@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Y6W-OH-hqX">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Score Game View Controller-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController id="Y6W-OH-hqX" customClass="ScoreGameViewController" customModule="Homework_11" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="доска 2" translatesAutoresizingMaskIntoConstraints="NO" id="KXc-od-zad">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                            </imageView>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="XUE-Tm-GhC">
+                                <rect key="frame" x="0.0" y="88" width="414" height="808"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hja-jq-ZWp">
+                                <rect key="frame" x="0.0" y="44" width="110" height="44"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="110" id="eiR-Sk-Qgh"/>
+                                    <constraint firstAttribute="height" constant="44" id="kzG-Ti-1ki"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="24"/>
+                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="BACK"/>
+                                <connections>
+                                    <action selector="backToMenuButton:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="mKt-Bw-ck4"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Hja-jq-ZWp" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="6FF-fV-LdS"/>
+                            <constraint firstItem="XUE-Tm-GhC" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="NlU-az-SDt"/>
+                            <constraint firstItem="XUE-Tm-GhC" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="44" id="PIh-n7-cpy"/>
+                            <constraint firstItem="KXc-od-zad" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="V7R-ml-uko"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="KXc-od-zad" secondAttribute="trailing" id="Xon-jS-Bir"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="XUE-Tm-GhC" secondAttribute="trailing" id="r4B-1E-8OE"/>
+                            <constraint firstAttribute="bottom" secondItem="XUE-Tm-GhC" secondAttribute="bottom" id="sk3-YM-M9y"/>
+                            <constraint firstItem="KXc-od-zad" firstAttribute="top" secondItem="5EZ-qb-Rvc" secondAttribute="top" id="wQE-bl-oWM"/>
+                            <constraint firstItem="Hja-jq-ZWp" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="xmq-P1-bRB"/>
+                            <constraint firstAttribute="bottom" secondItem="KXc-od-zad" secondAttribute="bottom" id="zit-sl-ezT"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="backButton" destination="Hja-jq-ZWp" id="t6j-pQ-eXC"/>
+                        <outlet property="tableView" destination="XUE-Tm-GhC" id="GMK-dN-dHe"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-17.39130434782609" y="36.830357142857139"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="доска 2" width="315" height="547"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

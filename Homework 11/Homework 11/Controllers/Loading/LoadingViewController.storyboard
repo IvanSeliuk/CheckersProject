@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Jsq-W3-u2g">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Loading View Controller-->
+        <scene sceneID="br9-lt-sXk">
+            <objects>
+                <viewController id="Ea2-fs-Gn4" customClass="LoadingViewController" customModule="Homework_11" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="B6h-kS-Ytm">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="checkers-ii-tom-mc-nemar" translatesAutoresizingMaskIntoConstraints="NO" id="kf2-nN-1Tr">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CHECKERS" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ty5-Mz-fg9" customClass="GlitchLabel" customModule="Homework_11">
+                                <rect key="frame" x="98" y="102.5" width="218" height="64"/>
+                                <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="45"/>
+                                <color key="textColor" red="0.95498482920000005" green="0.80583756870000001" blue="0.66580334119999995" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="glitchEnabled" value="YES"/>
+                                </userDefinedRuntimeAttributes>
+                                <variation key="heightClass=regular-widthClass=compact">
+                                    <fontDescription key="fontDescription" name="ChalkboardSE-Bold" family="Chalkboard SE" pointSize="45"/>
+                                </variation>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vpQ-jS-hwP"/>
+                        <constraints>
+                            <constraint firstItem="ty5-Mz-fg9" firstAttribute="centerX" secondItem="B6h-kS-Ytm" secondAttribute="centerX" id="0nb-gN-lIx"/>
+                            <constraint firstItem="kf2-nN-1Tr" firstAttribute="leading" secondItem="B6h-kS-Ytm" secondAttribute="leading" id="CN7-PE-1gw"/>
+                            <constraint firstItem="kf2-nN-1Tr" firstAttribute="top" secondItem="B6h-kS-Ytm" secondAttribute="top" id="Cmf-Xg-8K7"/>
+                            <constraint firstAttribute="bottom" secondItem="kf2-nN-1Tr" secondAttribute="bottom" id="NDh-Q5-0t9"/>
+                            <constraint firstItem="kf2-nN-1Tr" firstAttribute="trailing" secondItem="vpQ-jS-hwP" secondAttribute="trailing" id="X67-rp-xz9"/>
+                            <constraint firstItem="ty5-Mz-fg9" firstAttribute="centerY" secondItem="B6h-kS-Ytm" secondAttribute="centerY" multiplier="0.3" id="qaH-xm-h4s"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="Lwe-Es-05Q"/>
+                    <connections>
+                        <outlet property="loadingImage" destination="kf2-nN-1Tr" id="sZT-Gl-NK7"/>
+                        <outlet property="loadingLabel" destination="ty5-Mz-fg9" id="FOB-Kn-BFP"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jN4-ja-cHD" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2655.072463768116" y="75.669642857142847"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="4th-v6-PaB">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="Jsq-W3-u2g" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="eOH-Xs-1i5">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="Ea2-fs-Gn4" kind="relationship" relationship="rootViewController" id="rIK-Xb-vYI"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="yJS-fo-2RN" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1744.9275362318842" y="75.669642857142847"/>
+        </scene>
+    </scenes>
+    <designables>
+        <designable name="ty5-Mz-fg9">
+            <size key="intrinsicContentSize" width="218" height="64"/>
+        </designable>
+    </designables>
+    <resources>
+        <image name="checkers-ii-tom-mc-nemar" width="900" height="600"/>
+    </resources>
+</document>

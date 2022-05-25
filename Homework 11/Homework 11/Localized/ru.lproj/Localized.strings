@@ -1,0 +1,43 @@
+/* 
+  Localized.strings
+  Homework 11
+
+  Created by Иван Селюк on 2.04.22.
+  
+*/
+"chooseLabel" = "Пожалуйста, выберете ваш язык";
+
+// GameViewController
+"newGame" = "Новая игра";
+"Do you really want to start a new game?" = "Вы действительно хотите начать новую игру?";
+"NO" = "НЕТ";
+"YES" = "ДА";
+"Save Game" = "Сохрание игры";
+"Do you want to save the game?" = "Вы хотите сохранить игру?";
+"Attention" = "Внимание";
+"Do you really want to go to the menu?" = "Вы действительно хотите перейти в меню?";
+"White's move" = "Ход белых";
+"Black's move" = "Ход чёрных";
+"Welcome," = "Приветствую,";
+"It's not your move" = "Сейчас не Ваш ход";
+"Load Game" = "Загрузка игры";
+"Do you want to load the last game?" = "Вы хотите загрузить прошлую игру?";
+"White makes the first move" = "Белые ходят первыми";
+"SAVE" = "СОХРАНИТЬ";
+"RESET" = "ЗАГРУЗИТЬ";
+
+// MenuViewController
+"Cancel" = "Отмена";
+"Change background" = "Поменять фон";
+"Change languages" = "Поменять язык";
+"ABOUT" = "О НАС";
+"SETTINGS" = "НАСТРОЙКИ";
+"SCORE" = "РЕЗУЛЬТАТ";
+"START" = "СТАРТ";
+
+// ScoreViewController
+"BACK" = "НАЗАД";
+"Clear the results" = "ОЧИСТИТЬ";
+"WINNER" = "Победитель";
+"Game time" = "Время игры";
+

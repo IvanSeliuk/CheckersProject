@@ -1,0 +1,43 @@
+/* 
+  Localized.strings
+  Homework 11
+
+  Created by Иван Селюк on 2.04.22.
+  
+*/
+"chooseLabel" = "Por favor,       seleccione su idioma";
+
+// GameViewController
+"newGame" = "Nuevo juego";
+"Do you really want to start a new game?" = "¿De verdad quieres empezar un nuevo juego?";
+"NO" = "NO";
+"YES" = "SÍ";
+"Save Game" = "Guardar juego";
+"Do you want to save the game?" = "¿Quieres guardar el juego?";
+"Attention" = "Atención";
+"Do you really want to go to the menu?" = "¿De verdad quieres ir al menú?";
+"White's move" = "Jugada de las blancas";
+"Black's move" = "Jugada de las negras";
+"Welcome," = "Bienvenidos,";
+"It's not your move" = "No es tu jugada";
+"Load Game" = "Cargar juego";
+"Do you want to load the last game?" = "¿Quieres cargar el último juego?";
+"White makes the first move" = "Las blancas dan el primer paso";
+"SAVE" = "SALVAR";
+"RESET" = "REINICIAR";
+
+// MenuViewController
+"Cancel" = "Cancelar";
+"Change background" = "Cambiar el fondo";
+"Change languages" = "Cambiar idiomas";
+"ABOUT" = "ACERCA";
+"SETTINGS" = "AJUSTES";
+"SCORE" = "PUNTAJE";
+"START" = "INICIO";
+
+// ScoreViewController
+"BACK" = "ESPALDA";
+"Clear the results" = "CLARO";
+"WINNER" = "GANADOR";
+"Game time" = "Tiempo de juego";
+

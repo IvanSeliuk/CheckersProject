@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Y6W-OH-hqX">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Gamer View Controller-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController storyboardIdentifier="SecondViewController" id="Y6W-OH-hqX" customClass="GamerViewController" customModule="Homework_11" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="доска 2" translatesAutoresizingMaskIntoConstraints="NO" id="tDH-rA-J9a">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tVG-6q-SvN">
+                                <rect key="frame" x="343" y="60" width="55" height="45.5"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" imagePadding="0.0">
+                                    <imageReference key="image" image="xmark.circle.fill" catalog="system" symbolScale="default"/>
+                                    <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" configurationType="pointSize" pointSize="26"/>
+                                </buttonConfiguration>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isNeedBorder" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="exitApplication:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="88r-bn-Puu"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="..." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1s4-wl-qEw">
+                                <rect key="frame" x="10" y="138" width="394" height="100"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="100" id="Hr8-r7-iso"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="30"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8qX-K8-218">
+                                <rect key="frame" x="25" y="721.5" width="140" height="80"/>
+                                <color key="backgroundColor" red="0.86666667460000002" green="0.41568624970000001" blue="0.1647058874" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="80" id="aUh-bo-GQS"/>
+                                    <constraint firstAttribute="width" constant="140" id="xeN-yr-Atv"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="MarkerFelt-Wide" family="Marker Felt" pointSize="24"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="RESET"/>
+                                <connections>
+                                    <action selector="resetGame:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="EOq-FH-WWW"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2CE-7s-nkN">
+                                <rect key="frame" x="249" y="721.5" width="140" height="80"/>
+                                <color key="backgroundColor" red="0.86666667460000002" green="0.41568624970000001" blue="0.1647058874" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="80" id="LmG-1b-beR"/>
+                                    <constraint firstAttribute="width" constant="140" id="sBu-xt-RZa"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="MarkerFelt-Wide" family="Marker Felt" pointSize="24"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="SAVE"/>
+                                <connections>
+                                    <action selector="saveData:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="Zkq-iJ-dAM"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="White makes the first move" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="25" translatesAutoresizingMaskIntoConstraints="NO" id="gqe-DI-DYm">
+                                <rect key="frame" x="10" y="655.5" width="394" height="33"/>
+                                <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="30"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FOp-CT-PKQ">
+                                <rect key="frame" x="147" y="59.5" width="120" height="60"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RFQ-Ot-buj">
+                                        <rect key="frame" x="15.5" y="10.5" width="89" height="39"/>
+                                        <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="36"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="labelColor"/>
+                                <constraints>
+                                    <constraint firstItem="RFQ-Ot-buj" firstAttribute="centerX" secondItem="FOp-CT-PKQ" secondAttribute="centerX" id="0KB-9V-SyN"/>
+                                    <constraint firstItem="RFQ-Ot-buj" firstAttribute="centerY" secondItem="FOp-CT-PKQ" secondAttribute="centerY" id="Kra-i8-bE9"/>
+                                    <constraint firstAttribute="height" constant="60" id="UZh-dK-NKN"/>
+                                    <constraint firstAttribute="width" constant="120" id="h47-O6-sHZ"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isNeedBorder" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="gqe-DI-DYm" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="10" id="6Q8-e3-vWg"/>
+                            <constraint firstItem="8qX-K8-218" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="25" id="9eM-LB-FLO"/>
+                            <constraint firstItem="FOp-CT-PKQ" firstAttribute="centerY" secondItem="5EZ-qb-Rvc" secondAttribute="centerY" multiplier="0.2" id="DK0-qV-fOS"/>
+                            <constraint firstItem="gqe-DI-DYm" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="ML1-5S-YUc"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="tVG-6q-SvN" secondAttribute="trailing" constant="16" id="TIV-Go-CKR"/>
+                            <constraint firstItem="gqe-DI-DYm" firstAttribute="centerY" secondItem="5EZ-qb-Rvc" secondAttribute="centerY" multiplier="1.5" id="UjO-Sl-R3U"/>
+                            <constraint firstItem="1s4-wl-qEw" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="10" id="Wq1-G4-DIm"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="gqe-DI-DYm" secondAttribute="trailing" constant="10" id="Y94-l5-Rex"/>
+                            <constraint firstItem="1s4-wl-qEw" firstAttribute="centerY" secondItem="5EZ-qb-Rvc" secondAttribute="centerY" multiplier="0.42" id="YBy-Ef-whN"/>
+                            <constraint firstItem="tDH-rA-J9a" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" id="cbx-8E-HHd"/>
+                            <constraint firstItem="tVG-6q-SvN" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="16" id="gZh-J9-g1g"/>
+                            <constraint firstItem="tDH-rA-J9a" firstAttribute="top" secondItem="5EZ-qb-Rvc" secondAttribute="top" id="geg-hV-V9G"/>
+                            <constraint firstItem="8qX-K8-218" firstAttribute="centerY" secondItem="5EZ-qb-Rvc" secondAttribute="centerY" multiplier="1.7" id="jtO-Sn-WTF"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="2CE-7s-nkN" secondAttribute="trailing" constant="25" id="kEg-ZK-XUh"/>
+                            <constraint firstItem="1s4-wl-qEw" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="mPy-Pb-YPS"/>
+                            <constraint firstItem="tDH-rA-J9a" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="s4S-Bu-1PC"/>
+                            <constraint firstAttribute="bottom" secondItem="tDH-rA-J9a" secondAttribute="bottom" id="wHS-Tr-YKE"/>
+                            <constraint firstItem="2CE-7s-nkN" firstAttribute="centerY" secondItem="8qX-K8-218" secondAttribute="centerY" id="xVS-Ln-qJ2"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="1s4-wl-qEw" secondAttribute="trailing" constant="10" id="zlp-EW-MjX"/>
+                            <constraint firstItem="FOp-CT-PKQ" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="zvd-Cz-G9t"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="dzS-DT-qOH"/>
+                    <connections>
+                        <outlet property="backgroundSecondVC" destination="tDH-rA-J9a" id="Wmp-3g-YWu"/>
+                        <outlet property="buttonReset" destination="8qX-K8-218" id="kAy-bJ-ffX"/>
+                        <outlet property="buttonSave" destination="2CE-7s-nkN" id="ggH-gp-ZOk"/>
+                        <outlet property="namePlayerLabel" destination="1s4-wl-qEw" id="V5Y-kl-tlZ"/>
+                        <outlet property="timerLabel" destination="RFQ-Ot-buj" id="ZSS-Td-XRq"/>
+                        <outlet property="whoMustMoveLabel" destination="gqe-DI-DYm" id="Dx8-jL-3YL"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="886.95652173913049" y="53.571428571428569"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="xmark.circle.fill" catalog="system" width="128" height="121"/>
+        <image name="доска 2" width="315" height="547"/>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

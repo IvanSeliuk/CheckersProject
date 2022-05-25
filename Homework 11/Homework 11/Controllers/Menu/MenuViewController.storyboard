@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Y6W-OH-hqX">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Menu View Controller-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController storyboardIdentifier="MenuViewController" id="Y6W-OH-hqX" customClass="MenuViewController" customModule="Homework_11" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="доска 2" translatesAutoresizingMaskIntoConstraints="NO" id="bk7-o3-l8A">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                            </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pzt-bK-53p" customClass="StartGameView" customModule="Homework_11" customModuleProvider="target">
+                                <rect key="frame" x="107" y="109" width="200" height="140"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="140" id="2X1-mJ-fnR"/>
+                                    <constraint firstAttribute="width" constant="200" id="lsN-Zj-Hbx"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                        <real key="value" value="0.0"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="bgColor">
+                                        <color key="value" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="13"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FUa-nz-v1Q" customClass="ScoreGameView" customModule="Homework_11" customModuleProvider="target">
+                                <rect key="frame" x="107" y="269" width="200" height="120"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="8v0-4D-W02"/>
+                                    <constraint firstAttribute="height" constant="120" id="vB1-8b-fMa"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="bgColor">
+                                        <color key="value" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FZh-Di-cpW" customClass="SettingsGameView" customModule="Homework_11" customModuleProvider="target">
+                                <rect key="frame" x="107" y="399" width="200" height="120"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="3cX-Qg-uiS"/>
+                                    <constraint firstAttribute="height" constant="120" id="e37-Uj-N6W"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="bgColor">
+                                        <color key="value" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="heV-Cr-SFh" customClass="AboutGameView" customModule="Homework_11" customModuleProvider="target">
+                                <rect key="frame" x="107" y="539" width="200" height="300"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="300" id="57b-bv-h8p"/>
+                                    <constraint firstAttribute="width" constant="200" id="5Vt-kN-EkX"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="bgColor">
+                                        <color key="value" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="heV-Cr-SFh" firstAttribute="top" secondItem="FZh-Di-cpW" secondAttribute="bottom" constant="20" id="4UH-BI-laf"/>
+                            <constraint firstItem="FUa-nz-v1Q" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="5BV-ZA-TdH"/>
+                            <constraint firstItem="pzt-bK-53p" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="8a9-hj-VAG"/>
+                            <constraint firstItem="heV-Cr-SFh" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="THQ-YQ-8Br"/>
+                            <constraint firstItem="FZh-Di-cpW" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="VT5-1q-I5a"/>
+                            <constraint firstItem="FZh-Di-cpW" firstAttribute="top" secondItem="FUa-nz-v1Q" secondAttribute="bottom" constant="10" id="WrS-Ac-IfO"/>
+                            <constraint firstItem="bk7-o3-l8A" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="X0w-iJ-Ksu"/>
+                            <constraint firstItem="pzt-bK-53p" firstAttribute="centerY" secondItem="5EZ-qb-Rvc" secondAttribute="centerY" multiplier="0.4" id="eFS-kv-Y37"/>
+                            <constraint firstItem="FUa-nz-v1Q" firstAttribute="top" secondItem="pzt-bK-53p" secondAttribute="bottom" constant="20" id="g7G-Z4-khn"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="bk7-o3-l8A" secondAttribute="trailing" id="gmZ-No-Ern"/>
+                            <constraint firstAttribute="bottom" secondItem="bk7-o3-l8A" secondAttribute="bottom" id="h6f-sv-Tg9"/>
+                            <constraint firstItem="bk7-o3-l8A" firstAttribute="top" secondItem="5EZ-qb-Rvc" secondAttribute="top" id="xN1-8d-iQ8"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="scoreResultGame" destination="FUa-nz-v1Q" id="1Da-el-dPF"/>
+                        <outlet property="settingsBackgroundSecondViewController" destination="FZh-Di-cpW" id="LdE-cR-ay5"/>
+                        <outlet property="startGameView" destination="pzt-bK-53p" id="uIg-40-PI8"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="40.579710144927539" y="77.678571428571431"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="доска 2" width="315" height="547"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
