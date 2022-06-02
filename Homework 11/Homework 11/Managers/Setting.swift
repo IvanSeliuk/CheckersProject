@@ -20,6 +20,7 @@ class Setting: NSObject {
         case blackCheckerCompleted
         case currentGamer
         case language
+        case isSave
     }
     
     static let shared = Setting()
@@ -28,6 +29,11 @@ class Setting: NSObject {
     var onboardingCompleted: Bool {
         set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKeys.onboadringCompleted.rawValue) }
         get { return UserDefaults.standard.bool(forKey: UserDefaultsKeys.onboadringCompleted.rawValue) }
+    }
+    
+    var isSave: Bool {
+        set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKeys.isSave.rawValue) }
+        get { return UserDefaults.standard.bool(forKey: UserDefaultsKeys.isSave.rawValue) }
     }
     
     var namePlayer: String? {

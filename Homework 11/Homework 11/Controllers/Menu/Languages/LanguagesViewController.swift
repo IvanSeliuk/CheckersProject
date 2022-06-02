@@ -54,8 +54,6 @@ extension LanguagesViewController: UIPickerViewDelegate {
         return myImageView
     }
     
-    
-    
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         
         pickerView.selectRow(row, inComponent: component, animated: true)

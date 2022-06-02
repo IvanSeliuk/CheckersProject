@@ -32,6 +32,7 @@ class MenuViewController: UIViewController {
         startGameView.addGestureRecognizer(tapRecognizer)
         startGameView.isUserInteractionEnabled = true
     }
+    
     @objc private func startGameViewTapped() {
         guard let vc = GamerViewController.getInstanceController as? GamerViewController else {return}
         vc.imageBlackGround = self.imageBack
@@ -39,6 +40,7 @@ class MenuViewController: UIViewController {
         vc.modalTransitionStyle = .crossDissolve
         present(vc, animated: true, completion: nil)
     }
+    
     private func setupTapGestureRecognizereSettingsView() {
         let tapRecognizer = UITapGestureRecognizer()
         tapRecognizer.addTarget(self, action: #selector(settingsGameViewTapped))
@@ -90,6 +92,5 @@ extension MenuViewController: UIImagePickerControllerDelegate, UINavigationContr
             imageBack = image
         }
         picker.dismiss(animated: true, completion: nil)
-        
     }
 }

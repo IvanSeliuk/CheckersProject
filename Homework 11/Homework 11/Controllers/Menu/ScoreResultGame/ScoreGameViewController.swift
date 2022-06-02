@@ -10,14 +10,12 @@ import UIKit
 class ScoreGameViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
-   
     @IBOutlet weak var backButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableVeiw()
         setupUI()
-        
     }
     
     private func setupUI() {

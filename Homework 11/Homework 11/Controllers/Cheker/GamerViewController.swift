@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import GoogleMobileAds
 
 enum ColorChecker: String {
     case white, black
@@ -24,6 +25,7 @@ class GamerViewController: UIViewController {
     @IBOutlet weak var buttonReset: UIButton!
     @IBOutlet weak var buttonSave: UIButton!
     @IBOutlet weak var whoMustMoveLabel: UILabel!
+    private var interstitial: GADInterstitialAd?
     
     var desk: UIView!
     var chechersArray: [SaveCheckers] = []
@@ -48,29 +50,20 @@ class GamerViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        loadInterstitial()
         navigationController?.navigationBar.isHidden = true
         setupBackGround()
         namePlayer()
         setupDesk()
-        
-    }
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        let alert = UIAlertController(title: "Load Game".localized, message: "Do you want to load the last game?".localized, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "NO".localized, style: .default, handler: {
-            [self]_ in
-            turnOnTimer()
-        }))
-        alert.addAction(UIAlertAction(title: "YES".localized, style: .cancel, handler: { [self]_ in
+        if Setting.shared.isSave {
             loadSaveDesk()
-        }))
-        present(alert, animated: true, completion: nil)
+        } else {
+            turnOnTimer()
+        }
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
         guard desk != nil else { return }
         desk.center = view.center
     }
@@ -233,11 +226,11 @@ class GamerViewController: UIViewController {
                         checker.tag == 1 &&
                         currentGamer == .blackPlaying &&
                         (square.tag == (squareOfChecker.tag + 7) || square.tag == (squareOfChecker.tag + 9)) {
-                       
+                        
                         if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"){
                             
-//                        }  &&
-//                               (square.tag == (squareOfChecker.tag - 14) || square.tag == (squareOfChecker.tag - 18)) {
+                            //                        }  &&
+                            //                               (square.tag == (squareOfChecker.tag - 14) || square.tag == (squareOfChecker.tag - 18)) {
                             desk.bringSubviewToFront(square)
                             square.addSubview(checker)
                             checker.frame.origin = .zero
@@ -260,10 +253,10 @@ class GamerViewController: UIViewController {
                             checker.frame.origin = .zero
                         }
                     }
-//                    } else {
-//                        UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseOut) {
-//                            checker.frame.origin = .zero
-//                    }
+                    //                    } else {
+                    //                        UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseOut) {
+                    //                            checker.frame.origin = .zero
+                    //                    }
                 }
             }
         }
@@ -306,6 +299,21 @@ class GamerViewController: UIViewController {
         whoMustMoveLabel.text = currentGamer == .whitePlaying ? "White's move".localized : "Black's move".localized
     }
     
+    func loadInterstitial() {
+        let request = GADRequest()
+        GADInterstitialAd.load(withAdUnitID:"ca-app-pub-3940256099942544/4411468910",
+                               request: request,
+                               completionHandler: { [self] ad, error in
+            if let error = error {
+                print("Failed to load interstitial ad with error: \(error.localizedDescription)")
+                return
+            }
+            interstitial = ad
+            interstitial?.present(fromRootViewController: self)
+            interstitial?.fullScreenContentDelegate = self
+        })
+    }
+    
     @IBAction func exitApplication(_ sender: Any) {
         let alert = UIAlertController(title: "Attention".localized, message: "Do you really want to go to the menu?".localized, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "NO".localized, style: .default, handler: nil))
@@ -322,7 +330,7 @@ class GamerViewController: UIViewController {
         let alert = UIAlertController(title: "Save Game".localized, message: "Do you want to save the game?".localized, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "NO".localized, style: .default, handler: nil))
         alert.addAction(UIAlertAction(title: "YES".localized, style: .cancel, handler: { [self]_ in
-            
+            Setting.shared.isSave = true
             self.chechersArray.removeAll()
             for view in self.desk.subviews {
                 if !view.subviews.isEmpty {
@@ -351,6 +359,8 @@ class GamerViewController: UIViewController {
         let alert = UIAlertController(title: "newGame".localized, message: "Do you really want to start a new game?".localized, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "NO".localized, style: .default, handler: nil))
         alert.addAction(UIAlertAction(title: "YES".localized, style: .cancel, handler: { [self]_ in
+            loadInterstitial()
+            Setting.shared.isSave = false
             removeDesk()
             fillDesk(view: self.desk)
             timer.invalidate()
@@ -364,14 +374,21 @@ class GamerViewController: UIViewController {
 //MARK: Совместная работа двух Recognizer на одной View
 
 extension GamerViewController: UIGestureRecognizerDelegate {
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
-            shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
-        
+    }
+}
+
+extension GamerViewController: GADFullScreenContentDelegate {
+    func ad(_ ad: GADFullScreenPresentingAd, didFailToPresentFullScreenContentWithError error: Error) {
+        turnOnTimer()
+        print("Ad did fail to present full screen content.")
     }
     
-    
-    
+    func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
+        turnOnTimer()
+        print("Ad did dismiss full screen content.")
+    }
 }
 
 

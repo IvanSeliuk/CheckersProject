@@ -31,9 +31,6 @@ class ScoreResultGameTableViewCell: UITableViewCell {
         winnerWhitePlayerLabel.text = "WINNER".localized
         nameGameTimeLabel.text = "Game time".localized
         clearResultButton.setTitle("Clear the results".localized, for: .normal)
-     //   clearResultButton.setTitle("Clear the results".localized, for: .disabled)
-      //  clearResultButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 25)
-        
     }
     
     private func setupTableViewCell() {
@@ -74,6 +71,8 @@ class ScoreResultGameTableViewCell: UITableViewCell {
         personBlackImage.borderColor = .black
         winnerBlackPlayerLabel.layer.removeAnimation(forKey: "animation.description")
         winnerWhitePlayerLabel.isHidden = false
-        
+        Setting.shared.isSave = false
+        Setting.shared.timer = 0
+        //clear DB ячейку
     }
 }

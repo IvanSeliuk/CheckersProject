@@ -32,6 +32,7 @@
 		6DBC468927B1C37800D3DC00 /* MenuViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6DBC468827B1C37800D3DC00 /* MenuViewController.storyboard */; };
 		6DBC469B27B1CDF500D3DC00 /* StartGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBC469A27B1CDF500D3DC00 /* StartGameView.swift */; };
 		6DBC469D27B1CDFF00D3DC00 /* StartGameView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6DBC469C27B1CDFF00D3DC00 /* StartGameView.xib */; };
+		6DBCE2122848300C00F26DAC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6DBCE2112848300C00F26DAC /* GoogleService-Info.plist */; };
 		6DDF418B27B53E880036332D /* SaveCheckers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DDF418A27B53E880036332D /* SaveCheckers.swift */; };
 		6DE0746B27F7830000B609BA /* localized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE0746A27F7830000B609BA /* localized.swift */; };
 		6DE074A127F7BE8E00B609BA /* fr.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 6DE0749C27F7BE8E00B609BA /* fr.lproj */; };
@@ -76,6 +77,7 @@
 		6DBC468827B1C37800D3DC00 /* MenuViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MenuViewController.storyboard; sourceTree = "<group>"; };
 		6DBC469A27B1CDF500D3DC00 /* StartGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartGameView.swift; sourceTree = "<group>"; };
 		6DBC469C27B1CDFF00D3DC00 /* StartGameView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StartGameView.xib; sourceTree = "<group>"; };
+		6DBCE2112848300C00F26DAC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6DDF418A27B53E880036332D /* SaveCheckers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveCheckers.swift; sourceTree = "<group>"; };
 		6DE0746A27F7830000B609BA /* localized.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = localized.swift; sourceTree = "<group>"; };
 		6DE0749C27F7BE8E00B609BA /* fr.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fr.lproj; sourceTree = "<group>"; };
@@ -147,6 +149,7 @@
 				6D2CAD7527976BE0001DEE5F /* SceneDelegate.swift */,
 				6D2CAD7C27976BE0001DEE5F /* Assets.xcassets */,
 				6D2CAD7E27976BE0001DEE5F /* LaunchScreen.storyboard */,
+				6DBCE2112848300C00F26DAC /* GoogleService-Info.plist */,
 				6D2CAD8127976BE0001DEE5F /* Info.plist */,
 			);
 			path = "Homework 11";
@@ -422,6 +425,7 @@
 				6DE4382727B1FD21004C3406 /* ScoreGameView.xib in Resources */,
 				6DB3AB0D27CE7C9800B574E6 /* ScoreGameViewController.storyboard in Resources */,
 				6DBC468927B1C37800D3DC00 /* MenuViewController.storyboard in Resources */,
+				6DBCE2122848300C00F26DAC /* GoogleService-Info.plist in Resources */,
 				6DE074A427F7BE8E00B609BA /* en.lproj in Resources */,
 				6DE45F0827B2B8BB0004A28C /* AboutGameView.xib in Resources */,
 				6D132E3127A937B600542DBF /* GamerViewController.storyboard in Resources */,

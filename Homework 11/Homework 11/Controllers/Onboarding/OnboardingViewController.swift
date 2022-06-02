@@ -20,8 +20,6 @@ class OnboardingViewController: UIViewController {
     @IBOutlet weak var textFieldSecond: UITextField!
     @IBOutlet weak var doneButton: UIButton!
 
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -30,7 +28,6 @@ class OnboardingViewController: UIViewController {
         textFieldSecond.delegate = self
         setupAction()
         navigationController?.navigationBar.isHidden = true
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -96,7 +93,6 @@ class OnboardingViewController: UIViewController {
 }
 
 extension OnboardingViewController: UIScrollViewDelegate {
-    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         secondLabel.alpha = 0
         textField.alpha = 0

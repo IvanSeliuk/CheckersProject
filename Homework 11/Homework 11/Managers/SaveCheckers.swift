@@ -28,8 +28,5 @@ class SaveCheckers: NSObject, NSCoding, NSSecureCoding {
         self.number = coder.decodeInteger(forKey: "number")
         let imageString = coder.decodeObject(forKey: "image") as? String
         self.checkerName = ColorChecker(rawValue: imageString ?? "") ?? .white
-        
-    } 
-    
+    }
 }
-
