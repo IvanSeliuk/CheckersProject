@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import GoogleMobileAds
 
 class MenuViewController: UIViewController {
     
@@ -13,10 +14,26 @@ class MenuViewController: UIViewController {
     @IBOutlet weak var settingsBackgroundSecondViewController: SettingsGameView!
     @IBOutlet weak var scoreResultGame: ScoreGameView!
     var imageBack: UIImage?
+    private var interstitial: GADInterstitialAd?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTappedViews()
+    }
+    
+    func loadInterstitial() {
+        let request = GADRequest()
+        GADInterstitialAd.load(withAdUnitID:"ca-app-pub-3940256099942544/4411468910",
+                               request: request,
+                               completionHandler: { [self] ad, error in
+            if let error = error {
+                print("Failed to load interstitial ad with error: \(error.localizedDescription)")
+                return
+            }
+            interstitial = ad
+            interstitial?.present(fromRootViewController: self)
+            interstitial?.fullScreenContentDelegate = self
+        })
     }
     
     private func setupTappedViews() {
@@ -34,10 +51,14 @@ class MenuViewController: UIViewController {
     }
     
     @objc private func startGameViewTapped() {
+        loadInterstitial()
+    }
+    
+    private func presentGameViewController() {
         guard let vc = GamerViewController.getInstanceController as? GamerViewController else {return}
         vc.imageBlackGround = self.imageBack
         vc.modalPresentationStyle = .fullScreen
-        vc.modalTransitionStyle = .crossDissolve
+        vc.modalTransitionStyle = .flipHorizontal
         present(vc, animated: true, completion: nil)
     }
     
@@ -92,5 +113,16 @@ extension MenuViewController: UIImagePickerControllerDelegate, UINavigationContr
             imageBack = image
         }
         picker.dismiss(animated: true, completion: nil)
+    }
+}
+
+extension MenuViewController: GADFullScreenContentDelegate {
+    func ad(_ ad: GADFullScreenPresentingAd, didFailToPresentFullScreenContentWithError error: Error) {
+        print("Ad did fail to present full screen content.")
+    }
+    
+    func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
+        presentGameViewController()
+        print("Ad did dismiss full screen content.")
     }
 }

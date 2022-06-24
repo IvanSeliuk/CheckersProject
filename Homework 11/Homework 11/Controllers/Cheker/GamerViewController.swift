@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import GoogleMobileAds
+
 
 enum ColorChecker: String {
     case white, black, whiteKing, blackKing
@@ -25,7 +25,6 @@ class GamerViewController: UIViewController {
     @IBOutlet weak var buttonReset: UIButton!
     @IBOutlet weak var buttonSave: UIButton!
     @IBOutlet weak var whoMustMoveLabel: UILabel!
-    private var interstitial: GADInterstitialAd?
     
     var desk: UIView!
     var chechersArray: [SaveCheckers] = []
@@ -54,16 +53,24 @@ class GamerViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadInterstitial()
         navigationController?.navigationBar.isHidden = true
         setupBackGround()
         namePlayer()
         setupDesk()
-        if Setting.shared.isSave {
-            loadSaveDesk()
-        } else {
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        let alert = UIAlertController(title: "Load Game".localized, message: "Do you want to load the last game?".localized, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "NO".localized, style: .default, handler: {
+            [self]_ in
             turnOnTimer()
-        }
+        }))
+        alert.addAction(UIAlertAction(title: "YES".localized, style: .cancel, handler: { [self]_ in
+            loadSaveDesk()
+        }))
+        present(alert, animated: true, completion: nil)
     }
     
     override func viewDidLayoutSubviews() {
@@ -76,7 +83,6 @@ class GamerViewController: UIViewController {
         super.viewDidDisappear(animated)
         timer.invalidate()
     }
-    
     
     private func setupDesk() {
         let sizeConstant = self.view.frame.width - 32
@@ -278,25 +284,26 @@ class GamerViewController: UIViewController {
         return takeStep ?? false
     }
     
-    private func canStepChecker(recognizer: UIPanGestureRecognizer) {
+    private func canStepChecker(recognizer: UIPanGestureRecognizer, checkerMove: Int, checkerCheck: Int) {
         arrayPossibleSteps.removeAll()
         
         for square in desk.subviews {
-            if !square.subviews.isEmpty, square.subviews.first?.tag == 0 {
-                let filterSevenTop = desk.subviews.filter({$0.tag == square.tag + 7})
-                let filterNineTop = desk.subviews.filter({$0.tag == square.tag + 9})
-                let filterFourteenTop = desk.subviews.filter({$0.tag == square.tag + 14})
-                let filterEighteenTop = desk.subviews.filter({$0.tag == square.tag + 18})
-                let filterSevenBottom = desk.subviews.filter({$0.tag == square.tag - 7})
-                let filterNineBottom = desk.subviews.filter({$0.tag == square.tag - 9})
-                let filterFourteenBottom = desk.subviews.filter({$0.tag == square.tag - 14})
-                let filterEighteenBottom = desk.subviews.filter({$0.tag == square.tag - 18})
+            let filterSevenTop = desk.subviews.filter({$0.tag == square.tag + 7})
+            let filterNineTop = desk.subviews.filter({$0.tag == square.tag + 9})
+            let filterFourteenTop = desk.subviews.filter({$0.tag == square.tag + 14})
+            let filterEighteenTop = desk.subviews.filter({$0.tag == square.tag + 18})
+            let filterSevenBottom = desk.subviews.filter({$0.tag == square.tag - 7})
+            let filterNineBottom = desk.subviews.filter({$0.tag == square.tag - 9})
+            let filterFourteenBottom = desk.subviews.filter({$0.tag == square.tag - 14})
+            let filterEighteenBottom = desk.subviews.filter({$0.tag == square.tag - 18})
+            if !square.subviews.isEmpty, square.subviews.first?.tag == checkerMove {
+                
                 
                 // filterSevenTop.first?.subviews.first.tag == 1 || или 3 -дамка
-                if (filterSevenTop.first?.subviews.first?.tag == 1 && filterFourteenTop.first(where: {$0.subviews.isEmpty}) != nil) ||
-                    (filterNineTop.first?.subviews.first?.tag == 1 && filterEighteenTop.first(where: {$0.subviews.isEmpty}) != nil) ||
-                    (filterSevenBottom.first?.subviews.first?.tag == 1 && filterFourteenBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                    (filterNineBottom.first?.subviews.first?.tag == 1 && filterEighteenBottom.first(where: {$0.subviews.isEmpty}) != nil) {
+                if (filterSevenTop.first?.subviews.first?.tag == checkerCheck && filterFourteenTop.first(where: {$0.subviews.isEmpty}) != nil) ||
+                    (filterNineTop.first?.subviews.first?.tag == checkerCheck && filterEighteenTop.first(where: {$0.subviews.isEmpty}) != nil) ||
+                    (filterSevenBottom.first?.subviews.first?.tag == checkerCheck && filterFourteenBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                    (filterNineBottom.first?.subviews.first?.tag == checkerCheck && filterEighteenBottom.first(where: {$0.subviews.isEmpty}) != nil) {
                     arrayPossibleSteps.append(square.tag)
                     print(arrayPossibleSteps)
                 }
@@ -340,7 +347,6 @@ class GamerViewController: UIViewController {
     }
     
     private func finishGame() {
-        
         if beatBlackCheckers == 12 {
             showFinishGameAlert()
         } else {
@@ -399,7 +405,7 @@ class GamerViewController: UIViewController {
             // MARK: - MOVE WHITE FORWARD
             for square in desk.subviews {
                 if square.frame.contains(recognizer.location(in: desk)) {
-                    if checker.tag == 0, currentGamer == .whitePlaying, square.tag == (squareOfChecker.tag - 14) {
+                    if arrayPossibleSteps.contains(squareOfChecker.tag) || arrayPossibleSteps.isEmpty, checker.tag == 0, currentGamer == .whitePlaying, square.tag == (squareOfChecker.tag - 14) {
                         if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
                            (filterSevenBottom.first(where: {$0.subviews.isEmpty}) == nil), filterSevenBottom.first?.subviews.first?.tag == 1 {
                             print("белая побила вправо")
@@ -421,11 +427,11 @@ class GamerViewController: UIViewController {
                                 whoMustMoveLabel.text = "Black's move".localized
                                 saveCurrentMove = currentGamer
                             }
-                                //canStepChecker(recognizer: recognizer)
+                                canStepChecker(recognizer: recognizer, checkerMove: 0, checkerCheck: 1)
                         }
                         
                     } else {
-                        if checker.tag == 0, currentGamer == .whitePlaying, square.tag == (squareOfChecker.tag - 18) {
+                        if checker.tag == 0, currentGamer == .whitePlaying, square.tag == (squareOfChecker.tag - 18), arrayPossibleSteps.contains(squareOfChecker.tag) || arrayPossibleSteps.isEmpty {
                             if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
                                (filterNineBottom.first(where: {$0.subviews.isEmpty}) == nil), filterNineBottom.first?.subviews.first?.tag == 1 {
                                 print("белая побила влево")
@@ -433,7 +439,6 @@ class GamerViewController: UIViewController {
                                 desk.bringSubviewToFront(square)
                                 beatBlackCheckers += 1
                                 finishGame()
-                                
                                 
                                 square.addSubview(checker)
                                 checker.frame.origin = .zero
@@ -447,7 +452,7 @@ class GamerViewController: UIViewController {
                                     whoMustMoveLabel.text = "Black's move".localized
                                     saveCurrentMove = currentGamer
                                 }
-                            //    canStepChecker(recognizer: recognizer)
+                                canStepChecker(recognizer: recognizer, checkerMove: 0, checkerCheck: 1)
                             }
                         } else {
                             if checker.tag == 0, currentGamer == .whitePlaying,
@@ -459,12 +464,12 @@ class GamerViewController: UIViewController {
                                     square.addSubview(checker)
                                     checker.frame.origin = .zero
                                     completionMove(nextMove: .blackPlaying, text: "Black's move")
-                               //     canStepChecker(recognizer: recognizer)
+                                    
                                 }
                             } else {
                                 
                                 //MARK: - MOVE WHITE BACK
-                                if checker.tag == 0, currentGamer == .whitePlaying, (square.tag == (squareOfChecker.tag + 14)) {
+                                if checker.tag == 0, currentGamer == .whitePlaying, (square.tag == (squareOfChecker.tag + 14)), arrayPossibleSteps.contains(squareOfChecker.tag) || arrayPossibleSteps.isEmpty {
                                     if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
                                        (filterSevenTop.first(where: {$0.subviews.isEmpty}) == nil), filterSevenTop.first?.subviews.first?.tag == 1 {
                                         print("белая побила назад влево")
@@ -485,10 +490,10 @@ class GamerViewController: UIViewController {
                                             whoMustMoveLabel.text = "Black's move".localized
                                             saveCurrentMove = currentGamer
                                         }
-                                       // canStepChecker(recognizer: recognizer)
+                                        canStepChecker(recognizer: recognizer, checkerMove: 0, checkerCheck: 1)
                                     }
                                 } else {
-                                    if checker.tag == 0, currentGamer == .whitePlaying, (square.tag == (squareOfChecker.tag + 18)) {
+                                    if checker.tag == 0, currentGamer == .whitePlaying, (square.tag == (squareOfChecker.tag + 18)), arrayPossibleSteps.contains(squareOfChecker.tag) || arrayPossibleSteps.isEmpty {
                                         if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
                                            (filterNineTop.first(where: {$0.subviews.isEmpty}) == nil), filterNineTop.first?.subviews.first?.tag == 1 {
                                             print("белая побила назад вправо")
@@ -509,13 +514,13 @@ class GamerViewController: UIViewController {
                                                 whoMustMoveLabel.text = "Black's move".localized
                                                 saveCurrentMove = currentGamer
                                             }
-                                         //   canStepChecker(recognizer: recognizer)
+                                            canStepChecker(recognizer: recognizer, checkerMove: 0, checkerCheck: 1)
                                         }
                                         
                                         // MARK: - MOVE BLACK FORWARD
                                     } else {
                                         if checker.tag == 1, currentGamer == .blackPlaying, (square.tag == (squareOfChecker.tag + 14)) {
-                                            if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
+                                            if arrayPossibleSteps.contains(squareOfChecker.tag) || arrayPossibleSteps.isEmpty, square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
                                                (filterSevenTop.first(where: { $0.subviews.isEmpty}) == nil), filterSevenTop.first?.subviews.first?.tag == 0 {
                                                 print("черная побила влево")
                                                 filterSevenTop.first?.subviews.first?.removeFromSuperview()
@@ -535,11 +540,12 @@ class GamerViewController: UIViewController {
                                                     whoMustMoveLabel.text = "White's move".localized
                                                     saveCurrentMove = currentGamer
                                                 }
+                                                canStepChecker(recognizer: recognizer, checkerMove: 1, checkerCheck: 0)
                                             }
                                         }
                                         else {
                                             if checker.tag == 1, currentGamer == .blackPlaying, (square.tag == (squareOfChecker.tag + 18)) {
-                                                if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
+                                                if arrayPossibleSteps.contains(squareOfChecker.tag) || arrayPossibleSteps.isEmpty, square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
                                                    (filterNineTop.first(where: { $0.subviews.isEmpty}) == nil), filterNineTop.first?.subviews.first?.tag == 0  {
                                                     print("черная побила вправо")
                                                     filterNineTop.first?.subviews.first?.removeFromSuperview()
@@ -559,6 +565,7 @@ class GamerViewController: UIViewController {
                                                         whoMustMoveLabel.text = "White's move".localized
                                                         saveCurrentMove = currentGamer
                                                     }
+                                                    canStepChecker(recognizer: recognizer, checkerMove: 1, checkerCheck: 0)
                                                 }
                                             } else {
                                                 if checker.tag == 1, currentGamer == .blackPlaying,
@@ -575,7 +582,7 @@ class GamerViewController: UIViewController {
                                                 } else {
                                                     //MARK: - MOVE BLACK BACK
                                                     if checker.tag == 1, currentGamer == .blackPlaying, (square.tag == (squareOfChecker.tag - 14)) {
-                                                        if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
+                                                        if (arrayPossibleSteps.contains(squareOfChecker.tag) || arrayPossibleSteps.isEmpty), square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
                                                            (filterSevenBottom.first(where: {$0.subviews.isEmpty}) == nil), filterSevenBottom.first?.subviews.first?.tag == 0 {
                                                             print("черная побила назад влево")
                                                             filterSevenBottom.first?.subviews.first?.removeFromSuperview()
@@ -595,10 +602,11 @@ class GamerViewController: UIViewController {
                                                                 whoMustMoveLabel.text = "White's move".localized
                                                                 saveCurrentMove = currentGamer
                                                             }
+                                                            canStepChecker(recognizer: recognizer, checkerMove: 1, checkerCheck: 0)
                                                         }
                                                     } else {
                                                         if checker.tag == 1, currentGamer == .blackPlaying, (square.tag == (squareOfChecker.tag - 18)) {
-                                                            if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
+                                                            if arrayPossibleSteps.contains(squareOfChecker.tag) || arrayPossibleSteps.isEmpty, square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
                                                                (filterNineBottom.first(where: {$0.subviews.isEmpty}) == nil), filterNineBottom.first?.subviews.first?.tag == 0 {
                                                                 print("черная побила назад вправо")
                                                                 filterNineBottom.first?.subviews.first?.removeFromSuperview()
@@ -618,6 +626,7 @@ class GamerViewController: UIViewController {
                                                                     whoMustMoveLabel.text = "White's move".localized
                                                                     saveCurrentMove = currentGamer
                                                                 }
+                                                                canStepChecker(recognizer: recognizer, checkerMove: 1, checkerCheck: 0)
                                                             }
                                                         }
                                                     }
@@ -677,21 +686,6 @@ class GamerViewController: UIViewController {
         beatWhiteCheckers = Setting.shared.beatWhiteCheckers ?? 0
     }
     
-    func loadInterstitial() {
-        let request = GADRequest()
-        GADInterstitialAd.load(withAdUnitID:"ca-app-pub-3940256099942544/4411468910",
-                               request: request,
-                               completionHandler: { [self] ad, error in
-            if let error = error {
-                print("Failed to load interstitial ad with error: \(error.localizedDescription)")
-                return
-            }
-            interstitial = ad
-            interstitial?.present(fromRootViewController: self)
-            interstitial?.fullScreenContentDelegate = self
-        })
-    }
-    
     @IBAction func exitApplication(_ sender: Any) {
         let alert = UIAlertController(title: "Attention".localized, message: "Do you really want to go to the menu?".localized, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "NO".localized, style: .default, handler: nil))
@@ -708,7 +702,6 @@ class GamerViewController: UIViewController {
         let alert = UIAlertController(title: "Save Game".localized, message: "Do you want to save the game?".localized, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "NO".localized, style: .default, handler: nil))
         alert.addAction(UIAlertAction(title: "YES".localized, style: .cancel, handler: { [self]_ in
-            Setting.shared.isSave = true
             self.chechersArray.removeAll()
             for view in self.desk.subviews {
                 if !view.subviews.isEmpty {
@@ -739,8 +732,6 @@ class GamerViewController: UIViewController {
         let alert = UIAlertController(title: "newGame".localized, message: "Do you really want to start a new game?".localized, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "NO".localized, style: .default, handler: nil))
         alert.addAction(UIAlertAction(title: "YES".localized, style: .cancel, handler: { [self]_ in
-            loadInterstitial()
-            Setting.shared.isSave = false
             removeDesk()
             fillDesk(view: self.desk)
             timer.invalidate()
@@ -763,17 +754,7 @@ extension GamerViewController: UIGestureRecognizerDelegate {
     }
 }
 
-extension GamerViewController: GADFullScreenContentDelegate {
-    func ad(_ ad: GADFullScreenPresentingAd, didFailToPresentFullScreenContentWithError error: Error) {
-        turnOnTimer()
-        print("Ad did fail to present full screen content.")
-    }
-    
-    func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
-        turnOnTimer()
-        print("Ad did dismiss full screen content.")
-    }
-}
+
 
 
 
