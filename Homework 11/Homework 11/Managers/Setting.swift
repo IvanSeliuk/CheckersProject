@@ -21,6 +21,8 @@ class Setting: NSObject {
         case currentGamer
         case language
         case isSave
+        case beatBlackCheckers
+        case beatWhiteCheckers
     }
     
     static let shared = Setting()
@@ -61,6 +63,16 @@ class Setting: NSObject {
     var timer: Int? {
         set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKeys.timer.rawValue) }
         get { return UserDefaults.standard.integer(forKey: UserDefaultsKeys.timer.rawValue) }
+    }
+    
+    var beatWhiteCheckers: Int? {
+        set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKeys.beatWhiteCheckers.rawValue) }
+        get { return UserDefaults.standard.integer(forKey: UserDefaultsKeys.beatWhiteCheckers.rawValue) }
+    }
+    
+    var beatBlackCheckers: Int? {
+        set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKeys.beatBlackCheckers.rawValue) }
+        get { return UserDefaults.standard.integer(forKey: UserDefaultsKeys.beatBlackCheckers.rawValue) }
     }
     
     var currentGamer: MovePlayer {

@@ -37,7 +37,7 @@
 
 // ScoreViewController
 "BACK" = "ESPALDA";
-"Clear the results" = "CLARO";
+"Remove All" = "CLARO";
 "WINNER" = "GANADOR";
 "Game time" = "Tiempo de juego";
 

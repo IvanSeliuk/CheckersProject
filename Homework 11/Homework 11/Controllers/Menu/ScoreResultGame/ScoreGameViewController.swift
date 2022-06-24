@@ -11,6 +11,13 @@ class ScoreGameViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var backButton: UIButton!
+    @IBOutlet weak var removeAllButton: UIButton!
+    
+    var checkersDB = [Checkers]() {
+        didSet {
+            tableView.reloadData()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,9 +25,16 @@ class ScoreGameViewController: UIViewController {
         setupUI()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        getData()
+    }
+    
     private func setupUI() {
         backButton.setTitle("BACK".localized, for: .normal)
         backButton.setTitle("BACK".localized, for: .disabled)
+        removeAllButton.setTitle("Remove All".localized, for: .normal)
+        removeAllButton.setTitle("Remove All".localized, for: .disabled)
     }
     
     private func setupTableVeiw() {
@@ -29,29 +43,42 @@ class ScoreGameViewController: UIViewController {
         tableView.register(UINib(nibName: "ScoreResultGameTableViewCell", bundle: nil), forCellReuseIdentifier: "ScoreResultGameTableViewCell")
     }
     
+    private func getData() {
+        let checkers = CoreDataManager.shared.getFromDB()
+        checkersDB = checkers
+        if checkersDB.count == 0 {
+            removeAllButton.isHidden = true
+        } else {
+            removeAllButton.isHidden = false
+        }
+    }
+    
     @IBAction func backToMenuButton(_ sender: Any) {
         guard let menuVC = MenuViewController.getInstanceController else { return }
         menuVC.modalPresentationStyle = .fullScreen
         menuVC.modalTransitionStyle = .crossDissolve
         self.present(menuVC, animated: true, completion: nil)
     }
+    
+    @IBAction func removeAllButton(_ sender: Any) {
+        CoreDataManager.shared.clearDataBase()
+        checkersDB.removeAll()
+        removeAllButton.isHidden = true
+        tableView.reloadData()
+    }
 }
 
 extension ScoreGameViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return checkersDB.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch indexPath.row {
-        case 0: let cell = UITableViewCell()
-            cell.backgroundColor = .clear
-            return cell
-        case 1: guard let cell = tableView.dequeueReusableCell(withIdentifier: "ScoreResultGameTableViewCell") as? ScoreResultGameTableViewCell else { return UITableViewCell() }
-            return cell
-        default: return UITableViewCell()
-        }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ScoreResultGameTableViewCell") as? ScoreResultGameTableViewCell else { return UITableViewCell() }
+        cell.setupCheckersCell(with: checkersDB[indexPath.row])
+        cell.selectionStyle = .none
+        return cell
     }
 }
 

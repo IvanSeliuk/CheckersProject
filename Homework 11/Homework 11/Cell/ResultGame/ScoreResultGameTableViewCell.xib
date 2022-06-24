@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -17,25 +17,6 @@
                 <rect key="frame" x="0.0" y="0.0" width="413" height="198"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lzm-H6-MnG">
-                        <rect key="frame" x="121" y="107" width="171" height="35"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="35" id="qwO-bA-I0N"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
-                        <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                        <state key="normal" title="Clear"/>
-                        <userDefinedRuntimeAttributes>
-                            <userDefinedRuntimeAttribute type="boolean" keyPath="isNeedBorder" value="YES"/>
-                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </userDefinedRuntimeAttribute>
-                        </userDefinedRuntimeAttributes>
-                        <connections>
-                            <action selector="clearTheResultButton:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="mwo-pn-7k0"/>
-                        </connections>
-                    </button>
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="personLogoo" translatesAutoresizingMaskIntoConstraints="NO" id="3KC-E5-gVf">
                         <rect key="frame" x="20" y="4" width="100" height="100"/>
                         <color key="backgroundColor" name="ColorBlack"/>
@@ -78,7 +59,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Game time:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fTX-eK-EBo">
-                        <rect key="frame" x="153" y="20" width="107.5" height="24"/>
+                        <rect key="frame" x="153" y="4" width="107.5" height="24"/>
                         <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                         <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
@@ -104,9 +85,15 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h1a-ig-I8U">
-                        <rect key="frame" x="169.5" y="59" width="74" height="33"/>
+                        <rect key="frame" x="169.5" y="43" width="74" height="33"/>
                         <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="30"/>
                         <color key="textColor" systemColor="systemGreenColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WCd-tT-Nct">
+                        <rect key="frame" x="184.5" y="91" width="44.5" height="24"/>
+                        <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                        <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
@@ -114,11 +101,10 @@
                 <constraints>
                     <constraint firstItem="TVG-02-gGq" firstAttribute="top" secondItem="3KC-E5-gVf" secondAttribute="bottom" constant="4" id="49H-zO-plz"/>
                     <constraint firstItem="Ggz-g1-cCD" firstAttribute="top" secondItem="TVG-02-gGq" secondAttribute="bottom" constant="2" id="B4h-kx-lnY"/>
-                    <constraint firstItem="UYc-ja-DQx" firstAttribute="leading" secondItem="Lzm-H6-MnG" secondAttribute="trailing" constant="1" id="DmH-Ns-UcG"/>
                     <constraint firstItem="fTX-eK-EBo" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="FWI-6r-lk7"/>
                     <constraint firstItem="UYc-ja-DQx" firstAttribute="trailing" secondItem="R0O-lk-2MF" secondAttribute="trailing" id="HNC-cZ-d4S"/>
+                    <constraint firstItem="WCd-tT-Nct" firstAttribute="top" secondItem="h1a-ig-I8U" secondAttribute="bottom" constant="15" id="HnK-ka-WIe"/>
                     <constraint firstItem="ssG-Ma-PDo" firstAttribute="top" secondItem="UYc-ja-DQx" secondAttribute="bottom" constant="2" id="J2E-xw-YWt"/>
-                    <constraint firstItem="Lzm-H6-MnG" firstAttribute="top" secondItem="h1a-ig-I8U" secondAttribute="bottom" constant="15" id="L5k-3c-0DH"/>
                     <constraint firstAttribute="trailing" secondItem="R0O-lk-2MF" secondAttribute="trailing" constant="20" id="Lnt-bP-fFW"/>
                     <constraint firstItem="TVG-02-gGq" firstAttribute="trailing" secondItem="3KC-E5-gVf" secondAttribute="trailing" id="Q5W-Dp-DgE"/>
                     <constraint firstItem="Ggz-g1-cCD" firstAttribute="centerX" secondItem="TVG-02-gGq" secondAttribute="centerX" id="V95-QX-5D8"/>
@@ -126,18 +112,18 @@
                     <constraint firstItem="TVG-02-gGq" firstAttribute="leading" secondItem="3KC-E5-gVf" secondAttribute="leading" id="bmZ-sR-JZC"/>
                     <constraint firstItem="UYc-ja-DQx" firstAttribute="leading" secondItem="R0O-lk-2MF" secondAttribute="leading" id="edx-5j-3LE"/>
                     <constraint firstItem="3KC-E5-gVf" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="fc0-Z7-EXq"/>
-                    <constraint firstItem="Lzm-H6-MnG" firstAttribute="leading" secondItem="TVG-02-gGq" secondAttribute="trailing" constant="1" id="gk4-pY-44E"/>
                     <constraint firstItem="3KC-E5-gVf" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="4" id="hFA-As-lKw"/>
+                    <constraint firstItem="WCd-tT-Nct" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="iZu-yU-Xq4"/>
                     <constraint firstItem="ssG-Ma-PDo" firstAttribute="centerX" secondItem="UYc-ja-DQx" secondAttribute="centerX" id="tNO-Es-hyp"/>
                     <constraint firstItem="h1a-ig-I8U" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="vD8-pt-OA9"/>
                     <constraint firstItem="R0O-lk-2MF" firstAttribute="centerY" secondItem="3KC-E5-gVf" secondAttribute="centerY" id="vWY-wa-K6Q"/>
-                    <constraint firstItem="fTX-eK-EBo" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="20" id="yf2-wA-hb0"/>
+                    <constraint firstItem="fTX-eK-EBo" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="4" id="yf2-wA-hb0"/>
                     <constraint firstItem="h1a-ig-I8U" firstAttribute="top" secondItem="fTX-eK-EBo" secondAttribute="bottom" constant="15" id="zYX-9f-S7E"/>
                 </constraints>
             </tableViewCellContentView>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <connections>
-                <outlet property="clearResultButton" destination="Lzm-H6-MnG" id="HjF-kW-mjC"/>
+                <outlet property="dateLabel" destination="WCd-tT-Nct" id="fOI-dY-2ah"/>
                 <outlet property="gameTimeLabel" destination="h1a-ig-I8U" id="huH-gw-t7E"/>
                 <outlet property="nameBlackPlayerLabel" destination="TVG-02-gGq" id="6Qm-mt-Sft"/>
                 <outlet property="nameGameTimeLabel" destination="fTX-eK-EBo" id="sIB-YP-15Y"/>

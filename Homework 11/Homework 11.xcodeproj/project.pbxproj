@@ -16,6 +16,11 @@
 		6D2CAD7D27976BE0001DEE5F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6D2CAD7C27976BE0001DEE5F /* Assets.xcassets */; };
 		6D2CAD8027976BE0001DEE5F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6D2CAD7E27976BE0001DEE5F /* LaunchScreen.storyboard */; };
 		6D41B60427FB9862008FC6A5 /* OnboardingViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6D41B60327FB9862008FC6A5 /* OnboardingViewController.storyboard */; };
+		6D533205285FB6F300E391BA /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D533204285FB6F300E391BA /* CoreDataManager.swift */; };
+		6D53320B285FBFFE00E391BA /* CheckerDataBase.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6D533209285FBFFE00E391BA /* CheckerDataBase.xcdatamodeld */; };
+		6D533212285FC67D00E391BA /* CheckerDB+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D533210285FC67D00E391BA /* CheckerDB+CoreDataClass.swift */; };
+		6D533213285FC67D00E391BA /* CheckerDB+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D533211285FC67D00E391BA /* CheckerDB+CoreDataProperties.swift */; };
+		6D5332152864855300E391BA /* Checkers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D5332142864855300E391BA /* Checkers.swift */; };
 		6D6C01EC27A223CD00DCE8A2 /* UIStoryboard + CoreKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6C01EB27A223CD00DCE8A2 /* UIStoryboard + CoreKit.swift */; };
 		6D7FFBE428042D98002BE129 /* GlitchLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D7FFBE328042D98002BE129 /* GlitchLabel.swift */; };
 		6D862D71279A257A008AFB09 /* GamerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D862D70279A257A008AFB09 /* GamerViewController.swift */; };
@@ -61,6 +66,11 @@
 		6D2CAD7F27976BE0001DEE5F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6D2CAD8127976BE0001DEE5F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6D41B60327FB9862008FC6A5 /* OnboardingViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = OnboardingViewController.storyboard; sourceTree = "<group>"; };
+		6D533204285FB6F300E391BA /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		6D53320A285FBFFE00E391BA /* CheckerDataBase.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CheckerDataBase.xcdatamodel; sourceTree = "<group>"; };
+		6D533210285FC67D00E391BA /* CheckerDB+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CheckerDB+CoreDataClass.swift"; sourceTree = "<group>"; };
+		6D533211285FC67D00E391BA /* CheckerDB+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CheckerDB+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		6D5332142864855300E391BA /* Checkers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Checkers.swift; sourceTree = "<group>"; };
 		6D6C01EB27A223CD00DCE8A2 /* UIStoryboard + CoreKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIStoryboard + CoreKit.swift"; sourceTree = "<group>"; };
 		6D7FFBE328042D98002BE129 /* GlitchLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlitchLabel.swift; sourceTree = "<group>"; };
 		6D862D70279A257A008AFB09 /* GamerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamerViewController.swift; sourceTree = "<group>"; };
@@ -138,6 +148,7 @@
 		6D2CAD7227976BE0001DEE5F /* Homework 11 */ = {
 			isa = PBXGroup;
 			children = (
+				6D533206285FB73900E391BA /* Models */,
 				6D7FFBE028042D98002BE129 /* Libs */,
 				6DE0749227F7BD5300B609BA /* Localized */,
 				6DB3AB0527CE7C0900B574E6 /* Cell */,
@@ -151,8 +162,19 @@
 				6D2CAD7E27976BE0001DEE5F /* LaunchScreen.storyboard */,
 				6DBCE2112848300C00F26DAC /* GoogleService-Info.plist */,
 				6D2CAD8127976BE0001DEE5F /* Info.plist */,
+				6D533209285FBFFE00E391BA /* CheckerDataBase.xcdatamodeld */,
 			);
 			path = "Homework 11";
+			sourceTree = "<group>";
+		};
+		6D533206285FB73900E391BA /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				6D533210285FC67D00E391BA /* CheckerDB+CoreDataClass.swift */,
+				6D533211285FC67D00E391BA /* CheckerDB+CoreDataProperties.swift */,
+				6D5332142864855300E391BA /* Checkers.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		6D7FFBE028042D98002BE129 /* Libs */ = {
@@ -193,6 +215,7 @@
 			children = (
 				6D9611A327B0770F00C1C36D /* Setting.swift */,
 				6DDF418A27B53E880036332D /* SaveCheckers.swift */,
+				6D533204285FB6F300E391BA /* CoreDataManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -486,6 +509,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6D1BDE86279E04CB0007F413 /* CAMediaTimingFunction + Ease.swift in Sources */,
+				6D5332152864855300E391BA /* Checkers.swift in Sources */,
 				6DBC468727B1C36900D3DC00 /* MenuViewController.swift in Sources */,
 				6DDF418B27B53E880036332D /* SaveCheckers.swift in Sources */,
 				6D862D71279A257A008AFB09 /* GamerViewController.swift in Sources */,
@@ -497,12 +521,16 @@
 				6DA0D08527F34D1900165771 /* LanguagesViewController.swift in Sources */,
 				6D9611A827B07B4700C1C36D /* LoadingViewController.swift in Sources */,
 				6DB3AB0827CE7C5D00B574E6 /* ScoreResultGameTableViewCell.swift in Sources */,
+				6D533205285FB6F300E391BA /* CoreDataManager.swift in Sources */,
 				6DF19F4127A1DD2000C8F198 /* UIView.swift in Sources */,
 				6D9611A427B0770F00C1C36D /* Setting.swift in Sources */,
+				6D533213285FC67D00E391BA /* CheckerDB+CoreDataProperties.swift in Sources */,
 				6D2CAD7627976BE0001DEE5F /* SceneDelegate.swift in Sources */,
+				6D53320B285FBFFE00E391BA /* CheckerDataBase.xcdatamodeld in Sources */,
 				6DB3AB0B27CE7C8C00B574E6 /* ScoreGameViewController.swift in Sources */,
 				6DE45F0127B2ABED0004A28C /* SettingsGameView.swift in Sources */,
 				6DBC469B27B1CDF500D3DC00 /* StartGameView.swift in Sources */,
+				6D533212285FC67D00E391BA /* CheckerDB+CoreDataClass.swift in Sources */,
 				6DE4382527B1FD17004C3406 /* ScoreGameView.swift in Sources */,
 				6D7FFBE428042D98002BE129 /* GlitchLabel.swift in Sources */,
 			);
@@ -718,6 +746,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		6D533209285FBFFE00E391BA /* CheckerDataBase.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				6D53320A285FBFFE00E391BA /* CheckerDataBase.xcdatamodel */,
+			);
+			currentVersion = 6D53320A285FBFFE00E391BA /* CheckerDataBase.xcdatamodel */;
+			path = CheckerDataBase.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 6D2CAD6827976BE0001DEE5F /* Project object */;
 }

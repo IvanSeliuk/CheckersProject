@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21E258" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="CheckerDB" representedClassName="CheckerDB" syncable="YES">
+        <attribute name="date" optional="YES" attributeType="String"/>
+        <attribute name="namePlayer" optional="YES" attributeType="String"/>
+        <attribute name="namePlayerSecond" optional="YES" attributeType="String"/>
+        <attribute name="timer" optional="YES" attributeType="String"/>
+        <attribute name="winner" optional="YES" attributeType="String"/>
+    </entity>
+    <elements>
+        <element name="CheckerDB" positionX="-36" positionY="9" width="128" height="118"/>
+    </elements>
+</model>

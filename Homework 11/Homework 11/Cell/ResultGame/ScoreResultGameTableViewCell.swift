@@ -16,28 +16,27 @@ class ScoreResultGameTableViewCell: UITableViewCell {
     @IBOutlet weak var gameTimeLabel: UILabel!
     @IBOutlet weak var winnerBlackPlayerLabel: UILabel!
     @IBOutlet weak var winnerWhitePlayerLabel: UILabel!
-    @IBOutlet weak var clearResultButton: UIButton!
     @IBOutlet weak var nameGameTimeLabel: UILabel!
+    @IBOutlet weak var dateLabel: UILabel!
+    var whoIsWinner: String?
     
     override func awakeFromNib() {
         super.awakeFromNib()
         setupTableViewCell()
-        animationWinner()
         setupUI()
     }
-
+    
     private func setupUI() {
         winnerBlackPlayerLabel.text = "WINNER".localized
         winnerWhitePlayerLabel.text = "WINNER".localized
         nameGameTimeLabel.text = "Game time".localized
-        clearResultButton.setTitle("Clear the results".localized, for: .normal)
     }
     
     private func setupTableViewCell() {
         personBlackImage.layer.cornerRadius = 50
         personWhiteImage.layer.cornerRadius = 50
         if let nameUser = Setting.shared.namePlayer,
-            let nameUserSecond = Setting.shared.namePlayerSecond {
+           let nameUserSecond = Setting.shared.namePlayerSecond {
             nameWhitePlayerLabel.text = nameUser
             nameBlackPlayerLabel.text = nameUserSecond
         }
@@ -50,9 +49,7 @@ class ScoreResultGameTableViewCell: UITableViewCell {
         }
     }
     
-    private func animationWinner() {
-        personBlackImage.borderColor = .red
-        winnerWhitePlayerLabel.isHidden = true
+    private func animation(winner: UILabel) {
         let animation = CABasicAnimation(keyPath: "opacity")
         animation.fromValue = 1
         animation.toValue = 0
@@ -63,16 +60,26 @@ class ScoreResultGameTableViewCell: UITableViewCell {
         animation.isRemovedOnCompletion = false
         animation.timingFunction = .linear
         animation.fillMode = .both
-        winnerBlackPlayerLabel.layer.add(animation, forKey: "animation.description")
+        winner.layer.add(animation, forKey: "animation.description")
     }
-
-    @IBAction func clearTheResultButton(_ sender: Any) {
-        gameTimeLabel.text = "00:00"
-        personBlackImage.borderColor = .black
-        winnerBlackPlayerLabel.layer.removeAnimation(forKey: "animation.description")
-        winnerWhitePlayerLabel.isHidden = false
-        Setting.shared.isSave = false
-        Setting.shared.timer = 0
-        //clear DB ячейку
+    func setupCheckersCell(with checkers: Checkers) {
+        nameBlackPlayerLabel.text = checkers.namePlayerSecond
+        nameWhitePlayerLabel.text = checkers.namePlayer
+        gameTimeLabel.text = checkers.timer
+        whoIsWinner = checkers.winner
+        dateLabel.text = checkers.date
+        showWinner()
+    }
+    
+    private func showWinner() {
+        if whoIsWinner == nameBlackPlayerLabel.text {
+            personBlackImage.borderColor = .red
+            winnerWhitePlayerLabel.isHidden = true
+            animation(winner: winnerBlackPlayerLabel)
+        } else {
+            personWhiteImage.borderColor = .red
+            winnerBlackPlayerLabel.isHidden = true
+            animation(winner: winnerWhitePlayerLabel)
+        }
     }
 }

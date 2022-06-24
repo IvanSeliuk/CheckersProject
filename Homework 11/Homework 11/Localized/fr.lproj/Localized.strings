@@ -37,7 +37,7 @@
 
 // ScoreViewController
 "BACK" = "ARRIÈRE";
-"Clear the results" = "CLAIR";
+"Remove All" = "CLAIR";
 "WINNER" = "GAGNANT";
 "Game time" = "Temps de jeu";
 
