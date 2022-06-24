@@ -243,8 +243,6 @@ class GamerViewController: UIViewController {
         RunLoop.main.add(timer, forMode: .common)
     }
     
-    
-    
     private func checkBeatChecker(recognizer: UIPanGestureRecognizer, checkerMove: Int, checkerCheck: Int ) -> Bool {
         guard let checker = recognizer.view, let squareOfChecker = checker.superview else {return true}
         var takeStep: Bool?
@@ -334,10 +332,6 @@ class GamerViewController: UIViewController {
         
     }
     
-    
-    
-    
-    
     private func completionMove(nextMove: MovePlayer, text: String) {
         arrayBorder.forEach({ $0.backgroundColor = UIColor(named: "ColorBlack") } )
         currentGamer = nextMove
@@ -389,9 +383,6 @@ class GamerViewController: UIViewController {
         let filterSevenBottom = desk.subviews.filter{($0.tag == squareOfChecker.tag - 7)}
         let filterNineBottom = desk.subviews.filter{($0.tag == squareOfChecker.tag - 9)}
         
-        //        let arrayFilters = [filterSevenTop, filterSevenBottom, filterNineTop, filterNineBottom]
-        //        let arrayFiltersForMove = [filterFourteenTop, filterFourteenBottom, filterEighteenTop, filterEighteenBottom]
-        // arrayFilters.filter({$0.first?.tag == 1})
         if recognizer.state == .began {
             desk.bringSubviewToFront(squareOfChecker)
             
@@ -408,7 +399,7 @@ class GamerViewController: UIViewController {
             // MARK: - MOVE WHITE FORWARD
             for square in desk.subviews {
                 if square.frame.contains(recognizer.location(in: desk)) {
-                    if arrayPossibleSteps.contains(squareOfChecker.tag) || arrayPossibleSteps.isEmpty, checker.tag == 0, currentGamer == .whitePlaying, square.tag == (squareOfChecker.tag - 14) {
+                    if checker.tag == 0, currentGamer == .whitePlaying, square.tag == (squareOfChecker.tag - 14) {
                         if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
                            (filterSevenBottom.first(where: {$0.subviews.isEmpty}) == nil), filterSevenBottom.first?.subviews.first?.tag == 1 {
                             print("белая побила вправо")
@@ -430,12 +421,12 @@ class GamerViewController: UIViewController {
                                 whoMustMoveLabel.text = "Black's move".localized
                                 saveCurrentMove = currentGamer
                             }
-                            canStepChecker(recognizer: recognizer)
+                                //canStepChecker(recognizer: recognizer)
                         }
                         
                     } else {
                         if checker.tag == 0, currentGamer == .whitePlaying, square.tag == (squareOfChecker.tag - 18) {
-                            if arrayPossibleSteps.contains(squareOfChecker.tag) || arrayPossibleSteps.isEmpty, square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
+                            if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
                                (filterNineBottom.first(where: {$0.subviews.isEmpty}) == nil), filterNineBottom.first?.subviews.first?.tag == 1 {
                                 print("белая побила влево")
                                 filterNineBottom.first?.subviews.first?.removeFromSuperview()
@@ -456,24 +447,24 @@ class GamerViewController: UIViewController {
                                     whoMustMoveLabel.text = "Black's move".localized
                                     saveCurrentMove = currentGamer
                                 }
-                                canStepChecker(recognizer: recognizer)
+                            //    canStepChecker(recognizer: recognizer)
                             }
                         } else {
                             if checker.tag == 0, currentGamer == .whitePlaying,
                                (square.tag == (squareOfChecker.tag - 7) || square.tag == (squareOfChecker.tag - 9)) {
-                                if arrayPossibleSteps.contains(squareOfChecker.tag) || arrayPossibleSteps.isEmpty, square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack") {
+                                if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack") {
                                     print("белая походила")
                                     desk.bringSubviewToFront(square)
                                     
                                     square.addSubview(checker)
                                     checker.frame.origin = .zero
                                     completionMove(nextMove: .blackPlaying, text: "Black's move")
-                                    canStepChecker(recognizer: recognizer)
+                               //     canStepChecker(recognizer: recognizer)
                                 }
                             } else {
                                 
                                 //MARK: - MOVE WHITE BACK
-                                if arrayPossibleSteps.contains(squareOfChecker.tag) || arrayPossibleSteps.isEmpty, checker.tag == 0, currentGamer == .whitePlaying, (square.tag == (squareOfChecker.tag + 14)) {
+                                if checker.tag == 0, currentGamer == .whitePlaying, (square.tag == (squareOfChecker.tag + 14)) {
                                     if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
                                        (filterSevenTop.first(where: {$0.subviews.isEmpty}) == nil), filterSevenTop.first?.subviews.first?.tag == 1 {
                                         print("белая побила назад влево")
@@ -494,11 +485,11 @@ class GamerViewController: UIViewController {
                                             whoMustMoveLabel.text = "Black's move".localized
                                             saveCurrentMove = currentGamer
                                         }
-                                        canStepChecker(recognizer: recognizer)
+                                       // canStepChecker(recognizer: recognizer)
                                     }
                                 } else {
                                     if checker.tag == 0, currentGamer == .whitePlaying, (square.tag == (squareOfChecker.tag + 18)) {
-                                        if arrayPossibleSteps.contains(squareOfChecker.tag) || arrayPossibleSteps.isEmpty, square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
+                                        if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
                                            (filterNineTop.first(where: {$0.subviews.isEmpty}) == nil), filterNineTop.first?.subviews.first?.tag == 1 {
                                             print("белая побила назад вправо")
                                             filterNineTop.first?.subviews.first?.removeFromSuperview()
@@ -518,7 +509,7 @@ class GamerViewController: UIViewController {
                                                 whoMustMoveLabel.text = "Black's move".localized
                                                 saveCurrentMove = currentGamer
                                             }
-                                            canStepChecker(recognizer: recognizer)
+                                         //   canStepChecker(recognizer: recognizer)
                                         }
                                         
                                         // MARK: - MOVE BLACK FORWARD
