@@ -44,6 +44,12 @@ class OnboardingViewController: UIViewController {
         firstLabel.alpha = 0
         arrowImage.alpha = 0
         doneButton.isEnabled = false
+        textField.layer.cornerRadius = 25
+        textField.layer.borderWidth = 1
+        textField.layer.borderColor = UIColor.black.cgColor
+        textFieldSecond.layer.cornerRadius = 25
+        textFieldSecond.layer.borderWidth = 1
+        textFieldSecond.layer.borderColor = UIColor.black.cgColor
     }
     
     private func setupAction() {

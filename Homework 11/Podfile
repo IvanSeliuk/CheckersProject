@@ -9,4 +9,5 @@ target 'Homework 11' do
   pod 'lottie-ios'
   pod 'Firebase/Core'
   pod 'Google-Mobile-Ads-SDK'
+  pod 'NVActivityIndicatorView'
 end

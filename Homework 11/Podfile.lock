@@ -89,12 +89,16 @@ PODS:
     - nanopb/encode (= 2.30908.0)
   - nanopb/decode (2.30908.0)
   - nanopb/encode (2.30908.0)
+  - NVActivityIndicatorView (5.1.1):
+    - NVActivityIndicatorView/Base (= 5.1.1)
+  - NVActivityIndicatorView/Base (5.1.1)
   - PromisesObjC (2.0.0)
 
 DEPENDENCIES:
   - Firebase/Core
   - Google-Mobile-Ads-SDK
   - lottie-ios
+  - NVActivityIndicatorView
 
 SPEC REPOS:
   trunk:
@@ -110,6 +114,7 @@ SPEC REPOS:
     - GoogleUtilities
     - lottie-ios
     - nanopb
+    - NVActivityIndicatorView
     - PromisesObjC
 
 SPEC CHECKSUMS:
@@ -125,8 +130,9 @@ SPEC CHECKSUMS:
   GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
   lottie-ios: 6ac74dcc09904798f59b18cb3075c089d76be9ae
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
+  NVActivityIndicatorView: 1f6c5687f1171810aa27a3296814dc2d7dec3667
   PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
 
-PODFILE CHECKSUM: 89a099436ebea3e7efa7c148bd1a592c658f6df9
+PODFILE CHECKSUM: 5fc1f887e43f43effb995126f485c058a8da2113
 
 COCOAPODS: 1.11.3

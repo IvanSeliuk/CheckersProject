@@ -22,14 +22,18 @@ class MenuViewController: UIViewController {
     }
     
     func loadInterstitial() {
+        view.showLoading()
         let request = GADRequest()
         GADInterstitialAd.load(withAdUnitID:"ca-app-pub-3940256099942544/4411468910",
                                request: request,
                                completionHandler: { [self] ad, error in
             if let error = error {
                 print("Failed to load interstitial ad with error: \(error.localizedDescription)")
+                view.closeLoading()
+                presentGameViewController()
                 return
             }
+            view.closeLoading()
             interstitial = ad
             interstitial?.present(fromRootViewController: self)
             interstitial?.fullScreenContentDelegate = self

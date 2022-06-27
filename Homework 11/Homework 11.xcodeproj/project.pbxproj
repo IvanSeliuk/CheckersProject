@@ -16,6 +16,7 @@
 		6D2CAD7D27976BE0001DEE5F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6D2CAD7C27976BE0001DEE5F /* Assets.xcassets */; };
 		6D2CAD8027976BE0001DEE5F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6D2CAD7E27976BE0001DEE5F /* LaunchScreen.storyboard */; };
 		6D41B60427FB9862008FC6A5 /* OnboardingViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6D41B60327FB9862008FC6A5 /* OnboardingViewController.storyboard */; };
+		6D4DA8AD2869A46600319677 /* UIView + CoreKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4DA8AC2869A46600319677 /* UIView + CoreKit.swift */; };
 		6D533205285FB6F300E391BA /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D533204285FB6F300E391BA /* CoreDataManager.swift */; };
 		6D53320B285FBFFE00E391BA /* CheckerDataBase.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6D533209285FBFFE00E391BA /* CheckerDataBase.xcdatamodeld */; };
 		6D533212285FC67D00E391BA /* CheckerDB+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D533210285FC67D00E391BA /* CheckerDB+CoreDataClass.swift */; };
@@ -66,6 +67,7 @@
 		6D2CAD7F27976BE0001DEE5F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6D2CAD8127976BE0001DEE5F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6D41B60327FB9862008FC6A5 /* OnboardingViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = OnboardingViewController.storyboard; sourceTree = "<group>"; };
+		6D4DA8AC2869A46600319677 /* UIView + CoreKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView + CoreKit.swift"; sourceTree = "<group>"; };
 		6D533204285FB6F300E391BA /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		6D53320A285FBFFE00E391BA /* CheckerDataBase.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CheckerDataBase.xcdatamodel; sourceTree = "<group>"; };
 		6D533210285FC67D00E391BA /* CheckerDB+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CheckerDB+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -361,6 +363,7 @@
 				6D6C01EB27A223CD00DCE8A2 /* UIStoryboard + CoreKit.swift */,
 				6DF19F4027A1DD2000C8F198 /* UIView.swift */,
 				6DE0746A27F7830000B609BA /* localized.swift */,
+				6D4DA8AC2869A46600319677 /* UIView + CoreKit.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -516,6 +519,7 @@
 				6D6C01EC27A223CD00DCE8A2 /* UIStoryboard + CoreKit.swift in Sources */,
 				6D2CAD7827976BE0001DEE5F /* OnboardingViewController.swift in Sources */,
 				6DE0746B27F7830000B609BA /* localized.swift in Sources */,
+				6D4DA8AD2869A46600319677 /* UIView + CoreKit.swift in Sources */,
 				6D2CAD7427976BE0001DEE5F /* AppDelegate.swift in Sources */,
 				6DE45F0627B2B8B30004A28C /* AboutGameView.swift in Sources */,
 				6DA0D08527F34D1900165771 /* LanguagesViewController.swift in Sources */,
