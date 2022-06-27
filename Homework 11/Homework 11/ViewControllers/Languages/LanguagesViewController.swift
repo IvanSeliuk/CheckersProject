@@ -14,29 +14,13 @@ class LanguagesViewController: UIViewController {
     @IBOutlet weak var backButton: UIButton!
     var imageArray = [UIImage?]()
     
-    
+    //MARK: - Life cicle VC
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
     }
     
-    private func setLocalized() {
-        chooseLabel.text = "chooseLabel".localized
-        backButton.setTitle("BACK".localized, for: .normal)
-        backButton.setTitle("BACK".localized, for: .disabled)
-    }
-    
-   private func setupUI() {
-        pickerView.delegate = self
-        pickerView.dataSource = self
-        imageArray = [UIImage(named: "en"),
-                      UIImage(named: "ru"),
-                      UIImage(named: "de"),
-                      UIImage(named: "fr"),
-                      UIImage(named: "es")
-        ]
-    }
-    
+    //MARK: - Action & push
     @IBAction func backMenuButton(_ sender: Any) {
         guard let menuVC = MenuViewController.getInstanceController else { return }
         menuVC.modalPresentationStyle = .fullScreen
@@ -45,6 +29,7 @@ class LanguagesViewController: UIViewController {
     }
 }
 
+//MARK: - PickerView
 extension LanguagesViewController: UIPickerViewDelegate {
     func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
         let myImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 180, height: 135))
@@ -55,7 +40,6 @@ extension LanguagesViewController: UIPickerViewDelegate {
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        
         pickerView.selectRow(row, inComponent: component, animated: true)
         Setting.shared.currentLanguage = Setting.shared.languageCode[row]
         setLocalized()

@@ -24,54 +24,21 @@ class ScoreGameViewController: UIViewController {
         }
     }
     
+    //MARK: - Life cicle VC
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupTableVeiw()
         setupUI()
         removeScore()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        getData()
+        getDataScore()
         setupAnimation()
     }
     
-    private func setupUI() {
-        backButton.setTitle("BACK".localized, for: .normal)
-        backButton.setTitle("BACK".localized, for: .disabled)
-        
-    }
-    
-    private func setupTableVeiw() {
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.register(UINib(nibName: "ScoreResultGameTableViewCell", bundle: nil), forCellReuseIdentifier: "ScoreResultGameTableViewCell")
-    }
-    
-    func setupAnimation() {
-        removeViewAnimate.animation = Animation.named(LottieImage.delete3.rawValue)
-        removeViewAnimate.contentMode = .scaleAspectFit
-        removeViewAnimate.loopMode = .loop
-        removeViewAnimate.play()
-    }
-    
-    private func getData() {
-        let checkers = CoreDataManager.shared.getFromDB()
-        checkersDB = checkers
-        if checkersDB.count == 0 {
-            removeViewAnimate.isHidden = true
-        } else {
-            removeViewAnimate.isHidden = false
-        }
-    }
-    
-    private func removeScore() {
-        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(removeViewAnimateTap))
-        removeViewAnimate.addGestureRecognizer(tapRecognizer)
-    }
-    
-    @objc private func removeViewAnimateTap() {
+    //MARK: - Action & push
+    @objc func removeViewAnimateTap() {
         CoreDataManager.shared.clearDataBase()
         checkersDB.removeAll()
         removeViewAnimate.isHidden = true
@@ -86,6 +53,7 @@ class ScoreGameViewController: UIViewController {
     }
 }
 
+//MARK: - TableViewDelegate
 extension ScoreGameViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

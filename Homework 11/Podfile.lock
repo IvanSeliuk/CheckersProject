@@ -83,6 +83,7 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (7.7.0):
     - GoogleUtilities/Logger
+  - IQKeyboardManagerSwift (6.5.9)
   - lottie-ios (3.3.0)
   - nanopb (2.30908.0):
     - nanopb/decode (= 2.30908.0)
@@ -97,6 +98,7 @@ PODS:
 DEPENDENCIES:
   - Firebase/Core
   - Google-Mobile-Ads-SDK
+  - IQKeyboardManagerSwift
   - lottie-ios
   - NVActivityIndicatorView
 
@@ -112,6 +114,7 @@ SPEC REPOS:
     - GoogleDataTransport
     - GoogleUserMessagingPlatform
     - GoogleUtilities
+    - IQKeyboardManagerSwift
     - lottie-ios
     - nanopb
     - NVActivityIndicatorView
@@ -128,11 +131,12 @@ SPEC CHECKSUMS:
   GoogleDataTransport: 629c20a4d363167143f30ea78320d5a7eb8bd940
   GoogleUserMessagingPlatform: ab890ce5f6620f293a21b6bdd82e416a2c73aeca
   GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
+  IQKeyboardManagerSwift: 6e839c575c4aa1078d58a596e41244e77abe918f
   lottie-ios: 6ac74dcc09904798f59b18cb3075c089d76be9ae
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   NVActivityIndicatorView: 1f6c5687f1171810aa27a3296814dc2d7dec3667
   PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
 
-PODFILE CHECKSUM: 5fc1f887e43f43effb995126f485c058a8da2113
+PODFILE CHECKSUM: 5919a6cd5b11fb0f7b295f94a6017431d3bc56fa
 
 COCOAPODS: 1.11.3

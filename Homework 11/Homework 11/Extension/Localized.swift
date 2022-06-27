@@ -1,5 +1,5 @@
 //
-//  localized.swift
+//  Localized.swift
 //  Homework 11
 //
 //  Created by Иван Селюк on 1.04.22.

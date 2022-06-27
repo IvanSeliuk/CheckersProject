@@ -1,23 +1,15 @@
 //
-//  LoadingViewController.swift
+//  LoadingViewController + UI.swift
 //  Homework 11
 //
-//  Created by Иван Селюк on 7.02.22.
+//  Created by Иван Селюк on 27.06.22.
 //
 
 import UIKit
 
-class LoadingViewController: UIViewController {
-    
-    @IBOutlet weak var loadingImage: UIImageView!
-    @IBOutlet weak var loadingLabel: UILabel!
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        startAnimation()
-    }
-    
-    private func startAnimation() {
+extension LoadingViewController {
+    //MARK: - SetupUI
+    func startAnimation() {
         UIView.animate(withDuration: 1.0, delay: 1.0, options: [.curveEaseOut]) {
             self.loadingLabel.alpha = 0
         } completion: { _ in
