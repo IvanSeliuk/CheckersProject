@@ -6,12 +6,17 @@
 //
 
 import UIKit
+import Lottie
+
+enum LottieImage: String {
+    case delete1, delete2, delete3
+}
 
 class ScoreGameViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var backButton: UIButton!
-    @IBOutlet weak var removeAllButton: UIButton!
+    @IBOutlet weak var removeViewAnimate: AnimationView!
     
     var checkersDB = [Checkers]() {
         didSet {
@@ -23,18 +28,19 @@ class ScoreGameViewController: UIViewController {
         super.viewDidLoad()
         setupTableVeiw()
         setupUI()
+        removeScore()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         getData()
+        setupAnimation()
     }
     
     private func setupUI() {
         backButton.setTitle("BACK".localized, for: .normal)
         backButton.setTitle("BACK".localized, for: .disabled)
-        removeAllButton.setTitle("Remove All".localized, for: .normal)
-        removeAllButton.setTitle("Remove All".localized, for: .disabled)
+        
     }
     
     private func setupTableVeiw() {
@@ -43,14 +49,33 @@ class ScoreGameViewController: UIViewController {
         tableView.register(UINib(nibName: "ScoreResultGameTableViewCell", bundle: nil), forCellReuseIdentifier: "ScoreResultGameTableViewCell")
     }
     
+    func setupAnimation() {
+        removeViewAnimate.animation = Animation.named(LottieImage.delete3.rawValue)
+        removeViewAnimate.contentMode = .scaleAspectFit
+        removeViewAnimate.loopMode = .loop
+        removeViewAnimate.play()
+    }
+    
     private func getData() {
         let checkers = CoreDataManager.shared.getFromDB()
         checkersDB = checkers
         if checkersDB.count == 0 {
-            removeAllButton.isHidden = true
+            removeViewAnimate.isHidden = true
         } else {
-            removeAllButton.isHidden = false
+            removeViewAnimate.isHidden = false
         }
+    }
+    
+    private func removeScore() {
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(removeViewAnimateTap))
+        removeViewAnimate.addGestureRecognizer(tapRecognizer)
+    }
+    
+    @objc private func removeViewAnimateTap() {
+        CoreDataManager.shared.clearDataBase()
+        checkersDB.removeAll()
+        removeViewAnimate.isHidden = true
+        tableView.reloadData()
     }
     
     @IBAction func backToMenuButton(_ sender: Any) {
@@ -58,13 +83,6 @@ class ScoreGameViewController: UIViewController {
         menuVC.modalPresentationStyle = .fullScreen
         menuVC.modalTransitionStyle = .crossDissolve
         self.present(menuVC, animated: true, completion: nil)
-    }
-    
-    @IBAction func removeAllButton(_ sender: Any) {
-        CoreDataManager.shared.clearDataBase()
-        checkersDB.removeAll()
-        removeAllButton.isHidden = true
-        tableView.reloadData()
     }
 }
 

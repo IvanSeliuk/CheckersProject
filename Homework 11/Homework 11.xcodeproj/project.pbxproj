@@ -17,6 +17,9 @@
 		6D2CAD8027976BE0001DEE5F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6D2CAD7E27976BE0001DEE5F /* LaunchScreen.storyboard */; };
 		6D41B60427FB9862008FC6A5 /* OnboardingViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6D41B60327FB9862008FC6A5 /* OnboardingViewController.storyboard */; };
 		6D4DA8AD2869A46600319677 /* UIView + CoreKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4DA8AC2869A46600319677 /* UIView + CoreKit.swift */; };
+		6D4DA8B32869ACF400319677 /* delete1.json in Resources */ = {isa = PBXBuildFile; fileRef = 6D4DA8B02869ACF400319677 /* delete1.json */; };
+		6D4DA8B42869ACF400319677 /* delete2.json in Resources */ = {isa = PBXBuildFile; fileRef = 6D4DA8B12869ACF400319677 /* delete2.json */; };
+		6D4DA8B82869AF0500319677 /* delete3.json in Resources */ = {isa = PBXBuildFile; fileRef = 6D4DA8B62869AF0500319677 /* delete3.json */; };
 		6D533205285FB6F300E391BA /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D533204285FB6F300E391BA /* CoreDataManager.swift */; };
 		6D53320B285FBFFE00E391BA /* CheckerDataBase.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6D533209285FBFFE00E391BA /* CheckerDataBase.xcdatamodeld */; };
 		6D533212285FC67D00E391BA /* CheckerDB+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D533210285FC67D00E391BA /* CheckerDB+CoreDataClass.swift */; };
@@ -68,6 +71,9 @@
 		6D2CAD8127976BE0001DEE5F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6D41B60327FB9862008FC6A5 /* OnboardingViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = OnboardingViewController.storyboard; sourceTree = "<group>"; };
 		6D4DA8AC2869A46600319677 /* UIView + CoreKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView + CoreKit.swift"; sourceTree = "<group>"; };
+		6D4DA8B02869ACF400319677 /* delete1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = delete1.json; sourceTree = "<group>"; };
+		6D4DA8B12869ACF400319677 /* delete2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = delete2.json; sourceTree = "<group>"; };
+		6D4DA8B62869AF0500319677 /* delete3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = delete3.json; sourceTree = "<group>"; };
 		6D533204285FB6F300E391BA /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		6D53320A285FBFFE00E391BA /* CheckerDataBase.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CheckerDataBase.xcdatamodel; sourceTree = "<group>"; };
 		6D533210285FC67D00E391BA /* CheckerDB+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CheckerDB+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -169,6 +175,16 @@
 			path = "Homework 11";
 			sourceTree = "<group>";
 		};
+		6D4DA8AE2869ACB400319677 /* LottieImage */ = {
+			isa = PBXGroup;
+			children = (
+				6D4DA8B02869ACF400319677 /* delete1.json */,
+				6D4DA8B12869ACF400319677 /* delete2.json */,
+				6D4DA8B62869AF0500319677 /* delete3.json */,
+			);
+			path = LottieImage;
+			sourceTree = "<group>";
+		};
 		6D533206285FB73900E391BA /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -182,6 +198,7 @@
 		6D7FFBE028042D98002BE129 /* Libs */ = {
 			isa = PBXGroup;
 			children = (
+				6D4DA8AE2869ACB400319677 /* LottieImage */,
 				6D7FFBE128042D98002BE129 /* GlitchLabel */,
 			);
 			path = Libs;
@@ -447,6 +464,7 @@
 				6DE074A327F7BE8E00B609BA /* ru.lproj in Resources */,
 				6D9611AA27B07B5200C1C36D /* LoadingViewController.storyboard in Resources */,
 				6D41B60427FB9862008FC6A5 /* OnboardingViewController.storyboard in Resources */,
+				6D4DA8B32869ACF400319677 /* delete1.json in Resources */,
 				6DBC469D27B1CDFF00D3DC00 /* StartGameView.xib in Resources */,
 				6DE4382727B1FD21004C3406 /* ScoreGameView.xib in Resources */,
 				6DB3AB0D27CE7C9800B574E6 /* ScoreGameViewController.storyboard in Resources */,
@@ -457,8 +475,10 @@
 				6D132E3127A937B600542DBF /* GamerViewController.storyboard in Resources */,
 				6DE074A127F7BE8E00B609BA /* fr.lproj in Resources */,
 				6D2CAD7D27976BE0001DEE5F /* Assets.xcassets in Resources */,
+				6D4DA8B82869AF0500319677 /* delete3.json in Resources */,
 				6DE074A227F7BE8E00B609BA /* es.lproj in Resources */,
 				6DE074A527F7BE8E00B609BA /* de.lproj in Resources */,
+				6D4DA8B42869ACF400319677 /* delete2.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
