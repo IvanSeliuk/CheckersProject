@@ -25,7 +25,7 @@
 		6D4DA8C02869ED1300319677 /* LanguagesViewController + UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4DA8BF2869ED1300319677 /* LanguagesViewController + UI.swift */; };
 		6D4DA8C22869EDC100319677 /* LoadingViewController + UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4DA8C12869EDC100319677 /* LoadingViewController + UI.swift */; };
 		6D4DA8C42869EFFB00319677 /* OnboardingViewController + UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4DA8C32869EFFB00319677 /* OnboardingViewController + UI.swift */; };
-		6D4DA8CC286A3E1900319677 /* GamerViewControllerWithQueen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4DA8CB286A3E1900319677 /* GamerViewControllerWithQueen.swift */; };
+		6D4DA8CC286A3E1900319677 /* GamerViewController + UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4DA8CB286A3E1900319677 /* GamerViewController + UI.swift */; };
 		6D533205285FB6F300E391BA /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D533204285FB6F300E391BA /* CoreDataManager.swift */; };
 		6D53320B285FBFFE00E391BA /* CheckerDataBase.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6D533209285FBFFE00E391BA /* CheckerDataBase.xcdatamodeld */; };
 		6D533212285FC67D00E391BA /* CheckerDB+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D533210285FC67D00E391BA /* CheckerDB+CoreDataClass.swift */; };
@@ -85,7 +85,7 @@
 		6D4DA8BF2869ED1300319677 /* LanguagesViewController + UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LanguagesViewController + UI.swift"; sourceTree = "<group>"; };
 		6D4DA8C12869EDC100319677 /* LoadingViewController + UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LoadingViewController + UI.swift"; sourceTree = "<group>"; };
 		6D4DA8C32869EFFB00319677 /* OnboardingViewController + UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OnboardingViewController + UI.swift"; sourceTree = "<group>"; };
-		6D4DA8CB286A3E1900319677 /* GamerViewControllerWithQueen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamerViewControllerWithQueen.swift; sourceTree = "<group>"; };
+		6D4DA8CB286A3E1900319677 /* GamerViewController + UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GamerViewController + UI.swift"; sourceTree = "<group>"; };
 		6D533204285FB6F300E391BA /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		6D53320A285FBFFE00E391BA /* CheckerDataBase.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CheckerDataBase.xcdatamodel; sourceTree = "<group>"; };
 		6D533210285FC67D00E391BA /* CheckerDB+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CheckerDB+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -253,7 +253,7 @@
 			children = (
 				6D862D70279A257A008AFB09 /* GamerViewController.swift */,
 				6D132E3027A937B600542DBF /* GamerViewController.storyboard */,
-				6D4DA8CB286A3E1900319677 /* GamerViewControllerWithQueen.swift */,
+				6D4DA8CB286A3E1900319677 /* GamerViewController + UI.swift */,
 			);
 			path = Cheker;
 			sourceTree = "<group>";
@@ -578,7 +578,7 @@
 				6DE0746B27F7830000B609BA /* Localized.swift in Sources */,
 				6D4DA8AD2869A46600319677 /* UIView + CoreKit.swift in Sources */,
 				6D2CAD7427976BE0001DEE5F /* AppDelegate.swift in Sources */,
-				6D4DA8CC286A3E1900319677 /* GamerViewControllerWithQueen.swift in Sources */,
+				6D4DA8CC286A3E1900319677 /* GamerViewController + UI.swift in Sources */,
 				6DE45F0627B2B8B30004A28C /* AboutGameView.swift in Sources */,
 				6DA0D08527F34D1900165771 /* LanguagesViewController.swift in Sources */,
 				6D9611A827B07B4700C1C36D /* LoadingViewController.swift in Sources */,
