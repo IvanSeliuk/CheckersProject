@@ -623,8 +623,8 @@ extension GamerViewController {
                                                                                         }
                                                                                     }
                                                                                 } else {
-                                                                                    if (arrayPossibleStepsBlack.contains(squareOfChecker.tag) || arrayPossibleStepsBlack.isEmpty),
-                                                                                       (arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag) || arrayPossibleStepsQueenBlack.isEmpty),
+                                                                                    if ((arrayPossibleStepsBlack.contains(squareOfChecker.tag) || arrayPossibleStepsBlack.isEmpty) ||
+                                                                                       (arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag)) || arrayPossibleStepsQueenBlack.isEmpty),
                                                                                        square.tag == (squareOfChecker.tag - 36) {
                                                                                         if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
                                                                                            ((nineBottom.first?.subviews.first?.tag == 0 || nineBottom.first?.subviews.first?.tag == 2) && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
@@ -1601,7 +1601,8 @@ extension GamerViewController {
                                     ((nineTop.first?.subviews.first?.tag == checkerCheck || nineTop.first?.subviews.first?.tag == queenCheck) && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil) ||
                                     ((eighteenTop.first?.subviews.first?.tag == checkerCheck || eighteenTop.first?.subviews.first?.tag == queenCheck) && nineTop.first(where: {$0.subviews.isEmpty}) != nil) {
                                     takeStep = true
-                                } else {
+                                }
+                            } else {
                                     if checker.tag == queenMove, square.tag == (squareOfChecker.tag + 36) {
                                         if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
                                             ((nineTop.first?.subviews.first?.tag == checkerCheck || nineTop.first?.subviews.first?.tag == queenCheck) && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentySevenTop.first(where: {$0.subviews.isEmpty}) != nil) ||
@@ -1661,7 +1662,7 @@ extension GamerViewController {
                             ((twentyEightTop.first?.subviews.first?.tag == checkerCheck || twentyEightTop.first?.subviews.first?.tag == queenCheck) && sevenTop.first(where: {$0.subviews.isEmpty}) != nil && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveTop.first(where: {$0.subviews.isEmpty}) != nil) ||
                             ((thirtyFiveTop.first?.subviews.first?.tag == checkerCheck || thirtyFiveTop.first?.subviews.first?.tag == queenCheck) && sevenTop.first(where: {$0.subviews.isEmpty}) != nil && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil && twentyEightTop.first(where: {$0.subviews.isEmpty}) != nil) {
                             takeStep = true
-                                                                }
+                        }
                     } else {
                         if checker.tag == queenMove, square.tag == (squareOfChecker.tag + 49) {
                             if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
@@ -1676,10 +1677,11 @@ extension GamerViewController {
                         } else {
                             if checker.tag == queenMove, square.tag == (squareOfChecker.tag - 27) {
                                 if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                    ((nineBottom.first?.subviews.first?.tag == checkerCheck || nineBottom.first?.subviews.first?.tag == queenCheck) && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                    ((nineBottom.first?.subviews.first?.tag == checkerCheck || nineBottom.first?.subviews.first?.tag == queenCheck) && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
                                     ((eighteenBottom.first?.subviews.first?.tag == checkerCheck || eighteenBottom.first?.subviews.first?.tag == queenCheck) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil) {
                                     takeStep = true
-                                } else {
+                                }
+                            } else {
                                     if checker.tag == queenMove, square.tag == (squareOfChecker.tag - 36) {
                                         if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
                                             ((nineBottom.first?.subviews.first?.tag == checkerCheck || nineBottom.first?.subviews.first?.tag == queenCheck) && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
@@ -1695,7 +1697,7 @@ extension GamerViewController {
             ((twentySevenBottom.first?.subviews.first?.tag == checkerCheck || twentySevenBottom.first?.subviews.first?.tag == queenCheck) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtySixBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
             ((thirtySixBottom.first?.subviews.first?.tag == checkerCheck || thirtySixBottom.first?.subviews.first?.tag == queenCheck) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil)   {
             takeStep = true
-           }
+        }
     } else {
         if checker.tag == queenMove, square.tag == (squareOfChecker.tag - 54) {
             if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
@@ -1750,10 +1752,11 @@ extension GamerViewController {
                                         ((thirtyFiveBottom.first?.subviews.first?.tag == checkerCheck || thirtyFiveBottom.first?.subviews.first?.tag == queenCheck) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil && fortyTwoTop.first(where: {$0.subviews.isEmpty}) != nil) ||
                                         ((fortyTwoBottom.first?.subviews.first?.tag == checkerCheck || fortyTwoBottom.first?.subviews.first?.tag == queenCheck) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil) {
                                      takeStep = true
-        }}}}}}}}}}}}}}}}}}}}}}}}}}
+                                 }}}}}}}}}}}}}}}}}}}}}}}}
         return takeStep ?? false
     }
 }
+
 
 // MARK: - YOU HAVE TO BEAT
 extension GamerViewController {
