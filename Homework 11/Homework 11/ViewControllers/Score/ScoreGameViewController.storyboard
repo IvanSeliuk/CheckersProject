@@ -75,6 +75,9 @@
             <point key="canvasLocation" x="-17.39130434782609" y="36.830357142857139"/>
         </scene>
     </scenes>
+    <designables>
+        <designable name="hFB-r9-SaS"/>
+    </designables>
     <resources>
         <image name="доска 2" width="315" height="547"/>
         <systemColor name="systemBackgroundColor">
