@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Y6W-OH-hqX">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Y6W-OH-hqX">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -107,6 +107,10 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="R8t-Ob-M5M" customClass="AnimationView" customModule="Lottie">
+                                <rect key="frame" x="10" y="134.5" width="394" height="506"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -114,8 +118,10 @@
                             <constraint firstItem="gqe-DI-DYm" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="10" id="6Q8-e3-vWg"/>
                             <constraint firstItem="8qX-K8-218" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="25" id="9eM-LB-FLO"/>
                             <constraint firstItem="FOp-CT-PKQ" firstAttribute="centerY" secondItem="5EZ-qb-Rvc" secondAttribute="centerY" multiplier="0.2" id="DK0-qV-fOS"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="R8t-Ob-M5M" secondAttribute="trailing" constant="10" id="KYs-kp-ldk"/>
                             <constraint firstItem="gqe-DI-DYm" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="ML1-5S-YUc"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="tVG-6q-SvN" secondAttribute="trailing" constant="16" id="TIV-Go-CKR"/>
+                            <constraint firstItem="R8t-Ob-M5M" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="10" id="UPF-Iq-IE3"/>
                             <constraint firstItem="gqe-DI-DYm" firstAttribute="centerY" secondItem="5EZ-qb-Rvc" secondAttribute="centerY" multiplier="1.5" id="UjO-Sl-R3U"/>
                             <constraint firstItem="1s4-wl-qEw" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="10" id="Wq1-G4-DIm"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="gqe-DI-DYm" secondAttribute="trailing" constant="10" id="Y94-l5-Rex"/>
@@ -123,9 +129,11 @@
                             <constraint firstItem="tDH-rA-J9a" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" id="cbx-8E-HHd"/>
                             <constraint firstItem="tVG-6q-SvN" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="16" id="gZh-J9-g1g"/>
                             <constraint firstItem="tDH-rA-J9a" firstAttribute="top" secondItem="5EZ-qb-Rvc" secondAttribute="top" id="geg-hV-V9G"/>
+                            <constraint firstItem="R8t-Ob-M5M" firstAttribute="top" secondItem="FOp-CT-PKQ" secondAttribute="bottom" constant="15" id="jFO-3G-KkV"/>
                             <constraint firstItem="8qX-K8-218" firstAttribute="centerY" secondItem="5EZ-qb-Rvc" secondAttribute="centerY" multiplier="1.7" id="jtO-Sn-WTF"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="2CE-7s-nkN" secondAttribute="trailing" constant="25" id="kEg-ZK-XUh"/>
                             <constraint firstItem="1s4-wl-qEw" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="mPy-Pb-YPS"/>
+                            <constraint firstItem="gqe-DI-DYm" firstAttribute="top" secondItem="R8t-Ob-M5M" secondAttribute="bottom" constant="15" id="qkG-9N-4jv"/>
                             <constraint firstItem="tDH-rA-J9a" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="s4S-Bu-1PC"/>
                             <constraint firstAttribute="bottom" secondItem="tDH-rA-J9a" secondAttribute="bottom" id="wHS-Tr-YKE"/>
                             <constraint firstItem="2CE-7s-nkN" firstAttribute="centerY" secondItem="8qX-K8-218" secondAttribute="centerY" id="xVS-Ln-qJ2"/>
@@ -135,6 +143,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="dzS-DT-qOH"/>
                     <connections>
+                        <outlet property="animationView" destination="R8t-Ob-M5M" id="T6n-sU-xPQ"/>
                         <outlet property="backgroundSecondVC" destination="tDH-rA-J9a" id="Wmp-3g-YWu"/>
                         <outlet property="buttonReset" destination="8qX-K8-218" id="kAy-bJ-ffX"/>
                         <outlet property="buttonSave" destination="2CE-7s-nkN" id="ggH-gp-ZOk"/>

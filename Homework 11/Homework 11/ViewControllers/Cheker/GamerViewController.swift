@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+import Lottie
 
 enum ColorChecker: String {
     case white, black, whiteKing, blackKing
@@ -25,6 +25,7 @@ class GamerViewController: UIViewController {
     @IBOutlet weak var buttonReset: UIButton!
     @IBOutlet weak var buttonSave: UIButton!
     @IBOutlet weak var whoMustMoveLabel: UILabel!
+    @IBOutlet weak var animationView: AnimationView!
     
     var desk: UIView!
     var chechersArray: [SaveCheckers] = []
@@ -65,7 +66,7 @@ class GamerViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
+        setupAnimation()
         let alert = UIAlertController(title: "Load Game".localized, message: "Do you want to load the last game?".localized, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "NO".localized, style: .default, handler: {
             [self]_ in
@@ -86,6 +87,7 @@ class GamerViewController: UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         timer.invalidate()
+        AudioManager.shared.clearSoundPlayer()
     }
     
     
@@ -99,6 +101,7 @@ class GamerViewController: UIViewController {
         
         switch sender.state {
         case .began:
+            AudioManager.shared.playSoundPlayer(with: SoundsChoice.click.rawValue)
             arrayBorder.removeAll()
             for square in desk.subviews {
                 if checker.tag == 0 && currentGamer == .whitePlaying &&
@@ -153,6 +156,7 @@ class GamerViewController: UIViewController {
             }
             
         case .ended:
+            AudioManager.shared.playSoundPlayer(with: SoundsChoice.click.rawValue)
             UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseOut) {
                 checker.transform = .identity
             }
@@ -193,8 +197,8 @@ class GamerViewController: UIViewController {
             queenStepsGray(recognizer: recognizer)
             for square in desk.subviews {
                 if square.frame.contains(recognizer.location(in: desk)) {
-                    if (arrayPossibleStepsWhite.contains(squareOfChecker.tag) || arrayPossibleStepsWhite.isEmpty),
-                       (arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag) || arrayPossibleStepsQueenWhite.isEmpty),
+                    if ((arrayPossibleStepsWhite.contains(squareOfChecker.tag) || arrayPossibleStepsWhite.isEmpty) ||
+                       (arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag) || arrayPossibleStepsQueenWhite.isEmpty)),
                        checker.tag == 0, currentGamer == .whitePlaying, square.tag == (squareOfChecker.tag - 14) {
                         if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
                            (filterSevenBottom.first(where: {$0.subviews.isEmpty}) == nil),
@@ -221,8 +225,8 @@ class GamerViewController: UIViewController {
                         }
                         
                     } else {
-                        if (arrayPossibleStepsWhite.contains(squareOfChecker.tag) || arrayPossibleStepsWhite.isEmpty),
-                           (arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag) || arrayPossibleStepsQueenWhite.isEmpty),
+                        if ((arrayPossibleStepsWhite.contains(squareOfChecker.tag) || arrayPossibleStepsWhite.isEmpty) ||
+                            (arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag) || arrayPossibleStepsQueenWhite.isEmpty)),
                            checker.tag == 0, currentGamer == .whitePlaying, square.tag == (squareOfChecker.tag - 18) {
                             if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
                                (filterNineBottom.first(where: {$0.subviews.isEmpty}) == nil),
@@ -273,8 +277,8 @@ class GamerViewController: UIViewController {
                                 
 //MARK: - MOVE WHITE BACK
                             } else {
-                                if (arrayPossibleStepsWhite.contains(squareOfChecker.tag) || arrayPossibleStepsWhite.isEmpty),
-                                   (arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag) || arrayPossibleStepsQueenWhite.isEmpty),
+                                if ((arrayPossibleStepsWhite.contains(squareOfChecker.tag) || arrayPossibleStepsWhite.isEmpty) ||
+                                    (arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag) || arrayPossibleStepsQueenWhite.isEmpty)),
                                    checker.tag == 0, currentGamer == .whitePlaying,
                                    (square.tag == (squareOfChecker.tag + 14)) {
                                     if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
@@ -301,8 +305,8 @@ class GamerViewController: UIViewController {
                                         checkingStepsAllCheckers(recognizer: recognizer)
                                     }
                                 } else {
-                                    if (arrayPossibleStepsWhite.contains(squareOfChecker.tag) || arrayPossibleStepsWhite.isEmpty),
-                                       (arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag) || arrayPossibleStepsQueenWhite.isEmpty),
+                                    if ((arrayPossibleStepsWhite.contains(squareOfChecker.tag) || arrayPossibleStepsWhite.isEmpty) ||
+                                        (arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag) || arrayPossibleStepsQueenWhite.isEmpty)),
                                        checker.tag == 0, currentGamer == .whitePlaying,
                                        (square.tag == (squareOfChecker.tag + 18)) {
                                         if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
@@ -328,9 +332,11 @@ class GamerViewController: UIViewController {
                                             checkBeatCheckerWhite(recognizer: recognizer)
                                             checkingStepsAllCheckers(recognizer: recognizer)
                                         }
+                                        
+//MARK: - MOVE BLACK FORWARD
                                     } else {
-                                        if (arrayPossibleStepsBlack.contains(squareOfChecker.tag) || arrayPossibleStepsBlack.isEmpty),
-                                           (arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag) || arrayPossibleStepsQueenBlack.isEmpty),
+                                        if ((arrayPossibleStepsBlack.contains(squareOfChecker.tag) || arrayPossibleStepsBlack.isEmpty) ||
+                                            (arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag) || arrayPossibleStepsQueenBlack.isEmpty)),
                                            checker.tag == 1, currentGamer == .blackPlaying,
                                            (square.tag == (squareOfChecker.tag + 14)) {
                                             if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
@@ -356,10 +362,9 @@ class GamerViewController: UIViewController {
                                                 checkBeatCheckerBlack(recognizer: recognizer)
                                                 checkingStepsAllCheckers(recognizer: recognizer)
                                             }
-                                        }
-                                        else {
-                                            if (arrayPossibleStepsBlack.contains(squareOfChecker.tag) || arrayPossibleStepsBlack.isEmpty),
-                                               (arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag) || arrayPossibleStepsQueenBlack.isEmpty),
+                                        } else {
+                                            if ((arrayPossibleStepsBlack.contains(squareOfChecker.tag) || arrayPossibleStepsBlack.isEmpty) ||
+                                                (arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag) || arrayPossibleStepsQueenBlack.isEmpty)),
                                                checker.tag == 1, currentGamer == .blackPlaying,
                                                (square.tag == (squareOfChecker.tag + 18)) {
                                                 if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
@@ -411,8 +416,8 @@ class GamerViewController: UIViewController {
                                                     
                                                 } else {
 //MARK: - MOVE BLACK BACK
-                                                    if (arrayPossibleStepsBlack.contains(squareOfChecker.tag) || arrayPossibleStepsBlack.isEmpty),
-                                                       (arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag) || arrayPossibleStepsQueenBlack.isEmpty),
+                                                    if ((arrayPossibleStepsBlack.contains(squareOfChecker.tag) || arrayPossibleStepsBlack.isEmpty) ||
+                                                        (arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag) || arrayPossibleStepsQueenBlack.isEmpty)),
                                                        checker.tag == 1, currentGamer == .blackPlaying,
                                                        (square.tag == (squareOfChecker.tag - 14)) {
                                                         if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
@@ -439,8 +444,8 @@ class GamerViewController: UIViewController {
                                                             checkingStepsAllCheckers(recognizer: recognizer)
                                                         }
                                                     } else {
-                                                        if (arrayPossibleStepsBlack.contains(squareOfChecker.tag) || arrayPossibleStepsBlack.isEmpty),
-                                                           (arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag) || arrayPossibleStepsQueenBlack.isEmpty),
+                                                        if ((arrayPossibleStepsBlack.contains(squareOfChecker.tag) || arrayPossibleStepsBlack.isEmpty) ||
+                                                            (arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag) || arrayPossibleStepsQueenBlack.isEmpty)),
                                                            checker.tag == 1, currentGamer == .blackPlaying,
                                                            (square.tag == (squareOfChecker.tag - 18)) {
                                                             if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
