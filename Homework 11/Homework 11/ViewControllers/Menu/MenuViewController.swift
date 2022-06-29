@@ -13,6 +13,7 @@ class MenuViewController: UIViewController {
     @IBOutlet weak var startGameView: StartGameView!
     @IBOutlet weak var settingsBackgroundSecondViewController: SettingsGameView!
     @IBOutlet weak var scoreResultGame: ScoreGameView!
+    @IBOutlet weak var aboutGameView: AboutGameView!
     var imageBack: UIImage?
     var interstitial: GADInterstitialAd?
     
@@ -52,6 +53,13 @@ class MenuViewController: UIViewController {
     
     @objc func scoreResultGameViewTapped() {
         guard let scoreVC = ScoreGameViewController.getInstanceController as? ScoreGameViewController else {return}
+        scoreVC.modalPresentationStyle = .fullScreen
+        scoreVC.modalTransitionStyle = .crossDissolve
+        present(scoreVC, animated: true, completion: nil)
+    }
+    
+    @objc func aboutGameViewTapped() {
+        guard let scoreVC = AboutViewController.getInstanceController as? AboutViewController else {return}
         scoreVC.modalPresentationStyle = .fullScreen
         scoreVC.modalTransitionStyle = .crossDissolve
         present(scoreVC, animated: true, completion: nil)

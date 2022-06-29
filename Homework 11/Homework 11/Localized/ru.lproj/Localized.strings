@@ -40,3 +40,6 @@
 "WINNER" = "Победитель";
 "Game time" = "Время игры";
 
+// AboutViewController
+"name" = "Шашки были разработаны Иваном Селюком";
+"group" = "Группа i15-onl";

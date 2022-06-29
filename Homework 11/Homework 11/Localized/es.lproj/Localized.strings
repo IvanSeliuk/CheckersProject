@@ -40,3 +40,6 @@
 "WINNER" = "GANADOR";
 "Game time" = "Tiempo de juego";
 
+// AboutViewController
+"name" = "Damas desarrolladas por Ivan Seliuk";
+"group" = "Groupo i15-onl";

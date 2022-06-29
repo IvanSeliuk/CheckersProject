@@ -30,12 +30,13 @@ extension MenuViewController {
     }
     
     func setupTappedViews() {
-        setupTapGestureRecognizerStartView()
-        setupTapGestureRecognizereSettingsView()
-        setupTapGestureRecognizerScoreView()
+        setupTapGestureStartView()
+        setupTapGestureSettingsView()
+        setupTapGestureScoreView()
+        setupTapGestureAboutView()
     }
     
-    private func setupTapGestureRecognizerStartView() {
+    private func setupTapGestureStartView() {
         Setting.shared.onboardingCompleted = true
         let tapRecognizer = UITapGestureRecognizer()
         tapRecognizer.addTarget(self, action: #selector(startGameViewTapped))
@@ -43,17 +44,24 @@ extension MenuViewController {
         startGameView.isUserInteractionEnabled = true
     }
     
-    private func setupTapGestureRecognizereSettingsView() {
+    private func setupTapGestureSettingsView() {
         let tapRecognizer = UITapGestureRecognizer()
         tapRecognizer.addTarget(self, action: #selector(settingsGameViewTapped))
         settingsBackgroundSecondViewController.addGestureRecognizer(tapRecognizer)
         settingsBackgroundSecondViewController.isUserInteractionEnabled = true
     }
     
-    private func setupTapGestureRecognizerScoreView() {
+    private func setupTapGestureScoreView() {
         let tapRecognizer = UITapGestureRecognizer()
         tapRecognizer.addTarget(self, action: #selector(scoreResultGameViewTapped))
         scoreResultGame.addGestureRecognizer(tapRecognizer)
         scoreResultGame.isUserInteractionEnabled = true
+    }
+    
+    private func setupTapGestureAboutView() {
+        let tapRecognizer = UITapGestureRecognizer()
+        tapRecognizer.addTarget(self, action: #selector(aboutGameViewTapped))
+        aboutGameView.addGestureRecognizer(tapRecognizer)
+        aboutGameView.isUserInteractionEnabled = true
     }
 }

@@ -39,3 +39,6 @@
 "WINNER" = "WINNER";
 "Game time" = "Game time";
 
+// AboutViewController
+"name" = "Checkers developed by Ivan Seliuk";
+"group" = "Group i15-onl";

@@ -100,6 +100,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="aboutGameView" destination="heV-Cr-SFh" id="0fe-vp-BiQ"/>
                         <outlet property="scoreResultGame" destination="FUa-nz-v1Q" id="1Da-el-dPF"/>
                         <outlet property="settingsBackgroundSecondViewController" destination="FZh-Di-cpW" id="LdE-cR-ay5"/>
                         <outlet property="startGameView" destination="pzt-bK-53p" id="uIg-40-PI8"/>
