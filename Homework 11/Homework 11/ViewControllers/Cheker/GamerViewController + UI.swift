@@ -133,6 +133,18 @@ extension GamerViewController {
         saveCurrentMove = currentGamer
     }
     
+    func alertLoadGame() {
+        let alert = UIAlertController(title: "Load Game".localized, message: "Do you want to load the last game?".localized, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "NO".localized, style: .default, handler: {
+            [self]_ in
+            turnOnTimer()
+        }))
+        alert.addAction(UIAlertAction(title: "YES".localized, style: .cancel, handler: { [self]_ in
+            loadSaveDesk()
+        }))
+        present(alert, animated: true, completion: nil)
+    }
+    
     //MARK: - FINISH GAME
     func finishGame() {
         if beatBlackCheckers == 12 || beatWhiteCheckers == 12 {
