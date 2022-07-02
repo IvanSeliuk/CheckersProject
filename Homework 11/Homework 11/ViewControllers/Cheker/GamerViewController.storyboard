@@ -21,7 +21,11 @@
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tVG-6q-SvN">
-                                <rect key="frame" x="343" y="60" width="55" height="45.5"/>
+                                <rect key="frame" x="344" y="60" width="54" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="2Op-Kp-asZ"/>
+                                    <constraint firstAttribute="width" constant="54" id="4UY-ib-e3E"/>
+                                </constraints>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" imagePadding="0.0">
@@ -111,6 +115,27 @@
                                 <rect key="frame" x="10" y="134.5" width="394" height="506"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9vn-qY-ShY">
+                                <rect key="frame" x="343" y="112" width="55" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="K5t-Hs-Sqc"/>
+                                    <constraint firstAttribute="width" constant="55" id="bf2-HB-GTP"/>
+                                </constraints>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain">
+                                    <imageReference key="image" image="volume.slash.fill" catalog="system" symbolScale="large"/>
+                                </buttonConfiguration>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isNeedBorder" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="buttonVolumeIsMute:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="MkG-dp-njb"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -129,9 +154,11 @@
                             <constraint firstItem="tDH-rA-J9a" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" id="cbx-8E-HHd"/>
                             <constraint firstItem="tVG-6q-SvN" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="16" id="gZh-J9-g1g"/>
                             <constraint firstItem="tDH-rA-J9a" firstAttribute="top" secondItem="5EZ-qb-Rvc" secondAttribute="top" id="geg-hV-V9G"/>
+                            <constraint firstItem="9vn-qY-ShY" firstAttribute="top" secondItem="tVG-6q-SvN" secondAttribute="bottom" constant="8" id="iTX-yy-UKa"/>
                             <constraint firstItem="R8t-Ob-M5M" firstAttribute="top" secondItem="FOp-CT-PKQ" secondAttribute="bottom" constant="15" id="jFO-3G-KkV"/>
                             <constraint firstItem="8qX-K8-218" firstAttribute="centerY" secondItem="5EZ-qb-Rvc" secondAttribute="centerY" multiplier="1.7" id="jtO-Sn-WTF"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="2CE-7s-nkN" secondAttribute="trailing" constant="25" id="kEg-ZK-XUh"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="9vn-qY-ShY" secondAttribute="trailing" constant="16" id="mFN-Y8-svf"/>
                             <constraint firstItem="1s4-wl-qEw" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="mPy-Pb-YPS"/>
                             <constraint firstItem="gqe-DI-DYm" firstAttribute="top" secondItem="R8t-Ob-M5M" secondAttribute="bottom" constant="15" id="qkG-9N-4jv"/>
                             <constraint firstItem="tDH-rA-J9a" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="s4S-Bu-1PC"/>
@@ -147,6 +174,7 @@
                         <outlet property="backgroundSecondVC" destination="tDH-rA-J9a" id="Wmp-3g-YWu"/>
                         <outlet property="buttonReset" destination="8qX-K8-218" id="kAy-bJ-ffX"/>
                         <outlet property="buttonSave" destination="2CE-7s-nkN" id="ggH-gp-ZOk"/>
+                        <outlet property="buttonVolume" destination="9vn-qY-ShY" id="kEr-zn-xxT"/>
                         <outlet property="namePlayerLabel" destination="1s4-wl-qEw" id="V5Y-kl-tlZ"/>
                         <outlet property="timerLabel" destination="RFQ-Ot-buj" id="ZSS-Td-XRq"/>
                         <outlet property="whoMustMoveLabel" destination="gqe-DI-DYm" id="Dx8-jL-3YL"/>
@@ -157,7 +185,11 @@
             <point key="canvasLocation" x="886.95652173913049" y="53.571428571428569"/>
         </scene>
     </scenes>
+    <designables>
+        <designable name="R8t-Ob-M5M"/>
+    </designables>
     <resources>
+        <image name="volume.slash.fill" catalog="system" width="124" height="128"/>
         <image name="xmark.circle.fill" catalog="system" width="128" height="121"/>
         <image name="доска 2" width="315" height="547"/>
         <systemColor name="labelColor">

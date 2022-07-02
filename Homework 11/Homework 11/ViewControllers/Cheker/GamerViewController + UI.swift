@@ -112,6 +112,7 @@ extension GamerViewController {
         buttonReset.setTitle("RESET".localized, for: .normal)
         buttonReset.setTitle("RESET".localized, for: .disabled)
         animationView.isHidden = true
+        buttonVolume.setImage(UIImage(systemName: "volume.3.fill"), for: .normal)
     }
     
     func setupAnimation() {
@@ -174,6 +175,7 @@ extension GamerViewController {
         CoreDataManager.shared.saveScoreInDB(checkers: checkersDB)
         
         timer.invalidate()
+        UserDefaults.standard.removeObject(forKey: "chechersArray")
         let alert = UIAlertController(title: "Finish game", message:  (winner ?? "He") + " is winner!", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { action in
             AudioManager.shared.clearSoundPlayer()
@@ -229,52 +231,28 @@ extension GamerViewController {
                             checkingStepsAllCheckers(recognizer: recognizer)
                         }
                     } else {
-                        if (arrayPossibleStepsBlack.contains(squareOfChecker.tag) || arrayPossibleStepsBlack.isEmpty),
-                           (arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag) || arrayPossibleStepsQueenBlack.isEmpty),
+                        if arrayPossibleStepsBlack.isEmpty, arrayPossibleStepsQueenBlack.isEmpty,
                            square.tag == (squareOfChecker.tag + 14) {
-                            if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), sevenTop.first?.subviews.first?.tag == 0 || sevenTop.first?.subviews.first?.tag == 2 {
-                                sevenTop.first?.subviews.first?.removeFromSuperview()
+                            if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), sevenTop.first(where: {$0.subviews.isEmpty}) != nil {
                                 desk.bringSubviewToFront(square)
-                                beatWhiteCheckers += 1
-                                finishGame()
                                 square.addSubview(checker)
                                 checker.frame.origin = .zero
-                                checkBeatCheckerBlack(recognizer: recognizer)
+                                nextMove(nextMove: .whitePlaying, text: "White's move")
                                 checkingStepsAllCheckers(recognizer: recognizer)
-                            } else {
-                                if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), sevenTop.first(where: {$0.subviews.isEmpty}) != nil {
+                            }
+                        } else {
+                            if arrayPossibleStepsBlack.isEmpty, arrayPossibleStepsQueenBlack.isEmpty,
+                               square.tag == (squareOfChecker.tag + 18) {
+                                if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), nineTop.first(where: {$0.subviews.isEmpty}) != nil {
                                     desk.bringSubviewToFront(square)
                                     square.addSubview(checker)
                                     checker.frame.origin = .zero
                                     nextMove(nextMove: .whitePlaying, text: "White's move")
                                     checkingStepsAllCheckers(recognizer: recognizer)
                                 }
-                            }
-                        } else {
-                            if (arrayPossibleStepsBlack.contains(squareOfChecker.tag) || arrayPossibleStepsBlack.isEmpty),
-                               (arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag) || arrayPossibleStepsQueenBlack.isEmpty),
-                               square.tag == (squareOfChecker.tag + 18) {
-                                if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), nineTop.first?.subviews.first?.tag == 0 || nineTop.first?.subviews.first?.tag == 2 {
-                                    nineTop.first?.subviews.first?.removeFromSuperview()
-                                    desk.bringSubviewToFront(square)
-                                    beatWhiteCheckers += 1
-                                    finishGame()
-                                    square.addSubview(checker)
-                                    checker.frame.origin = .zero
-                                    checkBeatCheckerBlack(recognizer: recognizer)
-                                    checkingStepsAllCheckers(recognizer: recognizer)
-                                } else {
-                                    if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), nineTop.first(where: {$0.subviews.isEmpty}) != nil {
-                                        desk.bringSubviewToFront(square)
-                                        square.addSubview(checker)
-                                        checker.frame.origin = .zero
-                                        nextMove(nextMove: .whitePlaying, text: "White's move")
-                                        checkingStepsAllCheckers(recognizer: recognizer)
-                                    }
-                                }
                             } else {
-                                if (arrayPossibleStepsBlack.contains(squareOfChecker.tag) || arrayPossibleStepsBlack.isEmpty),
-                                    (arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag) || arrayPossibleStepsQueenBlack.isEmpty),
+                                if arrayPossibleStepsBlack.contains(squareOfChecker.tag) ||
+                                    arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag),
                                     square.tag == (squareOfChecker.tag + 21) {
                                     if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
                                        ((sevenTop.first?.subviews.first?.tag == 0 || sevenTop.first?.subviews.first?.tag == 2) && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil) ||
@@ -288,18 +266,20 @@ extension GamerViewController {
                                         checker.frame.origin = .zero
                                         checkBeatCheckerBlack(recognizer: recognizer)
                                         checkingStepsAllCheckers(recognizer: recognizer)
-                                    } else {
-                                        if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), sevenTop.first(where: {$0.subviews.isEmpty}) != nil && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil {
-                                            desk.bringSubviewToFront(square)
-                                            square.addSubview(checker)
-                                            checker.frame.origin = .zero
-                                            nextMove(nextMove: .whitePlaying, text: "White's move")
-                                            checkingStepsAllCheckers(recognizer: recognizer)
                                         }
+                                    } else {
+                                        if arrayPossibleStepsBlack.isEmpty, arrayPossibleStepsQueenBlack.isEmpty,
+                                           square.tag == (squareOfChecker.tag + 21) {
+                                            if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), sevenTop.first(where: {$0.subviews.isEmpty}) != nil && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil {
+                                                desk.bringSubviewToFront(square)
+                                                square.addSubview(checker)
+                                                checker.frame.origin = .zero
+                                                nextMove(nextMove: .whitePlaying, text: "White's move")
+                                                checkingStepsAllCheckers(recognizer: recognizer)
                                     }
                                 } else {
-                                    if (arrayPossibleStepsBlack.contains(squareOfChecker.tag) || arrayPossibleStepsBlack.isEmpty),
-                                        (arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag) || arrayPossibleStepsQueenBlack.isEmpty),
+                                    if arrayPossibleStepsBlack.contains(squareOfChecker.tag) ||
+                                    arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag),
                                        square.tag == (squareOfChecker.tag + 27) {
                                         if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
                                            ((nineTop.first?.subviews.first?.tag == 0 || nineTop.first?.subviews.first?.tag == 2) && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil) ||
@@ -313,18 +293,20 @@ extension GamerViewController {
                                             checker.frame.origin = .zero
                                             checkBeatCheckerBlack(recognizer: recognizer)
                                             checkingStepsAllCheckers(recognizer: recognizer)
-                                        } else {
-                                            if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), nineTop.first(where: {$0.subviews.isEmpty}) != nil && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil {
-                                                desk.bringSubviewToFront(square)
-                                                square.addSubview(checker)
-                                                checker.frame.origin = .zero
-                                                nextMove(nextMove: .whitePlaying, text: "White's move")
-                                                checkingStepsAllCheckers(recognizer: recognizer)
                                             }
+                                        } else {
+                                            if arrayPossibleStepsBlack.isEmpty, arrayPossibleStepsQueenBlack.isEmpty,
+                                               square.tag == (squareOfChecker.tag + 27) {
+                                                if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), nineTop.first(where: {$0.subviews.isEmpty}) != nil && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil {
+                                                    desk.bringSubviewToFront(square)
+                                                    square.addSubview(checker)
+                                                    checker.frame.origin = .zero
+                                                    nextMove(nextMove: .whitePlaying, text: "White's move")
+                                                    checkingStepsAllCheckers(recognizer: recognizer)
                                         }
                                     } else {
-                                        if (arrayPossibleStepsBlack.contains(squareOfChecker.tag) || arrayPossibleStepsBlack.isEmpty),
-                                            (arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag) || arrayPossibleStepsQueenBlack.isEmpty),
+                                        if arrayPossibleStepsBlack.contains(squareOfChecker.tag) ||
+                                            arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag),
                                             square.tag == (squareOfChecker.tag + 36) {
                                             if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
                                                ((nineTop.first?.subviews.first?.tag == 0 || nineTop.first?.subviews.first?.tag == 2) && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentySevenTop.first(where: {$0.subviews.isEmpty}) != nil) ||
@@ -340,18 +322,20 @@ extension GamerViewController {
                                                 checker.frame.origin = .zero
                                                 checkBeatCheckerBlack(recognizer: recognizer)
                                                 checkingStepsAllCheckers(recognizer: recognizer)
-                                            } else {
-                                                if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), nineTop.first(where: {$0.subviews.isEmpty}) != nil && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentySevenTop.first(where: {$0.subviews.isEmpty}) != nil {
-                                                    desk.bringSubviewToFront(square)
-                                                    square.addSubview(checker)
-                                                    checker.frame.origin = .zero
-                                                    nextMove(nextMove: .whitePlaying, text: "White's move")
-                                                    checkingStepsAllCheckers(recognizer: recognizer)
                                                 }
+                                            } else {
+                                                if arrayPossibleStepsBlack.isEmpty, arrayPossibleStepsQueenBlack.isEmpty,
+                                                   square.tag == (squareOfChecker.tag + 36) {
+                                                    if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), nineTop.first(where: {$0.subviews.isEmpty}) != nil && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentySevenTop.first(where: {$0.subviews.isEmpty}) != nil {
+                                                        desk.bringSubviewToFront(square)
+                                                        square.addSubview(checker)
+                                                        checker.frame.origin = .zero
+                                                        nextMove(nextMove: .whitePlaying, text: "White's move")
+                                                        checkingStepsAllCheckers(recognizer: recognizer)
                                             }
                                         } else {
-                                            if (arrayPossibleStepsBlack.contains(squareOfChecker.tag) || arrayPossibleStepsBlack.isEmpty),
-                                                (arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag) || arrayPossibleStepsQueenBlack.isEmpty),
+                                            if arrayPossibleStepsBlack.contains(squareOfChecker.tag) ||
+                                                arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag),
                                                square.tag == (squareOfChecker.tag + 45) {
                                                 if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
                                                    ((nineTop.first?.subviews.first?.tag == 0 || nineTop.first?.subviews.first?.tag == 2) && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentySevenTop.first(where: {$0.subviews.isEmpty}) != nil && thirtySixTop.first(where: {$0.subviews.isEmpty}) != nil) ||
@@ -369,18 +353,20 @@ extension GamerViewController {
                                                     checker.frame.origin = .zero
                                                     checkBeatCheckerBlack(recognizer: recognizer)
                                                     checkingStepsAllCheckers(recognizer: recognizer)
-                                                } else {
-                                                    if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), nineTop.first(where: {$0.subviews.isEmpty}) != nil && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentySevenTop.first(where: {$0.subviews.isEmpty}) != nil && thirtySixTop.first(where: {$0.subviews.isEmpty}) != nil {
-                                                        desk.bringSubviewToFront(square)
-                                                        square.addSubview(checker)
-                                                        checker.frame.origin = .zero
-                                                        nextMove(nextMove: .whitePlaying, text: "White's move")
-                                                        checkingStepsAllCheckers(recognizer: recognizer)
                                                     }
+                                                } else {
+                                                    if arrayPossibleStepsBlack.isEmpty, arrayPossibleStepsQueenBlack.isEmpty,
+                                                       square.tag == (squareOfChecker.tag + 45) {
+                                                        if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), nineTop.first(where: {$0.subviews.isEmpty}) != nil && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentySevenTop.first(where: {$0.subviews.isEmpty}) != nil && thirtySixTop.first(where: {$0.subviews.isEmpty}) != nil {
+                                                            desk.bringSubviewToFront(square)
+                                                            square.addSubview(checker)
+                                                            checker.frame.origin = .zero
+                                                            nextMove(nextMove: .whitePlaying, text: "White's move")
+                                                            checkingStepsAllCheckers(recognizer: recognizer)
                                                 }
                                             } else {
-                                                if (arrayPossibleStepsBlack.contains(squareOfChecker.tag) || arrayPossibleStepsBlack.isEmpty),
-                                                    (arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag) || arrayPossibleStepsQueenBlack.isEmpty),
+                                                if arrayPossibleStepsBlack.contains(squareOfChecker.tag) ||
+                                                    arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag),
                                                    square.tag == (squareOfChecker.tag + 54) {
                                                     if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
                                                        ((nineTop.first?.subviews.first?.tag == 0 || nineTop.first?.subviews.first?.tag == 2) && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentySevenTop.first(where: {$0.subviews.isEmpty}) != nil && thirtySixTop.first(where: {$0.subviews.isEmpty}) != nil && fortyFiveTop.first(where: {$0.subviews.isEmpty}) != nil) ||
@@ -400,23 +386,21 @@ extension GamerViewController {
                                                         checker.frame.origin = .zero
                                                         checkBeatCheckerBlack(recognizer: recognizer)
                                                         checkingStepsAllCheckers(recognizer: recognizer)
-                                                    } else {
-                                                        if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                           nineTop.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                            eighteenTop.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                            twentySevenTop.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                            thirtySixTop.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                            fortyFiveTop.first(where: {$0.subviews.isEmpty}) != nil {
-                                                            desk.bringSubviewToFront(square)
-                                                            square.addSubview(checker)
-                                                            checker.frame.origin = .zero
-                                                            nextMove(nextMove: .whitePlaying, text: "White's move")
-                                                            checkingStepsAllCheckers(recognizer: recognizer)
                                                         }
+                                                    } else {
+                                                        if arrayPossibleStepsBlack.isEmpty, arrayPossibleStepsQueenBlack.isEmpty,
+                                                           square.tag == (squareOfChecker.tag + 54) {
+                                                            if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), nineTop.first(where: {$0.subviews.isEmpty}) != nil && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentySevenTop.first(where: {$0.subviews.isEmpty}) != nil && thirtySixTop.first(where: {$0.subviews.isEmpty}) != nil && fortyFiveTop.first(where: {$0.subviews.isEmpty}) != nil
+                                                            {
+                                                                desk.bringSubviewToFront(square)
+                                                                square.addSubview(checker)
+                                                                checker.frame.origin = .zero
+                                                                nextMove(nextMove: .whitePlaying, text: "White's move")
+                                                                checkingStepsAllCheckers(recognizer: recognizer)
                                                     }
                                                 } else {
-                                                    if (arrayPossibleStepsBlack.contains(squareOfChecker.tag) || arrayPossibleStepsBlack.isEmpty),
-                                                        (arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag) || arrayPossibleStepsQueenBlack.isEmpty),
+                                                    if arrayPossibleStepsBlack.contains(squareOfChecker.tag) ||
+                                                        arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag),
                                                        square.tag == (squareOfChecker.tag + 28) {
                                                         if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
                                                            ((sevenTop.first?.subviews.first?.tag == 0 || sevenTop.first?.subviews.first?.tag == 2) && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil) ||
@@ -432,21 +416,20 @@ extension GamerViewController {
                                                             checker.frame.origin = .zero
                                                             checkBeatCheckerBlack(recognizer: recognizer)
                                                             checkingStepsAllCheckers(recognizer: recognizer)
-                                                        } else {
-                                                            if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                               sevenTop.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                fourteenTop.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil {
-                                                                desk.bringSubviewToFront(square)
-                                                                square.addSubview(checker)
-                                                                checker.frame.origin = .zero
-                                                                nextMove(nextMove: .whitePlaying, text: "White's move")
-                                                                checkingStepsAllCheckers(recognizer: recognizer)
                                                             }
+                                                        } else {
+                                                            if arrayPossibleStepsBlack.isEmpty, arrayPossibleStepsQueenBlack.isEmpty,
+                                                               square.tag == (squareOfChecker.tag + 28) {
+                                                                if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), sevenTop.first(where: {$0.subviews.isEmpty}) != nil && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil {
+                                                                    desk.bringSubviewToFront(square)
+                                                                    square.addSubview(checker)
+                                                                    checker.frame.origin = .zero
+                                                                    nextMove(nextMove: .whitePlaying, text: "White's move")
+                                                                    checkingStepsAllCheckers(recognizer: recognizer)
                                                         }
                                                     } else {
-                                                        if (arrayPossibleStepsBlack.contains(squareOfChecker.tag) || arrayPossibleStepsBlack.isEmpty),
-                                                            (arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag) || arrayPossibleStepsQueenBlack.isEmpty),
+                                                        if arrayPossibleStepsBlack.contains(squareOfChecker.tag) ||
+                                                            arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag),
                                                            square.tag == (squareOfChecker.tag + 35) {
                                                             if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
                                                                ((sevenTop.first?.subviews.first?.tag == 0 || sevenTop.first?.subviews.first?.tag == 2) && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil && twentyEightTop.first(where: {$0.subviews.isEmpty}) != nil) ||
@@ -464,18 +447,20 @@ extension GamerViewController {
                                                                 checker.frame.origin = .zero
                                                                 checkBeatCheckerBlack(recognizer: recognizer)
                                                                 checkingStepsAllCheckers(recognizer: recognizer)
-                                                            } else {
-                                                                if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), sevenTop.first(where: {$0.subviews.isEmpty}) != nil && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil && twentyEightTop.first(where: {$0.subviews.isEmpty}) != nil {
-                                                                    desk.bringSubviewToFront(square)
-                                                                    square.addSubview(checker)
-                                                                    checker.frame.origin = .zero
-                                                                    nextMove(nextMove: .whitePlaying, text: "White's move")
-                                                                    checkingStepsAllCheckers(recognizer: recognizer)
                                                                 }
+                                                            } else {
+                                                                if arrayPossibleStepsBlack.isEmpty, arrayPossibleStepsQueenBlack.isEmpty,
+                                                                   square.tag == (squareOfChecker.tag + 35) {
+                                                                    if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), sevenTop.first(where: {$0.subviews.isEmpty}) != nil && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil && twentyEightTop.first(where: {$0.subviews.isEmpty}) != nil {
+                                                                        desk.bringSubviewToFront(square)
+                                                                        square.addSubview(checker)
+                                                                        checker.frame.origin = .zero
+                                                                        nextMove(nextMove: .whitePlaying, text: "White's move")
+                                                                        checkingStepsAllCheckers(recognizer: recognizer)
                                                             }
                                                         } else {
-                                                            if (arrayPossibleStepsBlack.contains(squareOfChecker.tag) || arrayPossibleStepsBlack.isEmpty),
-                                                                (arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag) || arrayPossibleStepsQueenBlack.isEmpty),
+                                                            if arrayPossibleStepsBlack.contains(squareOfChecker.tag) ||
+                                                                arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag),
                                                                square.tag == (squareOfChecker.tag + 42) {
                                                                 if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
                                                                    ((sevenTop.first?.subviews.first?.tag == 0 || sevenTop.first?.subviews.first?.tag == 2) && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil && twentyEightTop.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveTop.first(where: {$0.subviews.isEmpty}) != nil) ||
@@ -495,23 +480,20 @@ extension GamerViewController {
                                                                     checker.frame.origin = .zero
                                                                     checkBeatCheckerBlack(recognizer: recognizer)
                                                                     checkingStepsAllCheckers(recognizer: recognizer)
-                                                                } else {
-                                                                    if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                                       sevenTop.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                        fourteenTop.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                        twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                        twentyEightTop.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                        thirtyFiveTop.first(where: {$0.subviews.isEmpty}) != nil {
-                                                                        desk.bringSubviewToFront(square)
-                                                                        square.addSubview(checker)
-                                                                        checker.frame.origin = .zero
-                                                                        nextMove(nextMove: .whitePlaying, text: "White's move")
-                                                                        checkingStepsAllCheckers(recognizer: recognizer)
                                                                     }
+                                                                } else {
+                                                                    if arrayPossibleStepsBlack.isEmpty, arrayPossibleStepsQueenBlack.isEmpty,
+                                                                       square.tag == (squareOfChecker.tag + 42) {
+                                                                        if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), sevenTop.first(where: {$0.subviews.isEmpty}) != nil && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil && twentyEightTop.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveTop.first(where: {$0.subviews.isEmpty}) != nil {
+                                                                            desk.bringSubviewToFront(square)
+                                                                            square.addSubview(checker)
+                                                                            checker.frame.origin = .zero
+                                                                            nextMove(nextMove: .whitePlaying, text: "White's move")
+                                                                            checkingStepsAllCheckers(recognizer: recognizer)
                                                                 }
                                                             } else {
-                                                                if (arrayPossibleStepsBlack.contains(squareOfChecker.tag) || arrayPossibleStepsBlack.isEmpty),
-                                                                    (arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag) || arrayPossibleStepsQueenBlack.isEmpty),
+                                                                if arrayPossibleStepsBlack.contains(squareOfChecker.tag) ||
+                                                                    arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag),
                                                                     square.tag == (squareOfChecker.tag + 49) {
                                                                     if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
                                                                        ((sevenTop.first?.subviews.first?.tag == 0 || sevenTop.first?.subviews.first?.tag == 2) && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil && twentyEightTop.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveTop.first(where: {$0.subviews.isEmpty}) != nil && fortyTwoTop.first(where: {$0.subviews.isEmpty}) != nil) ||
@@ -533,353 +515,327 @@ extension GamerViewController {
                                                                         checker.frame.origin = .zero
                                                                         checkBeatCheckerBlack(recognizer: recognizer)
                                                                         checkingStepsAllCheckers(recognizer: recognizer)
+                                                                       }
                                                                     } else {
-                                                                        if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                                           sevenTop.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                            fourteenTop.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                            twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                            twentyEightTop.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                            thirtyFiveTop.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                            fortyTwoTop.first(where: {$0.subviews.isEmpty}) != nil {
-                                                                            desk.bringSubviewToFront(square)
-                                                                            square.addSubview(checker)
-                                                                            checker.frame.origin = .zero
-                                                                            nextMove(nextMove: .whitePlaying, text: "White's move")
-                                                                            checkingStepsAllCheckers(recognizer: recognizer)
-                                                                        }
-                                                                    }
-//MARK: - BLACK QUEEN BACK
-                                                                } else {
-                                                                    if (arrayPossibleStepsBlack.contains(squareOfChecker.tag) || arrayPossibleStepsBlack.isEmpty),
-                                                                        (arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag) || arrayPossibleStepsQueenBlack.isEmpty),
-                                                                        square.tag == (squareOfChecker.tag - 14) {
-                                                                        if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), sevenBottom.first?.subviews.first?.tag == 0 || sevenBottom.first?.subviews.first?.tag == 2 {
-                                                                            sevenBottom.first?.subviews.first?.removeFromSuperview()
-                                                                            desk.bringSubviewToFront(square)
-                                                                            beatWhiteCheckers += 1
-                                                                            finishGame()
-                                                                            square.addSubview(checker)
-                                                                            checker.frame.origin = .zero
-                                                                            checkBeatCheckerBlack(recognizer: recognizer)
-                                                                            checkingStepsAllCheckers(recognizer: recognizer)
-                                                                        } else {
-                                                                            if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), sevenBottom.first(where: {$0.subviews.isEmpty}) != nil {
+                                                                        if arrayPossibleStepsBlack.isEmpty, arrayPossibleStepsQueenBlack.isEmpty,
+                                                                           square.tag == (squareOfChecker.tag + 49) {
+                                                                            if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), sevenTop.first(where: {$0.subviews.isEmpty}) != nil && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil && twentyEightTop.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveTop.first(where: {$0.subviews.isEmpty}) != nil && fortyTwoTop.first(where: {$0.subviews.isEmpty}) != nil {
                                                                                 desk.bringSubviewToFront(square)
                                                                                 square.addSubview(checker)
                                                                                 checker.frame.origin = .zero
                                                                                 nextMove(nextMove: .whitePlaying, text: "White's move")
                                                                                 checkingStepsAllCheckers(recognizer: recognizer)
-                                                                            }
-                                                                        }
-                                                                    } else {
-                                                                        if (arrayPossibleStepsBlack.contains(squareOfChecker.tag) || arrayPossibleStepsBlack.isEmpty),
-                                                                            (arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag) || arrayPossibleStepsQueenBlack.isEmpty),
-                                                                            square.tag == (squareOfChecker.tag - 18) {
-                                                                            if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), nineBottom.first?.subviews.first?.tag == 0 || nineBottom.first?.subviews.first?.tag == 2 {
-                                                                                nineBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                desk.bringSubviewToFront(square)
-                                                                                beatWhiteCheckers += 1
-                                                                                finishGame()
-                                                                                square.addSubview(checker)
-                                                                                checker.frame.origin = .zero
-                                                                                checkBeatCheckerBlack(recognizer: recognizer)
-                                                                                checkingStepsAllCheckers(recognizer: recognizer)
-                                                                            } else {
-                                                                                if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), nineBottom.first(where: {$0.subviews.isEmpty}) != nil {
-                                                                                    desk.bringSubviewToFront(square)
-                                                                                    square.addSubview(checker)
-                                                                                    checker.frame.origin = .zero
-                                                                                    nextMove(nextMove: .whitePlaying, text: "White's move")
-                                                                                    checkingStepsAllCheckers(recognizer: recognizer)
-                                                                                }
-                                                                            }
-                                                                        } else {
-                                                                            if (arrayPossibleStepsBlack.contains(squareOfChecker.tag) || arrayPossibleStepsBlack.isEmpty),
-                                                                                (arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag) || arrayPossibleStepsQueenBlack.isEmpty),
-                                                                                square.tag == (squareOfChecker.tag - 21) {
-                                                                                if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                                                   ((sevenBottom.first?.subviews.first?.tag == 0 || sevenBottom.first?.subviews.first?.tag == 2) && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                    ((fourteenBottom.first?.subviews.first?.tag == 0 || fourteenBottom.first?.subviews.first?.tag == 2) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil) {
-                                                                                    sevenBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                    fourteenBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                    desk.bringSubviewToFront(square)
-                                                                                    beatWhiteCheckers += 1
-                                                                                    finishGame()
-                                                                                    square.addSubview(checker)
-                                                                                    checker.frame.origin = .zero
-                                                                                    checkBeatCheckerBlack(recognizer: recognizer)
-                                                                                    checkingStepsAllCheckers(recognizer: recognizer)
-                                                                                } else {
-                                                                                    if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil {
-                                                                                        desk.bringSubviewToFront(square)
-                                                                                        square.addSubview(checker)
-                                                                                        checker.frame.origin = .zero
-                                                                                        nextMove(nextMove: .whitePlaying, text: "White's move")
-                                                                                        checkingStepsAllCheckers(recognizer: recognizer)
-                                                                                    }
-                                                                                }
-                                                                            } else {
-                                                                                if (arrayPossibleStepsBlack.contains(squareOfChecker.tag) || arrayPossibleStepsBlack.isEmpty),
-                                                                                    (arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag) || arrayPossibleStepsQueenBlack.isEmpty),
-                                                                                    square.tag == (squareOfChecker.tag - 27) {
-                                                                                    if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                                                       ((nineBottom.first?.subviews.first?.tag == 0 || nineBottom.first?.subviews.first?.tag == 2) && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                        ((eighteenBottom.first?.subviews.first?.tag == 0 || eighteenBottom.first?.subviews.first?.tag == 2) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil) {
-                                                                                        nineBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                        eighteenBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                        desk.bringSubviewToFront(square)
-                                                                                        beatWhiteCheckers += 1
-                                                                                        finishGame()
-                                                                                        square.addSubview(checker)
-                                                                                        checker.frame.origin = .zero
-                                                                                        checkBeatCheckerBlack(recognizer: recognizer)
-                                                                                        checkingStepsAllCheckers(recognizer: recognizer)
-                                                                                    } else {
-                                                                                        if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), nineBottom.first(where: {$0.subviews.isEmpty}) != nil && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil {
-                                                                                            desk.bringSubviewToFront(square)
-                                                                                            square.addSubview(checker)
-                                                                                            checker.frame.origin = .zero
-                                                                                            nextMove(nextMove: .whitePlaying, text: "White's move")
-                                                                                            checkingStepsAllCheckers(recognizer: recognizer)
-                                                                                        }
-                                                                                    }
-                                                                                } else {
-                                                                                    if (arrayPossibleStepsBlack.contains(squareOfChecker.tag) || arrayPossibleStepsBlack.isEmpty),
-                                                                                        (arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag) || arrayPossibleStepsQueenBlack.isEmpty),
-                                                                                       square.tag == (squareOfChecker.tag - 36) {
-                                                                                        if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                                                           ((nineBottom.first?.subviews.first?.tag == 0 || nineBottom.first?.subviews.first?.tag == 2) && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                            ((eighteenBottom.first?.subviews.first?.tag == 0 || eighteenBottom.first?.subviews.first?.tag == 2) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                            ((twentySevenBottom.first?.subviews.first?.tag == 0 || twentySevenBottom.first?.subviews.first?.tag == 2) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil) {
-                                                                                            nineBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                            eighteenBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                            twentySevenBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                            desk.bringSubviewToFront(square)
-                                                                                            beatWhiteCheckers += 1
-                                                                                            finishGame()
-                                                                                            square.addSubview(checker)
-                                                                                            checker.frame.origin = .zero
-                                                                                            checkBeatCheckerBlack(recognizer: recognizer)
-                                                                                            checkingStepsAllCheckers(recognizer: recognizer)
-                                                                                        } else {
-                                                                                            if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                                                               nineBottom.first(where: {$0.subviews.isEmpty}) != nil && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil {
-                                                                                                desk.bringSubviewToFront(square)
-                                                                                                square.addSubview(checker)
-                                                                                                checker.frame.origin = .zero
-                                                                                                nextMove(nextMove: .whitePlaying, text: "White's move")
-                                                                                                checkingStepsAllCheckers(recognizer: recognizer)
-                                                                                            }
-                                                                                        }
-                                                                                    } else {
-                                                                                        if (arrayPossibleStepsBlack.contains(squareOfChecker.tag) || arrayPossibleStepsBlack.isEmpty),
-                                                                                            (arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag) || arrayPossibleStepsQueenBlack.isEmpty),
-                                                                                            square.tag == (squareOfChecker.tag - 45) {
-                                                                                            if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                                                               ((nineBottom.first?.subviews.first?.tag == 0 || nineBottom.first?.subviews.first?.tag == 2) && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtySixBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                                ((eighteenBottom.first?.subviews.first?.tag == 0 || eighteenBottom.first?.subviews.first?.tag == 2) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtySixBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                                ((twentySevenBottom.first?.subviews.first?.tag == 0 || twentySevenBottom.first?.subviews.first?.tag == 2) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtySixBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                                ((thirtySixBottom.first?.subviews.first?.tag == 0 || thirtySixBottom.first?.subviews.first?.tag == 2) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil) {
-                                                                                                nineBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                eighteenBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                twentySevenBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                thirtySixBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                desk.bringSubviewToFront(square)
-                                                                                                beatWhiteCheckers += 1
-                                                                                                finishGame()
-                                                                                                square.addSubview(checker)
-                                                                                                checker.frame.origin = .zero
-                                                                                                checkBeatCheckerBlack(recognizer: recognizer)
-                                                                                                checkingStepsAllCheckers(recognizer: recognizer)
-                                                                                            } else {
-                                                                                                if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                                                                   nineBottom.first(where: {$0.subviews.isEmpty}) != nil && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtySixBottom.first(where: {$0.subviews.isEmpty}) != nil {
-                                                                                                    desk.bringSubviewToFront(square)
-                                                                                                    square.addSubview(checker)
-                                                                                                    checker.frame.origin = .zero
-                                                                                                    nextMove(nextMove: .whitePlaying, text: "White's move")
-                                                                                                    checkingStepsAllCheckers(recognizer: recognizer)
-                                                                                                }
-                                                                                            }
-                                                                                        } else {
-                                                                                            if (arrayPossibleStepsBlack.contains(squareOfChecker.tag) || arrayPossibleStepsBlack.isEmpty),
-                                                                                                (arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag) || arrayPossibleStepsQueenBlack.isEmpty), square.tag == (squareOfChecker.tag - 54) {
-                                                                                                if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                                                                   ((nineBottom.first?.subviews.first?.tag == 0 || nineBottom.first?.subviews.first?.tag == 2) && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtySixBottom.first(where: {$0.subviews.isEmpty}) != nil && fortyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                                    ((eighteenBottom.first?.subviews.first?.tag == 0 || eighteenBottom.first?.subviews.first?.tag == 2) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtySixBottom.first(where: {$0.subviews.isEmpty}) != nil && fortyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                                    ((twentySevenBottom.first?.subviews.first?.tag == 0 || twentySevenBottom.first?.subviews.first?.tag == 2) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtySixBottom.first(where: {$0.subviews.isEmpty}) != nil && fortyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                                    ((thirtySixBottom.first?.subviews.first?.tag == 0 || thirtySixBottom.first?.subviews.first?.tag == 2) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fortyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                                    ((fortyFiveBottom.first?.subviews.first?.tag == 0 || fortyFiveBottom.first?.subviews.first?.tag == 2) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtySixBottom.first(where: {$0.subviews.isEmpty}) != nil) {
-                                                                                                    nineBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                    eighteenBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                    twentySevenBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                    thirtySixBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                    fortyFiveBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                    desk.bringSubviewToFront(square)
-                                                                                                    beatWhiteCheckers += 1
-                                                                                                    finishGame()
-                                                                                                    square.addSubview(checker)
-                                                                                                    checker.frame.origin = .zero
-                                                                                                    checkBeatCheckerBlack(recognizer: recognizer)
-                                                                                                    checkingStepsAllCheckers(recognizer: recognizer)
-                                                                                                } else {
-                                                                                                    if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), nineBottom.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                                                        eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                                                        twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                                                        thirtySixBottom.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                                                        fortyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil {
-                                                                                                        desk.bringSubviewToFront(square)
-                                                                                                        square.addSubview(checker)
-                                                                                                        checker.frame.origin = .zero
-                                                                                                        nextMove(nextMove: .whitePlaying, text: "White's move")
-                                                                                                        checkingStepsAllCheckers(recognizer: recognizer)
-                                                                                                    }
-                                                                                                }
-                                                                                            } else {
-                                                                                                if (arrayPossibleStepsBlack.contains(squareOfChecker.tag) || arrayPossibleStepsBlack.isEmpty),
-                                                                                                    (arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag) || arrayPossibleStepsQueenBlack.isEmpty),
-                                                                                                   square.tag == (squareOfChecker.tag - 28) {
-                                                                                                    if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                                                                       ((sevenBottom.first?.subviews.first?.tag == 0 || sevenBottom.first?.subviews.first?.tag == 2) && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                                        ((fourteenBottom.first?.subviews.first?.tag == 0 || fourteenBottom.first?.subviews.first?.tag == 2) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                                        ((twentyOneBottom.first?.subviews.first?.tag == 0 || twentyOneBottom.first?.subviews.first?.tag == 2) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil) {
-                                                                                                        sevenBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                        fourteenBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                        twentyOneBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                        desk.bringSubviewToFront(square)
-                                                                                                        beatWhiteCheckers += 1
-                                                                                                        finishGame()
-                                                                                                        square.addSubview(checker)
-                                                                                                        checker.frame.origin = .zero
-                                                                                                        checkBeatCheckerBlack(recognizer: recognizer)
-                                                                                                        checkingStepsAllCheckers(recognizer: recognizer)
-                                                                                                    } else {
-                                                                                                        if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                                                                           sevenBottom.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                                                            fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                                                            twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil {
-                                                                                                            desk.bringSubviewToFront(square)
-                                                                                                            square.addSubview(checker)
-                                                                                                            checker.frame.origin = .zero
-                                                                                                            nextMove(nextMove: .whitePlaying, text: "White's move")
-                                                                                                            checkingStepsAllCheckers(recognizer: recognizer)
-                                                                                                        }
-                                                                                                    }
-                                                                                                } else {
-                                                                                                    if (arrayPossibleStepsBlack.contains(squareOfChecker.tag) || arrayPossibleStepsBlack.isEmpty),
-                                                                                                        (arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag) || arrayPossibleStepsQueenBlack.isEmpty), square.tag == (squareOfChecker.tag - 35) {
-                                                                                                        if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                                                                           ((sevenBottom.first?.subviews.first?.tag == 0 || sevenBottom.first?.subviews.first?.tag == 2) && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                                            ((fourteenBottom.first?.subviews.first?.tag == 0 || fourteenBottom.first?.subviews.first?.tag == 2) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                                            ((twentyOneBottom.first?.subviews.first?.tag == 0 || twentyOneBottom.first?.subviews.first?.tag == 2) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                                            ((twentyEightBottom.first?.subviews.first?.tag == 0 || twentyEightBottom.first?.subviews.first?.tag == 2) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil) {
-                                                                                                            sevenBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                            fourteenBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                            twentyOneBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                            twentyEightBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                            desk.bringSubviewToFront(square)
-                                                                                                            beatWhiteCheckers += 1
-                                                                                                            finishGame()
-                                                                                                            square.addSubview(checker)
-                                                                                                            checker.frame.origin = .zero
-                                                                                                            checkBeatCheckerBlack(recognizer: recognizer)
-                                                                                                            checkingStepsAllCheckers(recognizer: recognizer)
-                                                                                                        } else {
-                                                                                                            if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                                                                               sevenTop.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                                                                fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                                                                twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                                                                twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil {
-                                                                                                                desk.bringSubviewToFront(square)
-                                                                                                                square.addSubview(checker)
-                                                                                                                checker.frame.origin = .zero
-                                                                                                                nextMove(nextMove: .whitePlaying, text: "White's move")
-                                                                                                                checkingStepsAllCheckers(recognizer: recognizer)
-                                                                                                            }
-                                                                                                        }
-                                                                                                    } else {
-                                                                                                        if (arrayPossibleStepsBlack.contains(squareOfChecker.tag) || arrayPossibleStepsBlack.isEmpty),
-                                                                                                            (arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag) || arrayPossibleStepsQueenBlack.isEmpty),
-                                                                                                           square.tag == (squareOfChecker.tag - 42) {
-                                                                                                            if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                                                                               ((sevenBottom.first?.subviews.first?.tag == 0 || sevenBottom.first?.subviews.first?.tag == 2) && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                                                ((fourteenBottom.first?.subviews.first?.tag == 0 || fourteenBottom.first?.subviews.first?.tag == 2) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                                                ((twentyOneBottom.first?.subviews.first?.tag == 0 || twentyOneBottom.first?.subviews.first?.tag == 2) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                                                ((twentyEightBottom.first?.subviews.first?.tag == 0 || twentyEightBottom.first?.subviews.first?.tag == 2) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                                                ((thirtyFiveBottom.first?.subviews.first?.tag == 0 || thirtyFiveBottom.first?.subviews.first?.tag == 2) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil) {
-                                                                                                                sevenBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                                fourteenBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                                twentyOneBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                                twentyEightBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                                thirtyFiveBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                                desk.bringSubviewToFront(square)
-                                                                                                                beatWhiteCheckers += 1
-                                                                                                                finishGame()
-                                                                                                                square.addSubview(checker)
-                                                                                                                checker.frame.origin = .zero
-                                                                                                                checkBeatCheckerBlack(recognizer: recognizer)
-                                                                                                                checkingStepsAllCheckers(recognizer: recognizer)
-                                                                                                            } else {
-                                                                                                                if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                                                                                   sevenBottom.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                                                                    fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                                                                    twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                                                                    twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                                                                    thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil {
-                                                                                                                    desk.bringSubviewToFront(square)
-                                                                                                                    square.addSubview(checker)
-                                                                                                                    checker.frame.origin = .zero
-                                                                                                                    nextMove(nextMove: .whitePlaying, text: "White's move")
-                                                                                                                    checkingStepsAllCheckers(recognizer: recognizer)
-                                                                                                                }
-                                                                                                            }
-                                                                                                        } else {
-                                                                                                            if (arrayPossibleStepsBlack.contains(squareOfChecker.tag) || arrayPossibleStepsBlack.isEmpty),
-                                                                                                                (arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag) || arrayPossibleStepsQueenBlack.isEmpty), square.tag == (squareOfChecker.tag - 49) {
-                                                                                                                if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                                                                                   ((sevenBottom.first?.subviews.first?.tag == 0 || sevenBottom.first?.subviews.first?.tag == 2) && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil && fortyTwoBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                                                    ((fourteenBottom.first?.subviews.first?.tag == 0 || fourteenBottom.first?.subviews.first?.tag == 2) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil && fortyTwoBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                                                    ((twentyOneBottom.first?.subviews.first?.tag == 0 || twentyOneBottom.first?.subviews.first?.tag == 2) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil && fortyTwoBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                                                    ((twentyEightBottom.first?.subviews.first?.tag == 0 || twentyEightBottom.first?.subviews.first?.tag == 2) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil && fortyTwoBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                                                    ((thirtyFiveBottom.first?.subviews.first?.tag == 0 || thirtyFiveBottom.first?.subviews.first?.tag == 2) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil && fortyTwoBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                                                    ((fortyTwoBottom.first?.subviews.first?.tag == 0 || fortyTwoBottom.first?.subviews.first?.tag == 2) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil) {
-                                                                                                                    sevenBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                                    fourteenBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                                    twentyOneBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                                    twentyEightBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                                    thirtyFiveBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                                    fortyTwoBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                                    desk.bringSubviewToFront(square)
-                                                                                                                    beatWhiteCheckers += 1
-                                                                                                                    finishGame()
-                                                                                                                    square.addSubview(checker)
-                                                                                                                    checker.frame.origin = .zero
-                                                                                                                    checkBeatCheckerBlack(recognizer: recognizer)
-                                                                                                                    checkingStepsAllCheckers(recognizer: recognizer)
-                                                                                                                } else {
-                                                                                                                    if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                                                                                       sevenBottom.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                                                                        fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                                                                        twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                                                                        twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                                                                        thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                                                                        fortyTwoBottom.first(where: {$0.subviews.isEmpty}) != nil {
-                                                                                                                        desk.bringSubviewToFront(square)
-                                                                                                                        square.addSubview(checker)
-                                                                                                                        checker.frame.origin = .zero
-                                                                                                                        nextMove(nextMove: .whitePlaying, text: "White's move")
-                                                                                                                        checkingStepsAllCheckers(recognizer: recognizer)
-                                                                                            }}}}}}}}}}}}}}}}}}}}}}}}}
+                                                                    }
+//MARK: - BLACK QUEEN BACK
+   } else {
+       if  arrayPossibleStepsBlack.isEmpty,
+           arrayPossibleStepsQueenBlack.isEmpty,
+           square.tag == (squareOfChecker.tag - 14) {
+           if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), sevenBottom.first(where: {$0.subviews.isEmpty}) != nil {
+               desk.bringSubviewToFront(square)
+               square.addSubview(checker)
+               checker.frame.origin = .zero
+               nextMove(nextMove: .whitePlaying, text: "White's move")
+               checkingStepsAllCheckers(recognizer: recognizer)
+           }
+       } else {
+           if arrayPossibleStepsBlack.isEmpty,
+              arrayPossibleStepsQueenBlack.isEmpty,
+              square.tag == (squareOfChecker.tag - 18) {
+               if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), nineBottom.first(where: {$0.subviews.isEmpty}) != nil {
+                   desk.bringSubviewToFront(square)
+                   square.addSubview(checker)
+                   checker.frame.origin = .zero
+                   nextMove(nextMove: .whitePlaying, text: "White's move")
+                   checkingStepsAllCheckers(recognizer: recognizer)
+               }
+           } else {
+               if arrayPossibleStepsBlack.contains(squareOfChecker.tag) ||
+                  arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag),
+                  square.tag == (squareOfChecker.tag - 21) {
+                   if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
+                      ((sevenBottom.first?.subviews.first?.tag == 0 || sevenBottom.first?.subviews.first?.tag == 2) && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                        ((fourteenBottom.first?.subviews.first?.tag == 0 || fourteenBottom.first?.subviews.first?.tag == 2) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil) {
+                       sevenBottom.first?.subviews.first?.removeFromSuperview()
+                       fourteenBottom.first?.subviews.first?.removeFromSuperview()
+                       desk.bringSubviewToFront(square)
+                       beatWhiteCheckers += 1
+                       finishGame()
+                       square.addSubview(checker)
+                       checker.frame.origin = .zero
+                       checkBeatCheckerBlack(recognizer: recognizer)
+                       checkingStepsAllCheckers(recognizer: recognizer)
+                       }
+                   } else {
+                       if arrayPossibleStepsBlack.isEmpty, arrayPossibleStepsQueenBlack.isEmpty,
+                          square.tag == (squareOfChecker.tag - 21) {
+                           if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil {
+                               desk.bringSubviewToFront(square)
+                               square.addSubview(checker)
+                               checker.frame.origin = .zero
+                               nextMove(nextMove: .whitePlaying, text: "White's move")
+                               checkingStepsAllCheckers(recognizer: recognizer)
+                   }
+               } else {
+                   if arrayPossibleStepsBlack.contains(squareOfChecker.tag) ||
+                      arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag),
+                      square.tag == (squareOfChecker.tag - 27) {
+                       if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
+                          ((nineBottom.first?.subviews.first?.tag == 0 || nineBottom.first?.subviews.first?.tag == 2) && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                            ((eighteenBottom.first?.subviews.first?.tag == 0 || eighteenBottom.first?.subviews.first?.tag == 2) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil) {
+                           nineBottom.first?.subviews.first?.removeFromSuperview()
+                           eighteenBottom.first?.subviews.first?.removeFromSuperview()
+                           desk.bringSubviewToFront(square)
+                           beatWhiteCheckers += 1
+                           finishGame()
+                           square.addSubview(checker)
+                           checker.frame.origin = .zero
+                           checkBeatCheckerBlack(recognizer: recognizer)
+                           checkingStepsAllCheckers(recognizer: recognizer)
+                          }
+                       } else {
+                           if arrayPossibleStepsBlack.isEmpty, arrayPossibleStepsQueenBlack.isEmpty,
+                              square.tag == (squareOfChecker.tag - 27) {
+                               if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), nineBottom.first(where: {$0.subviews.isEmpty}) != nil && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil {
+                                   desk.bringSubviewToFront(square)
+                                   square.addSubview(checker)
+                                   checker.frame.origin = .zero
+                                   nextMove(nextMove: .whitePlaying, text: "White's move")
+                                   checkingStepsAllCheckers(recognizer: recognizer)
+                       }
+                   } else {
+                       if arrayPossibleStepsBlack.contains(squareOfChecker.tag) || arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag),
+                          square.tag == (squareOfChecker.tag - 36) {
+                           if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
+                              ((nineBottom.first?.subviews.first?.tag == 0 || nineBottom.first?.subviews.first?.tag == 2) && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                ((eighteenBottom.first?.subviews.first?.tag == 0 || eighteenBottom.first?.subviews.first?.tag == 2) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                ((twentySevenBottom.first?.subviews.first?.tag == 0 || twentySevenBottom.first?.subviews.first?.tag == 2) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil) {
+                               nineBottom.first?.subviews.first?.removeFromSuperview()
+                               eighteenBottom.first?.subviews.first?.removeFromSuperview()
+                               twentySevenBottom.first?.subviews.first?.removeFromSuperview()
+                               desk.bringSubviewToFront(square)
+                               beatWhiteCheckers += 1
+                               finishGame()
+                               square.addSubview(checker)
+                               checker.frame.origin = .zero
+                               checkBeatCheckerBlack(recognizer: recognizer)
+                               checkingStepsAllCheckers(recognizer: recognizer)
+                              }
+                           } else {
+                               if arrayPossibleStepsBlack.isEmpty, arrayPossibleStepsQueenBlack.isEmpty,
+                                  square.tag == (squareOfChecker.tag - 36) {
+                                   if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), nineBottom.first(where: {$0.subviews.isEmpty}) != nil && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil {
+                                       desk.bringSubviewToFront(square)
+                                       square.addSubview(checker)
+                                       checker.frame.origin = .zero
+                                       nextMove(nextMove: .whitePlaying, text: "White's move")
+                                       checkingStepsAllCheckers(recognizer: recognizer)
+                           }
+                       } else {
+                           if arrayPossibleStepsBlack.contains(squareOfChecker.tag) ||
+                              arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag),
+                              square.tag == (squareOfChecker.tag - 45) {
+                               if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
+                                  ((nineBottom.first?.subviews.first?.tag == 0 || nineBottom.first?.subviews.first?.tag == 2) && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtySixBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                    ((eighteenBottom.first?.subviews.first?.tag == 0 || eighteenBottom.first?.subviews.first?.tag == 2) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtySixBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                    ((twentySevenBottom.first?.subviews.first?.tag == 0 || twentySevenBottom.first?.subviews.first?.tag == 2) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtySixBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                    ((thirtySixBottom.first?.subviews.first?.tag == 0 || thirtySixBottom.first?.subviews.first?.tag == 2) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil) {
+                                   nineBottom.first?.subviews.first?.removeFromSuperview()
+                                   eighteenBottom.first?.subviews.first?.removeFromSuperview()
+                                   twentySevenBottom.first?.subviews.first?.removeFromSuperview()
+                                   thirtySixBottom.first?.subviews.first?.removeFromSuperview()
+                                   desk.bringSubviewToFront(square)
+                                   beatWhiteCheckers += 1
+                                   finishGame()
+                                   square.addSubview(checker)
+                                   checker.frame.origin = .zero
+                                   checkBeatCheckerBlack(recognizer: recognizer)
+                                   checkingStepsAllCheckers(recognizer: recognizer)
+                                   }
+                               } else {
+                                   if arrayPossibleStepsBlack.isEmpty, arrayPossibleStepsQueenBlack.isEmpty,
+                                      square.tag == (squareOfChecker.tag - 45) {
+                                       if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), nineBottom.first(where: {$0.subviews.isEmpty}) != nil && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtySixBottom.first(where: {$0.subviews.isEmpty}) != nil {
+                                           desk.bringSubviewToFront(square)
+                                           square.addSubview(checker)
+                                           checker.frame.origin = .zero
+                                           nextMove(nextMove: .whitePlaying, text: "White's move")
+                                           checkingStepsAllCheckers(recognizer: recognizer)
+                               }
+                           } else {
+                               if arrayPossibleStepsBlack.contains(squareOfChecker.tag) || arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag), square.tag == (squareOfChecker.tag - 54) {
+                                   if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
+                                      ((nineBottom.first?.subviews.first?.tag == 0 || nineBottom.first?.subviews.first?.tag == 2) && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtySixBottom.first(where: {$0.subviews.isEmpty}) != nil && fortyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                        ((eighteenBottom.first?.subviews.first?.tag == 0 || eighteenBottom.first?.subviews.first?.tag == 2) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtySixBottom.first(where: {$0.subviews.isEmpty}) != nil && fortyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                        ((twentySevenBottom.first?.subviews.first?.tag == 0 || twentySevenBottom.first?.subviews.first?.tag == 2) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtySixBottom.first(where: {$0.subviews.isEmpty}) != nil && fortyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                        ((thirtySixBottom.first?.subviews.first?.tag == 0 || thirtySixBottom.first?.subviews.first?.tag == 2) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fortyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                        ((fortyFiveBottom.first?.subviews.first?.tag == 0 || fortyFiveBottom.first?.subviews.first?.tag == 2) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtySixBottom.first(where: {$0.subviews.isEmpty}) != nil) {
+                                       nineBottom.first?.subviews.first?.removeFromSuperview()
+                                       eighteenBottom.first?.subviews.first?.removeFromSuperview()
+                                       twentySevenBottom.first?.subviews.first?.removeFromSuperview()
+                                       thirtySixBottom.first?.subviews.first?.removeFromSuperview()
+                                       fortyFiveBottom.first?.subviews.first?.removeFromSuperview()
+                                       desk.bringSubviewToFront(square)
+                                       beatWhiteCheckers += 1
+                                       finishGame()
+                                       square.addSubview(checker)
+                                       checker.frame.origin = .zero
+                                       checkBeatCheckerBlack(recognizer: recognizer)
+                                       checkingStepsAllCheckers(recognizer: recognizer)
+                                       }
+                                   } else {
+                                       if arrayPossibleStepsBlack.isEmpty, arrayPossibleStepsQueenBlack.isEmpty,
+                                          square.tag == (squareOfChecker.tag - 54) {
+                                           if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), nineBottom.first(where: {$0.subviews.isEmpty}) != nil && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtySixBottom.first(where: {$0.subviews.isEmpty}) != nil && fortyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil {
+                                               desk.bringSubviewToFront(square)
+                                               square.addSubview(checker)
+                                               checker.frame.origin = .zero
+                                               nextMove(nextMove: .whitePlaying, text: "White's move")
+                                               checkingStepsAllCheckers(recognizer: recognizer)
+                                   }
+                               } else {
+                                   if arrayPossibleStepsBlack.contains(squareOfChecker.tag) || arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag),
+                                      square.tag == (squareOfChecker.tag - 28) {
+                                       if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
+                                          ((sevenBottom.first?.subviews.first?.tag == 0 || sevenBottom.first?.subviews.first?.tag == 2) && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                            ((fourteenBottom.first?.subviews.first?.tag == 0 || fourteenBottom.first?.subviews.first?.tag == 2) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                            ((twentyOneBottom.first?.subviews.first?.tag == 0 || twentyOneBottom.first?.subviews.first?.tag == 2) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil) {
+                                           sevenBottom.first?.subviews.first?.removeFromSuperview()
+                                           fourteenBottom.first?.subviews.first?.removeFromSuperview()
+                                           twentyOneBottom.first?.subviews.first?.removeFromSuperview()
+                                           desk.bringSubviewToFront(square)
+                                           beatWhiteCheckers += 1
+                                           finishGame()
+                                           square.addSubview(checker)
+                                           checker.frame.origin = .zero
+                                           checkBeatCheckerBlack(recognizer: recognizer)
+                                           checkingStepsAllCheckers(recognizer: recognizer)
+                                           }
+                                       } else {
+                                           if arrayPossibleStepsBlack.isEmpty, arrayPossibleStepsQueenBlack.isEmpty,
+                                              square.tag == (squareOfChecker.tag - 28) {
+                                               if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil {
+                                                   desk.bringSubviewToFront(square)
+                                                   square.addSubview(checker)
+                                                   checker.frame.origin = .zero
+                                                   nextMove(nextMove: .whitePlaying, text: "White's move")
+                                                   checkingStepsAllCheckers(recognizer: recognizer)
+                                       }
+                                   } else {
+                                       if arrayPossibleStepsBlack.contains(squareOfChecker.tag) || arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag), square.tag == (squareOfChecker.tag - 35) {
+                                           if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
+                                              ((sevenBottom.first?.subviews.first?.tag == 0 || sevenBottom.first?.subviews.first?.tag == 2) && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                ((fourteenBottom.first?.subviews.first?.tag == 0 || fourteenBottom.first?.subviews.first?.tag == 2) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                ((twentyOneBottom.first?.subviews.first?.tag == 0 || twentyOneBottom.first?.subviews.first?.tag == 2) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                ((twentyEightBottom.first?.subviews.first?.tag == 0 || twentyEightBottom.first?.subviews.first?.tag == 2) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil) {
+                                               sevenBottom.first?.subviews.first?.removeFromSuperview()
+                                               fourteenBottom.first?.subviews.first?.removeFromSuperview()
+                                               twentyOneBottom.first?.subviews.first?.removeFromSuperview()
+                                               twentyEightBottom.first?.subviews.first?.removeFromSuperview()
+                                               desk.bringSubviewToFront(square)
+                                               beatWhiteCheckers += 1
+                                               finishGame()
+                                               square.addSubview(checker)
+                                               checker.frame.origin = .zero
+                                               checkBeatCheckerBlack(recognizer: recognizer)
+                                               checkingStepsAllCheckers(recognizer: recognizer)
+                                               }
+                                           } else {
+                                               if arrayPossibleStepsBlack.isEmpty, arrayPossibleStepsQueenBlack.isEmpty,
+                                                  square.tag == (squareOfChecker.tag - 35) {
+                                                   if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil {
+                                                       desk.bringSubviewToFront(square)
+                                                       square.addSubview(checker)
+                                                       checker.frame.origin = .zero
+                                                       nextMove(nextMove: .whitePlaying, text: "White's move")
+                                                       checkingStepsAllCheckers(recognizer: recognizer)
+                                           }
+                                       } else {
+                                           if arrayPossibleStepsBlack.contains(squareOfChecker.tag) || arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag),
+                                              square.tag == (squareOfChecker.tag - 42) {
+                                               if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
+                                                  ((sevenBottom.first?.subviews.first?.tag == 0 || sevenBottom.first?.subviews.first?.tag == 2) && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                    ((fourteenBottom.first?.subviews.first?.tag == 0 || fourteenBottom.first?.subviews.first?.tag == 2) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                    ((twentyOneBottom.first?.subviews.first?.tag == 0 || twentyOneBottom.first?.subviews.first?.tag == 2) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                    ((twentyEightBottom.first?.subviews.first?.tag == 0 || twentyEightBottom.first?.subviews.first?.tag == 2) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                    ((thirtyFiveBottom.first?.subviews.first?.tag == 0 || thirtyFiveBottom.first?.subviews.first?.tag == 2) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil) {
+                                                   sevenBottom.first?.subviews.first?.removeFromSuperview()
+                                                   fourteenBottom.first?.subviews.first?.removeFromSuperview()
+                                                   twentyOneBottom.first?.subviews.first?.removeFromSuperview()
+                                                   twentyEightBottom.first?.subviews.first?.removeFromSuperview()
+                                                   thirtyFiveBottom.first?.subviews.first?.removeFromSuperview()
+                                                   desk.bringSubviewToFront(square)
+                                                   beatWhiteCheckers += 1
+                                                   finishGame()
+                                                   square.addSubview(checker)
+                                                   checker.frame.origin = .zero
+                                                   checkBeatCheckerBlack(recognizer: recognizer)
+                                                   checkingStepsAllCheckers(recognizer: recognizer)
+                                                   }
+                                               } else {
+                                                   if arrayPossibleStepsBlack.isEmpty, arrayPossibleStepsQueenBlack.isEmpty,
+                                                      square.tag == (squareOfChecker.tag - 42) {
+                                                       if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil {
+                                                           desk.bringSubviewToFront(square)
+                                                           square.addSubview(checker)
+                                                           checker.frame.origin = .zero
+                                                           nextMove(nextMove: .whitePlaying, text: "White's move")
+                                                           checkingStepsAllCheckers(recognizer: recognizer)
+                                               }
+                                           } else {
+                                               if arrayPossibleStepsBlack.contains(squareOfChecker.tag) ||
+                                                  arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag), square.tag == (squareOfChecker.tag - 49) {
+                                                   if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
+                                                      ((sevenBottom.first?.subviews.first?.tag == 0 || sevenBottom.first?.subviews.first?.tag == 2) && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil && fortyTwoBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                        ((fourteenBottom.first?.subviews.first?.tag == 0 || fourteenBottom.first?.subviews.first?.tag == 2) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil && fortyTwoBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                        ((twentyOneBottom.first?.subviews.first?.tag == 0 || twentyOneBottom.first?.subviews.first?.tag == 2) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil && fortyTwoBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                        ((twentyEightBottom.first?.subviews.first?.tag == 0 || twentyEightBottom.first?.subviews.first?.tag == 2) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil && fortyTwoBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                        ((thirtyFiveBottom.first?.subviews.first?.tag == 0 || thirtyFiveBottom.first?.subviews.first?.tag == 2) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil && fortyTwoBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                        ((fortyTwoBottom.first?.subviews.first?.tag == 0 || fortyTwoBottom.first?.subviews.first?.tag == 2) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil) {
+                                                       sevenBottom.first?.subviews.first?.removeFromSuperview()
+                                                       fourteenBottom.first?.subviews.first?.removeFromSuperview()
+                                                       twentyOneBottom.first?.subviews.first?.removeFromSuperview()
+                                                       twentyEightBottom.first?.subviews.first?.removeFromSuperview()
+                                                       thirtyFiveBottom.first?.subviews.first?.removeFromSuperview()
+                                                       fortyTwoBottom.first?.subviews.first?.removeFromSuperview()
+                                                       desk.bringSubviewToFront(square)
+                                                       beatWhiteCheckers += 1
+                                                       finishGame()
+                                                       square.addSubview(checker)
+                                                       checker.frame.origin = .zero
+                                                       checkBeatCheckerBlack(recognizer: recognizer)
+                                                       checkingStepsAllCheckers(recognizer: recognizer)
+                                                       }
+                                                   } else {
+                                                       if arrayPossibleStepsBlack.isEmpty, arrayPossibleStepsQueenBlack.isEmpty,
+                                                          square.tag == (squareOfChecker.tag - 49) {
+                                                           if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil && fortyTwoBottom.first(where: {$0.subviews.isEmpty}) != nil {
+                                                               desk.bringSubviewToFront(square)
+                                                               square.addSubview(checker)
+                                                               checker.frame.origin = .zero
+                                                               nextMove(nextMove: .whitePlaying, text: "White's move")
+                                                               checkingStepsAllCheckers(recognizer: recognizer)
+                                                           }}
+                                                   }}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
 // MARK: - WHITE QUEEN FORWARD
 } else {
-    if (arrayPossibleStepsWhite.contains(squareOfChecker.tag) || arrayPossibleStepsWhite.isEmpty),
-       (arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag) || arrayPossibleStepsQueenWhite.isEmpty),
-        checker.tag == 2, currentGamer == .whitePlaying {
-        if (square.tag == (squareOfChecker.tag + 7) ||
-            square.tag == (squareOfChecker.tag + 9) ||
-            square.tag == (squareOfChecker.tag - 7) ||
-            square.tag == (squareOfChecker.tag - 9))  {
+    if checker.tag == 2, currentGamer == .whitePlaying {
+       if arrayPossibleStepsWhite.isEmpty, arrayPossibleStepsQueenWhite.isEmpty,
+          (square.tag == (squareOfChecker.tag - 7) ||
+           square.tag == (squareOfChecker.tag - 9) ||
+           square.tag == (squareOfChecker.tag + 7) ||
+           square.tag == (squareOfChecker.tag + 9))  {
             if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack") {
+            desk.bringSubviewToFront(square)
+            square.addSubview(checker)
+            checker.frame.origin = .zero
+            nextMove(nextMove: .blackPlaying, text: "Black's move")
+            checkingStepsAllCheckers(recognizer: recognizer)
+        }
+    } else {
+        if arrayPossibleStepsWhite.isEmpty, arrayPossibleStepsQueenWhite.isEmpty,
+           square.tag == (squareOfChecker.tag + 14) {
+            if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), sevenTop.first(where: {$0.subviews.isEmpty}) != nil {
                 desk.bringSubviewToFront(square)
                 square.addSubview(checker)
                 checker.frame.origin = .zero
@@ -887,33 +843,24 @@ extension GamerViewController {
                 checkingStepsAllCheckers(recognizer: recognizer)
             }
         } else {
-            if (arrayPossibleStepsWhite.contains(squareOfChecker.tag) || arrayPossibleStepsWhite.isEmpty),
-                (arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag) || arrayPossibleStepsQueenWhite.isEmpty),
-                square.tag == (squareOfChecker.tag + 14) {
-                if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), sevenTop.first?.subviews.first?.tag == 1 || sevenTop.first?.subviews.first?.tag == 3 {
-                    sevenTop.first?.subviews.first?.removeFromSuperview()
+            if arrayPossibleStepsWhite.isEmpty, arrayPossibleStepsQueenWhite.isEmpty,
+               square.tag == (squareOfChecker.tag + 18) {
+                if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), nineTop.first(where: {$0.subviews.isEmpty}) != nil {
                     desk.bringSubviewToFront(square)
-                    beatBlackCheckers += 1
-                    finishGame()
                     square.addSubview(checker)
                     checker.frame.origin = .zero
-                    checkBeatCheckerWhite(recognizer: recognizer)
+                    nextMove(nextMove: .blackPlaying, text: "Black's move")
                     checkingStepsAllCheckers(recognizer: recognizer)
-                } else {
-                    if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), sevenTop.first(where: {$0.subviews.isEmpty}) != nil {
-                        desk.bringSubviewToFront(square)
-                        square.addSubview(checker)
-                        checker.frame.origin = .zero
-                        nextMove(nextMove: .blackPlaying, text: "Black's move")
-                        checkingStepsAllCheckers(recognizer: recognizer)
-                    }
                 }
             } else {
-                if (arrayPossibleStepsWhite.contains(squareOfChecker.tag) || arrayPossibleStepsWhite.isEmpty),
-                    (arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag) || arrayPossibleStepsQueenWhite.isEmpty),
-                   square.tag == (squareOfChecker.tag + 18) {
-                    if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), nineTop.first?.subviews.first?.tag == 1 || nineTop.first?.subviews.first?.tag == 3 {
-                        nineTop.first?.subviews.first?.removeFromSuperview()
+                if arrayPossibleStepsWhite.contains(squareOfChecker.tag) ||
+                    arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag),
+                    square.tag == (squareOfChecker.tag + 21) {
+                    if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
+                       ((sevenTop.first?.subviews.first?.tag == 1 || sevenTop.first?.subviews.first?.tag == 3) && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil) ||
+                        ((fourteenTop.first?.subviews.first?.tag == 1 || fourteenTop.first?.subviews.first?.tag == 3) && sevenTop.first(where: {$0.subviews.isEmpty}) != nil) {
+                        sevenTop.first?.subviews.first?.removeFromSuperview()
+                        fourteenTop.first?.subviews.first?.removeFromSuperview()
                         desk.bringSubviewToFront(square)
                         beatBlackCheckers += 1
                         finishGame()
@@ -921,24 +868,26 @@ extension GamerViewController {
                         checker.frame.origin = .zero
                         checkBeatCheckerWhite(recognizer: recognizer)
                         checkingStepsAllCheckers(recognizer: recognizer)
-                    } else {
-                        if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), nineTop.first(where: {$0.subviews.isEmpty}) != nil {
-                            desk.bringSubviewToFront(square)
-                            square.addSubview(checker)
-                            checker.frame.origin = .zero
-                            nextMove(nextMove: .blackPlaying, text: "Black's move")
-                            checkingStepsAllCheckers(recognizer: recognizer)
                         }
+                    } else {
+                        if arrayPossibleStepsWhite.isEmpty, arrayPossibleStepsQueenWhite.isEmpty,
+                           square.tag == (squareOfChecker.tag + 21) {
+                            if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), sevenTop.first(where: {$0.subviews.isEmpty}) != nil && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil {
+                                desk.bringSubviewToFront(square)
+                                square.addSubview(checker)
+                                checker.frame.origin = .zero
+                                nextMove(nextMove: .blackPlaying, text: "Black's move")
+                                checkingStepsAllCheckers(recognizer: recognizer)
                     }
                 } else {
-                    if (arrayPossibleStepsWhite.contains(squareOfChecker.tag) || arrayPossibleStepsWhite.isEmpty),
-                        (arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag) || arrayPossibleStepsQueenWhite.isEmpty),
-                       square.tag == (squareOfChecker.tag + 21) {
+                    if arrayPossibleStepsWhite.contains(squareOfChecker.tag) ||
+                        arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag),
+                       square.tag == (squareOfChecker.tag + 27) {
                         if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                           ((sevenTop.first?.subviews.first?.tag == 1 || sevenTop.first?.subviews.first?.tag == 3) && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil) ||
-                            ((fourteenTop.first?.subviews.first?.tag == 1 || fourteenTop.first?.subviews.first?.tag == 3) && sevenTop.first(where: {$0.subviews.isEmpty}) != nil) {
-                            sevenTop.first?.subviews.first?.removeFromSuperview()
-                            fourteenTop.first?.subviews.first?.removeFromSuperview()
+                           ((nineTop.first?.subviews.first?.tag == 1 || nineTop.first?.subviews.first?.tag == 3) && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil) ||
+                            ((eighteenTop.first?.subviews.first?.tag == 1 || eighteenTop.first?.subviews.first?.tag == 3) && nineTop.first(where: {$0.subviews.isEmpty}) != nil) {
+                            nineTop.first?.subviews.first?.removeFromSuperview()
+                            eighteenTop.first?.subviews.first?.removeFromSuperview()
                             desk.bringSubviewToFront(square)
                             beatBlackCheckers += 1
                             finishGame()
@@ -946,24 +895,28 @@ extension GamerViewController {
                             checker.frame.origin = .zero
                             checkBeatCheckerWhite(recognizer: recognizer)
                             checkingStepsAllCheckers(recognizer: recognizer)
-                        } else {
-                            if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), sevenTop.first(where: {$0.subviews.isEmpty}) != nil && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil {
-                                desk.bringSubviewToFront(square)
-                                square.addSubview(checker)
-                                checker.frame.origin = .zero
-                                nextMove(nextMove: .blackPlaying, text: "Black's move")
-                                checkingStepsAllCheckers(recognizer: recognizer)
                             }
+                        } else {
+                            if arrayPossibleStepsWhite.isEmpty, arrayPossibleStepsQueenWhite.isEmpty,
+                               square.tag == (squareOfChecker.tag + 27) {
+                                if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), nineTop.first(where: {$0.subviews.isEmpty}) != nil && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil {
+                                    desk.bringSubviewToFront(square)
+                                    square.addSubview(checker)
+                                    checker.frame.origin = .zero
+                                    nextMove(nextMove: .blackPlaying, text: "Black's move")
+                                    checkingStepsAllCheckers(recognizer: recognizer)
                         }
                     } else {
-                        if (arrayPossibleStepsWhite.contains(squareOfChecker.tag) || arrayPossibleStepsWhite.isEmpty),
-                            (arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag) || arrayPossibleStepsQueenWhite.isEmpty),
-                           square.tag == (squareOfChecker.tag + 27) {
+                        if arrayPossibleStepsWhite.contains(squareOfChecker.tag) ||
+                            arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag),
+                            square.tag == (squareOfChecker.tag + 36) {
                             if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                               ((nineTop.first?.subviews.first?.tag == 1 || nineTop.first?.subviews.first?.tag == 3) && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                ((eighteenTop.first?.subviews.first?.tag == 1 || eighteenTop.first?.subviews.first?.tag == 3) && nineTop.first(where: {$0.subviews.isEmpty}) != nil) {
+                               ((nineTop.first?.subviews.first?.tag == 1 || nineTop.first?.subviews.first?.tag == 3) && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentySevenTop.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                ((eighteenTop.first?.subviews.first?.tag == 1 || eighteenTop.first?.subviews.first?.tag == 3) && nineTop.first(where: {$0.subviews.isEmpty}) != nil && twentySevenTop.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                ((twentySevenTop.first?.subviews.first?.tag == 1 || twentySevenTop.first?.subviews.first?.tag == 3) && nineTop.first(where: {$0.subviews.isEmpty}) != nil && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil) {
                                 nineTop.first?.subviews.first?.removeFromSuperview()
                                 eighteenTop.first?.subviews.first?.removeFromSuperview()
+                                twentySevenTop.first?.subviews.first?.removeFromSuperview()
                                 desk.bringSubviewToFront(square)
                                 beatBlackCheckers += 1
                                 finishGame()
@@ -971,28 +924,30 @@ extension GamerViewController {
                                 checker.frame.origin = .zero
                                 checkBeatCheckerWhite(recognizer: recognizer)
                                 checkingStepsAllCheckers(recognizer: recognizer)
-                            } else {
-                                if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                    nineTop.first(where: {$0.subviews.isEmpty}) != nil &&
-                                    eighteenTop.first(where: {$0.subviews.isEmpty}) != nil {
-                                    desk.bringSubviewToFront(square)
-                                    square.addSubview(checker)
-                                    checker.frame.origin = .zero
-                                    nextMove(nextMove: .blackPlaying, text: "Black's move")
-                                    checkingStepsAllCheckers(recognizer: recognizer)
                                 }
+                            } else {
+                                if arrayPossibleStepsWhite.isEmpty, arrayPossibleStepsQueenWhite.isEmpty,
+                                   square.tag == (squareOfChecker.tag + 36) {
+                                    if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), nineTop.first(where: {$0.subviews.isEmpty}) != nil && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentySevenTop.first(where: {$0.subviews.isEmpty}) != nil {
+                                        desk.bringSubviewToFront(square)
+                                        square.addSubview(checker)
+                                        checker.frame.origin = .zero
+                                        nextMove(nextMove: .blackPlaying, text: "Black's move")
+                                        checkingStepsAllCheckers(recognizer: recognizer)
                             }
                         } else {
-                            if (arrayPossibleStepsWhite.contains(squareOfChecker.tag) || arrayPossibleStepsWhite.isEmpty),
-                                (arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag) || arrayPossibleStepsQueenWhite.isEmpty),
-                               square.tag == (squareOfChecker.tag + 36) {
+                            if arrayPossibleStepsWhite.contains(squareOfChecker.tag) ||
+                                arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag),
+                               square.tag == (squareOfChecker.tag + 45) {
                                 if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                   ((nineTop.first?.subviews.first?.tag == 1 || nineTop.first?.subviews.first?.tag == 3) && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentySevenTop.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                    ((eighteenTop.first?.subviews.first?.tag == 1 || eighteenTop.first?.subviews.first?.tag == 3) && nineTop.first(where: {$0.subviews.isEmpty}) != nil && twentySevenTop.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                    ((twentySevenTop.first?.subviews.first?.tag == 1 || twentySevenTop.first?.subviews.first?.tag == 3) && nineTop.first(where: {$0.subviews.isEmpty}) != nil && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil) {
+                                   ((nineTop.first?.subviews.first?.tag == 1 || nineTop.first?.subviews.first?.tag == 3) && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentySevenTop.first(where: {$0.subviews.isEmpty}) != nil && thirtySixTop.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                    ((eighteenTop.first?.subviews.first?.tag == 1 || eighteenTop.first?.subviews.first?.tag == 3) && nineTop.first(where: {$0.subviews.isEmpty}) != nil && twentySevenTop.first(where: {$0.subviews.isEmpty}) != nil && thirtySixTop.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                    ((twentySevenTop.first?.subviews.first?.tag == 1 || twentySevenTop.first?.subviews.first?.tag == 3) && nineTop.first(where: {$0.subviews.isEmpty}) != nil && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil && thirtySixTop.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                    ((thirtySixTop.first?.subviews.first?.tag == 1 || thirtySixTop.first?.subviews.first?.tag == 3) && nineTop.first(where: {$0.subviews.isEmpty}) != nil && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentySevenTop.first(where: {$0.subviews.isEmpty}) != nil) {
                                     nineTop.first?.subviews.first?.removeFromSuperview()
                                     eighteenTop.first?.subviews.first?.removeFromSuperview()
                                     twentySevenTop.first?.subviews.first?.removeFromSuperview()
+                                    thirtySixTop.first?.subviews.first?.removeFromSuperview()
                                     desk.bringSubviewToFront(square)
                                     beatBlackCheckers += 1
                                     finishGame()
@@ -1000,28 +955,32 @@ extension GamerViewController {
                                     checker.frame.origin = .zero
                                     checkBeatCheckerWhite(recognizer: recognizer)
                                     checkingStepsAllCheckers(recognizer: recognizer)
-                                } else {
-                                    if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), nineTop.first(where: {$0.subviews.isEmpty}) != nil && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentySevenTop.first(where: {$0.subviews.isEmpty}) != nil {
-                                        desk.bringSubviewToFront(square)
-                                        square.addSubview(checker)
-                                        checker.frame.origin = .zero
-                                        nextMove(nextMove: .blackPlaying, text: "Black's move")
-                                        checkingStepsAllCheckers(recognizer: recognizer)
                                     }
+                                } else {
+                                    if arrayPossibleStepsWhite.isEmpty, arrayPossibleStepsQueenWhite.isEmpty,
+                                       square.tag == (squareOfChecker.tag + 45) {
+                                        if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), nineTop.first(where: {$0.subviews.isEmpty}) != nil && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentySevenTop.first(where: {$0.subviews.isEmpty}) != nil && thirtySixTop.first(where: {$0.subviews.isEmpty}) != nil {
+                                            desk.bringSubviewToFront(square)
+                                            square.addSubview(checker)
+                                            checker.frame.origin = .zero
+                                            nextMove(nextMove: .blackPlaying, text: "Black's move")
+                                            checkingStepsAllCheckers(recognizer: recognizer)
                                 }
                             } else {
-                                if (arrayPossibleStepsWhite.contains(squareOfChecker.tag) || arrayPossibleStepsWhite.isEmpty),
-                                    (arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag) || arrayPossibleStepsQueenWhite.isEmpty),
-                                   square.tag == (squareOfChecker.tag + 45) {
+                                if arrayPossibleStepsWhite.contains(squareOfChecker.tag) ||
+                                    arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag),
+                                   square.tag == (squareOfChecker.tag + 54) {
                                     if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                       ((nineTop.first?.subviews.first?.tag == 1 || nineTop.first?.subviews.first?.tag == 3) && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentySevenTop.first(where: {$0.subviews.isEmpty}) != nil && thirtySixTop.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                        ((eighteenTop.first?.subviews.first?.tag == 1 || eighteenTop.first?.subviews.first?.tag == 3) && nineTop.first(where: {$0.subviews.isEmpty}) != nil && twentySevenTop.first(where: {$0.subviews.isEmpty}) != nil && thirtySixTop.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                        ((twentySevenTop.first?.subviews.first?.tag == 1 || twentySevenTop.first?.subviews.first?.tag == 3) && nineTop.first(where: {$0.subviews.isEmpty}) != nil && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil && thirtySixTop.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                        ((thirtySixTop.first?.subviews.first?.tag == 1 || thirtySixTop.first?.subviews.first?.tag == 3) && nineTop.first(where: {$0.subviews.isEmpty}) != nil && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentySevenTop.first(where: {$0.subviews.isEmpty}) != nil) {
+                                       ((nineTop.first?.subviews.first?.tag == 1 || nineTop.first?.subviews.first?.tag == 3) && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentySevenTop.first(where: {$0.subviews.isEmpty}) != nil && thirtySixTop.first(where: {$0.subviews.isEmpty}) != nil && fortyFiveTop.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                        ((eighteenTop.first?.subviews.first?.tag == 1 || eighteenTop.first?.subviews.first?.tag == 3) && nineTop.first(where: {$0.subviews.isEmpty}) != nil && twentySevenTop.first(where: {$0.subviews.isEmpty}) != nil && thirtySixTop.first(where: {$0.subviews.isEmpty}) != nil && fortyFiveTop.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                        ((twentySevenTop.first?.subviews.first?.tag == 1 || twentySevenTop.first?.subviews.first?.tag == 3) && nineTop.first(where: {$0.subviews.isEmpty}) != nil && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil && thirtySixTop.first(where: {$0.subviews.isEmpty}) != nil && fortyFiveTop.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                        ((thirtySixTop.first?.subviews.first?.tag == 1 || thirtySixTop.first?.subviews.first?.tag == 3) && nineTop.first(where: {$0.subviews.isEmpty}) != nil && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentySevenTop.first(where: {$0.subviews.isEmpty}) != nil &&  fortyFiveTop.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                        ((fortyFiveTop.first?.subviews.first?.tag == 1 || fortyFiveTop.first?.subviews.first?.tag == 3) && nineTop.first(where: {$0.subviews.isEmpty}) != nil && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentySevenTop.first(where: {$0.subviews.isEmpty}) != nil && thirtySixTop.first(where: {$0.subviews.isEmpty}) != nil) {
                                         nineTop.first?.subviews.first?.removeFromSuperview()
                                         eighteenTop.first?.subviews.first?.removeFromSuperview()
                                         twentySevenTop.first?.subviews.first?.removeFromSuperview()
                                         thirtySixTop.first?.subviews.first?.removeFromSuperview()
+                                        fortyFiveTop.first?.subviews.first?.removeFromSuperview()
                                         desk.bringSubviewToFront(square)
                                         beatBlackCheckers += 1
                                         finishGame()
@@ -1029,30 +988,29 @@ extension GamerViewController {
                                         checker.frame.origin = .zero
                                         checkBeatCheckerWhite(recognizer: recognizer)
                                         checkingStepsAllCheckers(recognizer: recognizer)
-                                    } else {
-                                        if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), nineTop.first(where: {$0.subviews.isEmpty}) != nil && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentySevenTop.first(where: {$0.subviews.isEmpty}) != nil && thirtySixTop.first(where: {$0.subviews.isEmpty}) != nil {
-                                            desk.bringSubviewToFront(square)
-                                            square.addSubview(checker)
-                                            checker.frame.origin = .zero
-                                            nextMove(nextMove: .blackPlaying, text: "Black's move")
-                                            checkingStepsAllCheckers(recognizer: recognizer)
                                         }
+                                    } else {
+                                        if arrayPossibleStepsWhite.isEmpty, arrayPossibleStepsQueenWhite.isEmpty,
+                                           square.tag == (squareOfChecker.tag + 54) {
+                                            if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), nineTop.first(where: {$0.subviews.isEmpty}) != nil && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentySevenTop.first(where: {$0.subviews.isEmpty}) != nil && thirtySixTop.first(where: {$0.subviews.isEmpty}) != nil && fortyFiveTop.first(where: {$0.subviews.isEmpty}) != nil
+                                            {
+                                                desk.bringSubviewToFront(square)
+                                                square.addSubview(checker)
+                                                checker.frame.origin = .zero
+                                                nextMove(nextMove: .blackPlaying, text: "Black's move")
+                                                checkingStepsAllCheckers(recognizer: recognizer)
                                     }
                                 } else {
-                                    if (arrayPossibleStepsWhite.contains(squareOfChecker.tag) || arrayPossibleStepsWhite.isEmpty),
-                                        (arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag) || arrayPossibleStepsQueenWhite.isEmpty),
-                                       square.tag == (squareOfChecker.tag + 54) {
+                                    if arrayPossibleStepsWhite.contains(squareOfChecker.tag) ||
+                                        arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag),
+                                       square.tag == (squareOfChecker.tag + 28) {
                                         if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                           ((nineTop.first?.subviews.first?.tag == 1 || nineTop.first?.subviews.first?.tag == 3) && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentySevenTop.first(where: {$0.subviews.isEmpty}) != nil && thirtySixTop.first(where: {$0.subviews.isEmpty}) != nil && fortyFiveTop.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                            ((eighteenTop.first?.subviews.first?.tag == 1 || eighteenTop.first?.subviews.first?.tag == 3) && nineTop.first(where: {$0.subviews.isEmpty}) != nil && twentySevenTop.first(where: {$0.subviews.isEmpty}) != nil && thirtySixTop.first(where: {$0.subviews.isEmpty}) != nil && fortyFiveTop.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                            ((twentySevenTop.first?.subviews.first?.tag == 1 || twentySevenTop.first?.subviews.first?.tag == 3) && nineTop.first(where: {$0.subviews.isEmpty}) != nil && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil && thirtySixTop.first(where: {$0.subviews.isEmpty}) != nil && fortyFiveTop.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                            ((thirtySixTop.first?.subviews.first?.tag == 1 || thirtySixTop.first?.subviews.first?.tag == 3) && nineTop.first(where: {$0.subviews.isEmpty}) != nil && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentySevenTop.first(where: {$0.subviews.isEmpty}) != nil && thirtySixTop.first(where: {$0.subviews.isEmpty}) != nil && fortyFiveTop.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                            ((fortyFiveTop.first?.subviews.first?.tag == 1 || fortyFiveTop.first?.subviews.first?.tag == 3) && nineTop.first(where: {$0.subviews.isEmpty}) != nil && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentySevenTop.first(where: {$0.subviews.isEmpty}) != nil && thirtySixTop.first(where: {$0.subviews.isEmpty}) != nil) {
-                                            nineTop.first?.subviews.first?.removeFromSuperview()
-                                            eighteenTop.first?.subviews.first?.removeFromSuperview()
-                                            twentySevenTop.first?.subviews.first?.removeFromSuperview()
-                                            thirtySixTop.first?.subviews.first?.removeFromSuperview()
-                                            fortyFiveTop.first?.subviews.first?.removeFromSuperview()
+                                           ((sevenTop.first?.subviews.first?.tag == 1 || sevenTop.first?.subviews.first?.tag == 3) && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                            ((fourteenTop.first?.subviews.first?.tag == 1 || fourteenTop.first?.subviews.first?.tag == 3) && sevenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                            ((twentyOneTop.first?.subviews.first?.tag == 1 || twentyOneTop.first?.subviews.first?.tag == 3) && sevenTop.first(where: {$0.subviews.isEmpty}) != nil && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil) {
+                                            sevenTop.first?.subviews.first?.removeFromSuperview()
+                                            fourteenTop.first?.subviews.first?.removeFromSuperview()
+                                            twentyOneTop.first?.subviews.first?.removeFromSuperview()
                                             desk.bringSubviewToFront(square)
                                             beatBlackCheckers += 1
                                             finishGame()
@@ -1060,31 +1018,30 @@ extension GamerViewController {
                                             checker.frame.origin = .zero
                                             checkBeatCheckerWhite(recognizer: recognizer)
                                             checkingStepsAllCheckers(recognizer: recognizer)
-                                        } else {
-                                            if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                               nineTop.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                eighteenTop.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                twentySevenTop.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                thirtySixTop.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                fortyFiveTop.first(where: {$0.subviews.isEmpty}) != nil {
-                                                desk.bringSubviewToFront(square)
-                                                square.addSubview(checker)
-                                                checker.frame.origin = .zero
-                                                nextMove(nextMove: .blackPlaying, text: "Black's move")
-                                                checkingStepsAllCheckers(recognizer: recognizer)
                                             }
+                                        } else {
+                                            if arrayPossibleStepsWhite.isEmpty, arrayPossibleStepsQueenWhite.isEmpty,
+                                               square.tag == (squareOfChecker.tag + 28) {
+                                                if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), sevenTop.first(where: {$0.subviews.isEmpty}) != nil && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil {
+                                                    desk.bringSubviewToFront(square)
+                                                    square.addSubview(checker)
+                                                    checker.frame.origin = .zero
+                                                    nextMove(nextMove: .blackPlaying, text: "Black's move")
+                                                    checkingStepsAllCheckers(recognizer: recognizer)
                                         }
                                     } else {
-                                        if (arrayPossibleStepsWhite.contains(squareOfChecker.tag) || arrayPossibleStepsWhite.isEmpty),
-                                            (arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag) || arrayPossibleStepsQueenWhite.isEmpty),
-                                           square.tag == (squareOfChecker.tag + 28) {
+                                        if arrayPossibleStepsWhite.contains(squareOfChecker.tag) ||
+                                            arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag),
+                                           square.tag == (squareOfChecker.tag + 35) {
                                             if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                               ((sevenTop.first?.subviews.first?.tag == 1 || sevenTop.first?.subviews.first?.tag == 3) && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                ((fourteenTop.first?.subviews.first?.tag == 1 || fourteenTop.first?.subviews.first?.tag == 3) && sevenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                ((twentyOneTop.first?.subviews.first?.tag == 1 || twentyOneTop.first?.subviews.first?.tag == 3) && sevenTop.first(where: {$0.subviews.isEmpty}) != nil && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil) {
+                                               ((sevenTop.first?.subviews.first?.tag == 1 || sevenTop.first?.subviews.first?.tag == 3) && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil && twentyEightTop.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                ((fourteenTop.first?.subviews.first?.tag == 1 || fourteenTop.first?.subviews.first?.tag == 3) && sevenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil && twentyEightTop.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                ((twentyOneTop.first?.subviews.first?.tag == 1 || twentyOneTop.first?.subviews.first?.tag == 3) && sevenTop.first(where: {$0.subviews.isEmpty}) != nil && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyEightTop.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                ((twentyEightTop.first?.subviews.first?.tag == 1 || twentyEightTop.first?.subviews.first?.tag == 3) && sevenTop.first(where: {$0.subviews.isEmpty}) != nil && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil) {
                                                 sevenTop.first?.subviews.first?.removeFromSuperview()
                                                 fourteenTop.first?.subviews.first?.removeFromSuperview()
                                                 twentyOneTop.first?.subviews.first?.removeFromSuperview()
+                                                twentyEightTop.first?.subviews.first?.removeFromSuperview()
                                                 desk.bringSubviewToFront(square)
                                                 beatBlackCheckers += 1
                                                 finishGame()
@@ -1092,31 +1049,32 @@ extension GamerViewController {
                                                 checker.frame.origin = .zero
                                                 checkBeatCheckerWhite(recognizer: recognizer)
                                                 checkingStepsAllCheckers(recognizer: recognizer)
-                                            } else {
-                                                if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                   sevenTop.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                    fourteenTop.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                    twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil {
-                                                    desk.bringSubviewToFront(square)
-                                                    square.addSubview(checker)
-                                                    checker.frame.origin = .zero
-                                                    nextMove(nextMove: .blackPlaying, text: "Black's move")
-                                                    checkingStepsAllCheckers(recognizer: recognizer)
                                                 }
+                                            } else {
+                                                if arrayPossibleStepsWhite.isEmpty, arrayPossibleStepsQueenWhite.isEmpty,
+                                                   square.tag == (squareOfChecker.tag + 35) {
+                                                    if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), sevenTop.first(where: {$0.subviews.isEmpty}) != nil && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil && twentyEightTop.first(where: {$0.subviews.isEmpty}) != nil {
+                                                        desk.bringSubviewToFront(square)
+                                                        square.addSubview(checker)
+                                                        checker.frame.origin = .zero
+                                                        nextMove(nextMove: .blackPlaying, text: "Black's move")
+                                                        checkingStepsAllCheckers(recognizer: recognizer)
                                             }
                                         } else {
-                                            if (arrayPossibleStepsWhite.contains(squareOfChecker.tag) || arrayPossibleStepsWhite.isEmpty),
-                                                (arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag) || arrayPossibleStepsQueenWhite.isEmpty),
-                                               square.tag == (squareOfChecker.tag + 35) {
+                                            if arrayPossibleStepsWhite.contains(squareOfChecker.tag) ||
+                                                arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag),
+                                               square.tag == (squareOfChecker.tag + 42) {
                                                 if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                   ((sevenTop.first?.subviews.first?.tag == 1 || sevenTop.first?.subviews.first?.tag == 3) && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil && twentyEightTop.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                    ((fourteenTop.first?.subviews.first?.tag == 1 || fourteenTop.first?.subviews.first?.tag == 3) && sevenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil && twentyEightTop.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                    ((twentyOneTop.first?.subviews.first?.tag == 1 || twentyOneTop.first?.subviews.first?.tag == 3) && sevenTop.first(where: {$0.subviews.isEmpty}) != nil && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyEightTop.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                    ((twentyEightTop.first?.subviews.first?.tag == 1 || twentyEightTop.first?.subviews.first?.tag == 3) && sevenTop.first(where: {$0.subviews.isEmpty}) != nil && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil) {
+                                                   ((sevenTop.first?.subviews.first?.tag == 1 || sevenTop.first?.subviews.first?.tag == 3) && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil && twentyEightTop.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveTop.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                    ((fourteenTop.first?.subviews.first?.tag == 1 || fourteenTop.first?.subviews.first?.tag == 3) && sevenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil && twentyEightTop.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveTop.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                    ((twentyOneTop.first?.subviews.first?.tag == 1 || twentyOneTop.first?.subviews.first?.tag == 3) && sevenTop.first(where: {$0.subviews.isEmpty}) != nil && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyEightTop.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveTop.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                    ((twentyEightTop.first?.subviews.first?.tag == 1 || twentyEightTop.first?.subviews.first?.tag == 3) && sevenTop.first(where: {$0.subviews.isEmpty}) != nil && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveTop.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                    ((thirtyFiveTop.first?.subviews.first?.tag == 1 || thirtyFiveTop.first?.subviews.first?.tag == 3) && sevenTop.first(where: {$0.subviews.isEmpty}) != nil && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil && twentyEightTop.first(where: {$0.subviews.isEmpty}) != nil) {
                                                     sevenTop.first?.subviews.first?.removeFromSuperview()
                                                     fourteenTop.first?.subviews.first?.removeFromSuperview()
                                                     twentyOneTop.first?.subviews.first?.removeFromSuperview()
                                                     twentyEightTop.first?.subviews.first?.removeFromSuperview()
+                                                    thirtyFiveTop.first?.subviews.first?.removeFromSuperview()
                                                     desk.bringSubviewToFront(square)
                                                     beatBlackCheckers += 1
                                                     finishGame()
@@ -1124,30 +1082,34 @@ extension GamerViewController {
                                                     checker.frame.origin = .zero
                                                     checkBeatCheckerWhite(recognizer: recognizer)
                                                     checkingStepsAllCheckers(recognizer: recognizer)
-                                                } else {
-                                                    if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), sevenTop.first(where: {$0.subviews.isEmpty}) != nil && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil && twentyEightTop.first(where: {$0.subviews.isEmpty}) != nil {
-                                                        desk.bringSubviewToFront(square)
-                                                        square.addSubview(checker)
-                                                        checker.frame.origin = .zero
-                                                        nextMove(nextMove: .blackPlaying, text: "Black's move")
-                                                        checkingStepsAllCheckers(recognizer: recognizer)
                                                     }
+                                                } else {
+                                                    if arrayPossibleStepsWhite.isEmpty, arrayPossibleStepsQueenWhite.isEmpty,
+                                                       square.tag == (squareOfChecker.tag + 42) {
+                                                        if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), sevenTop.first(where: {$0.subviews.isEmpty}) != nil && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil && twentyEightTop.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveTop.first(where: {$0.subviews.isEmpty}) != nil {
+                                                            desk.bringSubviewToFront(square)
+                                                            square.addSubview(checker)
+                                                            checker.frame.origin = .zero
+                                                            nextMove(nextMove: .blackPlaying, text: "Black's move")
+                                                            checkingStepsAllCheckers(recognizer: recognizer)
                                                 }
                                             } else {
-                                                if (arrayPossibleStepsWhite.contains(squareOfChecker.tag) || arrayPossibleStepsWhite.isEmpty),
-                                                    (arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag) || arrayPossibleStepsQueenWhite.isEmpty),
-                                                   square.tag == (squareOfChecker.tag + 42) {
+                                                if arrayPossibleStepsWhite.contains(squareOfChecker.tag) ||
+                                                    arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag),
+                                                    square.tag == (squareOfChecker.tag + 49) {
                                                     if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                       ((sevenTop.first?.subviews.first?.tag == 1 || sevenTop.first?.subviews.first?.tag == 3) && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil && twentyEightTop.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveTop.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                        ((fourteenTop.first?.subviews.first?.tag == 1 || fourteenTop.first?.subviews.first?.tag == 3) && sevenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil && twentyEightTop.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveTop.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                        ((twentyOneTop.first?.subviews.first?.tag == 1 || twentyOneTop.first?.subviews.first?.tag == 3) && sevenTop.first(where: {$0.subviews.isEmpty}) != nil && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyEightTop.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveTop.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                        ((twentyEightTop.first?.subviews.first?.tag == 1 || twentyEightTop.first?.subviews.first?.tag == 3) && sevenTop.first(where: {$0.subviews.isEmpty}) != nil && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveTop.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                        ((thirtyFiveTop.first?.subviews.first?.tag == 1 || thirtyFiveTop.first?.subviews.first?.tag == 3) && sevenTop.first(where: {$0.subviews.isEmpty}) != nil && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil && twentyEightTop.first(where: {$0.subviews.isEmpty}) != nil) {
+                                                       ((sevenTop.first?.subviews.first?.tag == 1 || sevenTop.first?.subviews.first?.tag == 3) && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil && twentyEightTop.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveTop.first(where: {$0.subviews.isEmpty}) != nil && fortyTwoTop.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                        ((fourteenTop.first?.subviews.first?.tag == 1 || fourteenTop.first?.subviews.first?.tag == 3) && sevenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil && twentyEightTop.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveTop.first(where: {$0.subviews.isEmpty}) != nil && fortyTwoTop.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                        ((twentyOneTop.first?.subviews.first?.tag == 1 || twentyOneTop.first?.subviews.first?.tag == 3) && sevenTop.first(where: {$0.subviews.isEmpty}) != nil && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyEightTop.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveTop.first(where: {$0.subviews.isEmpty}) != nil && fortyTwoTop.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                        ((twentyEightTop.first?.subviews.first?.tag == 1 || twentyEightTop.first?.subviews.first?.tag == 3) && sevenTop.first(where: {$0.subviews.isEmpty}) != nil && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveTop.first(where: {$0.subviews.isEmpty}) != nil && fortyTwoTop.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                        ((thirtyFiveTop.first?.subviews.first?.tag == 1 || thirtyFiveTop.first?.subviews.first?.tag == 3) && sevenTop.first(where: {$0.subviews.isEmpty}) != nil && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil && twentyEightTop.first(where: {$0.subviews.isEmpty}) != nil && fortyTwoTop.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                        ((fortyTwoTop.first?.subviews.first?.tag == 1 || fortyTwoTop.first?.subviews.first?.tag == 3) && sevenTop.first(where: {$0.subviews.isEmpty}) != nil && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil && twentyEightTop.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveTop.first(where: {$0.subviews.isEmpty}) != nil) {
                                                         sevenTop.first?.subviews.first?.removeFromSuperview()
                                                         fourteenTop.first?.subviews.first?.removeFromSuperview()
                                                         twentyOneTop.first?.subviews.first?.removeFromSuperview()
                                                         twentyEightTop.first?.subviews.first?.removeFromSuperview()
                                                         thirtyFiveTop.first?.subviews.first?.removeFromSuperview()
+                                                        fortyTwoTop.first?.subviews.first?.removeFromSuperview()
                                                         desk.bringSubviewToFront(square)
                                                         beatBlackCheckers += 1
                                                         finishGame()
@@ -1155,384 +1117,312 @@ extension GamerViewController {
                                                         checker.frame.origin = .zero
                                                         checkBeatCheckerWhite(recognizer: recognizer)
                                                         checkingStepsAllCheckers(recognizer: recognizer)
+                                                       }
                                                     } else {
-                                                        if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                           sevenTop.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                            fourteenTop.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                            twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                            twentyEightTop.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                            thirtyFiveTop.first(where: {$0.subviews.isEmpty}) != nil {
-                                                            desk.bringSubviewToFront(square)
-                                                            square.addSubview(checker)
-                                                            checker.frame.origin = .zero
-                                                            nextMove(nextMove: .blackPlaying, text: "Black's move")
-                                                            checkingStepsAllCheckers(recognizer: recognizer)
-                                                        }
-                                                    }
-                                                } else {
-                                                    if (arrayPossibleStepsWhite.contains(squareOfChecker.tag) || arrayPossibleStepsWhite.isEmpty),
-                                                        (arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag) || arrayPossibleStepsQueenWhite.isEmpty),
-                                                       square.tag == (squareOfChecker.tag + 49) {
-                                                        if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                           ((sevenTop.first?.subviews.first?.tag == 1 || sevenTop.first?.subviews.first?.tag == 3) && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil && twentyEightTop.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveTop.first(where: {$0.subviews.isEmpty}) != nil && fortyTwoTop.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                            ((fourteenTop.first?.subviews.first?.tag == 1 || fourteenTop.first?.subviews.first?.tag == 3) && sevenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil && twentyEightTop.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveTop.first(where: {$0.subviews.isEmpty}) != nil && fortyTwoTop.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                            ((twentyOneTop.first?.subviews.first?.tag == 1 || twentyOneTop.first?.subviews.first?.tag == 3) && sevenTop.first(where: {$0.subviews.isEmpty}) != nil && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyEightTop.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveTop.first(where: {$0.subviews.isEmpty}) != nil && fortyTwoTop.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                            ((twentyEightTop.first?.subviews.first?.tag == 1 || twentyEightTop.first?.subviews.first?.tag == 3) && sevenTop.first(where: {$0.subviews.isEmpty}) != nil && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveTop.first(where: {$0.subviews.isEmpty}) != nil && fortyTwoTop.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                            ((thirtyFiveTop.first?.subviews.first?.tag == 1 || thirtyFiveTop.first?.subviews.first?.tag == 3) && sevenTop.first(where: {$0.subviews.isEmpty}) != nil && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil && twentyEightTop.first(where: {$0.subviews.isEmpty}) != nil && fortyTwoTop.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                            ((fortyTwoTop.first?.subviews.first?.tag == 1 || fortyTwoTop.first?.subviews.first?.tag == 3) && sevenTop.first(where: {$0.subviews.isEmpty}) != nil && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil && twentyEightTop.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveTop.first(where: {$0.subviews.isEmpty}) != nil) {
-                                                            sevenTop.first?.subviews.first?.removeFromSuperview()
-                                                            fourteenTop.first?.subviews.first?.removeFromSuperview()
-                                                            twentyOneTop.first?.subviews.first?.removeFromSuperview()
-                                                            twentyEightTop.first?.subviews.first?.removeFromSuperview()
-                                                            thirtyFiveTop.first?.subviews.first?.removeFromSuperview()
-                                                            fortyTwoTop.first?.subviews.first?.removeFromSuperview()
-                                                            desk.bringSubviewToFront(square)
-                                                            beatBlackCheckers += 1
-                                                            finishGame()
-                                                            square.addSubview(checker)
-                                                            checker.frame.origin = .zero
-                                                            checkBeatCheckerWhite(recognizer: recognizer)
-                                                            checkingStepsAllCheckers(recognizer: recognizer)
-                                                        } else {
-                                                            if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                               sevenTop.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                fourteenTop.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                twentyEightTop.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                thirtyFiveTop.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                fortyTwoTop.first(where: {$0.subviews.isEmpty}) != nil {
+                                                        if arrayPossibleStepsWhite.isEmpty, arrayPossibleStepsQueenWhite.isEmpty,
+                                                           square.tag == (squareOfChecker.tag + 49) {
+                                                            if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), sevenTop.first(where: {$0.subviews.isEmpty}) != nil && fourteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentyOneTop.first(where: {$0.subviews.isEmpty}) != nil && twentyEightTop.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveTop.first(where: {$0.subviews.isEmpty}) != nil && fortyTwoTop.first(where: {$0.subviews.isEmpty}) != nil {
                                                                 desk.bringSubviewToFront(square)
                                                                 square.addSubview(checker)
                                                                 checker.frame.origin = .zero
                                                                 nextMove(nextMove: .blackPlaying, text: "Black's move")
                                                                 checkingStepsAllCheckers(recognizer: recognizer)
-                                                            }
-                                                        }
+                                                    }
 //MARK: - WHITE QUEEN BACK
-                                                    } else {
-                                                        if (arrayPossibleStepsWhite.contains(squareOfChecker.tag) || arrayPossibleStepsWhite.isEmpty),
-                                                            (arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag) || arrayPossibleStepsQueenWhite.isEmpty),
-                                                           square.tag == (squareOfChecker.tag - 14) {
-                                                            if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), sevenBottom.first?.subviews.first?.tag == 1 || sevenBottom.first?.subviews.first?.tag == 3 {
-                                                                sevenBottom.first?.subviews.first?.removeFromSuperview()
-                                                                desk.bringSubviewToFront(square)
-                                                                beatBlackCheckers += 1
-                                                                finishGame()
-                                                                square.addSubview(checker)
-                                                                checker.frame.origin = .zero
-                                                                checkBeatCheckerWhite(recognizer: recognizer)
-                                                                checkingStepsAllCheckers(recognizer: recognizer)
-                                                            } else {
-                                                                if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), sevenBottom.first(where: {$0.subviews.isEmpty}) != nil {
-                                                                    desk.bringSubviewToFront(square)
-                                                                    square.addSubview(checker)
-                                                                    checker.frame.origin = .zero
-                                                                    nextMove(nextMove: .blackPlaying, text: "Black's move")
-                                                                    checkingStepsAllCheckers(recognizer: recognizer)
-                                                                }
-                                                            }
-                                                        } else {
-                                                            if (arrayPossibleStepsWhite.contains(squareOfChecker.tag) || arrayPossibleStepsWhite.isEmpty),
-                                                                (arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag) || arrayPossibleStepsQueenWhite.isEmpty),
-                                                               square.tag == (squareOfChecker.tag - 18) {
-                                                                if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), nineBottom.first?.subviews.first?.tag == 1 || nineBottom.first?.subviews.first?.tag == 3 {
-                                                                    nineBottom.first?.subviews.first?.removeFromSuperview()
-                                                                    desk.bringSubviewToFront(square)
-                                                                    beatBlackCheckers += 1
-                                                                    finishGame()
-                                                                    square.addSubview(checker)
-                                                                    checker.frame.origin = .zero
-                                                                    checkBeatCheckerWhite(recognizer: recognizer)
-                                                                    checkingStepsAllCheckers(recognizer: recognizer)
-                                                                } else {
-                                                                    if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), nineBottom.first(where: {$0.subviews.isEmpty}) != nil {
-                                                                        desk.bringSubviewToFront(square)
-                                                                        square.addSubview(checker)
-                                                                        checker.frame.origin = .zero
-                                                                        nextMove(nextMove: .blackPlaying, text: "Black's move")
-                                                                        checkingStepsAllCheckers(recognizer: recognizer)
-                                                                    }
-                                                                }
-                                                            } else {
-                                                                if (arrayPossibleStepsWhite.contains(squareOfChecker.tag) || arrayPossibleStepsWhite.isEmpty),
-                                                                    (arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag) || arrayPossibleStepsQueenWhite.isEmpty),
-                                                                   square.tag == (squareOfChecker.tag - 21) {
-                                                                    if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                                       ((sevenBottom.first?.subviews.first?.tag == 1 || sevenBottom.first?.subviews.first?.tag == 3) && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                        ((fourteenBottom.first?.subviews.first?.tag == 1 || fourteenBottom.first?.subviews.first?.tag == 3) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil) {
-                                                                        sevenBottom.first?.subviews.first?.removeFromSuperview()
-                                                                        fourteenBottom.first?.subviews.first?.removeFromSuperview()
-                                                                        desk.bringSubviewToFront(square)
-                                                                        beatBlackCheckers += 1
-                                                                        finishGame()
-                                                                        square.addSubview(checker)
-                                                                        checker.frame.origin = .zero
-                                                                        checkBeatCheckerWhite(recognizer: recognizer)
-                                                                        checkingStepsAllCheckers(recognizer: recognizer)
-                                                                    } else {
-                                                                        if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil {
-                                                                            desk.bringSubviewToFront(square)
-                                                                            square.addSubview(checker)
-                                                                            checker.frame.origin = .zero
-                                                                            nextMove(nextMove: .blackPlaying, text: "Black's move")
-                                                                            checkingStepsAllCheckers(recognizer: recognizer)
-                                                                        }
-                                                                    }
-                                                                } else {
-                                                                    if (arrayPossibleStepsWhite.contains(squareOfChecker.tag) || arrayPossibleStepsWhite.isEmpty),
-                                                                        (arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag) || arrayPossibleStepsQueenWhite.isEmpty),
-                                                                       square.tag == (squareOfChecker.tag - 27) {
-                                                                        if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                                           ((nineBottom.first?.subviews.first?.tag == 1 || nineBottom.first?.subviews.first?.tag == 3) && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                            ((eighteenBottom.first?.subviews.first?.tag == 1 || eighteenBottom.first?.subviews.first?.tag == 3) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil) {
-                                                                            nineBottom.first?.subviews.first?.removeFromSuperview()
-                                                                            eighteenBottom.first?.subviews.first?.removeFromSuperview()
-                                                                            desk.bringSubviewToFront(square)
-                                                                            beatBlackCheckers += 1
-                                                                            finishGame()
-                                                                            square.addSubview(checker)
-                                                                            checker.frame.origin = .zero
-                                                                            checkBeatCheckerWhite(recognizer: recognizer)
-                                                                            checkingStepsAllCheckers(recognizer: recognizer)
-                                                                        } else {
-                                                                            if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), nineBottom.first(where: {$0.subviews.isEmpty}) != nil && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil {
-                                                                                desk.bringSubviewToFront(square)
-                                                                                square.addSubview(checker)
-                                                                                checker.frame.origin = .zero
-                                                                                nextMove(nextMove: .blackPlaying, text: "Black's move")
-                                                                                checkingStepsAllCheckers(recognizer: recognizer)
-                                                                            }
-                                                                        }
-                                                                    } else {
-                                                                        if (arrayPossibleStepsWhite.contains(squareOfChecker.tag) || arrayPossibleStepsWhite.isEmpty),
-                                                                            (arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag) || arrayPossibleStepsQueenWhite.isEmpty),
-                                                                           square.tag == (squareOfChecker.tag - 36) {
-                                                                            if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                                               ((nineBottom.first?.subviews.first?.tag == 1 || nineBottom.first?.subviews.first?.tag == 3) && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                ((eighteenBottom.first?.subviews.first?.tag == 1 || eighteenBottom.first?.subviews.first?.tag == 3) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                ((twentySevenBottom.first?.subviews.first?.tag == 1 || twentySevenBottom.first?.subviews.first?.tag == 3) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil) {
-                                                                                nineBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                eighteenBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                twentySevenBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                desk.bringSubviewToFront(square)
-                                                                                beatBlackCheckers += 1
-                                                                                finishGame()
-                                                                                square.addSubview(checker)
-                                                                                checker.frame.origin = .zero
-                                                                                checkBeatCheckerWhite(recognizer: recognizer)
-                                                                                checkingStepsAllCheckers(recognizer: recognizer)
-                                                                            } else {
-                                                                                if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                                                   nineBottom.first(where: {$0.subviews.isEmpty}) != nil && eighteenTop.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil {
-                                                                                    desk.bringSubviewToFront(square)
-                                                                                    square.addSubview(checker)
-                                                                                    checker.frame.origin = .zero
-                                                                                    nextMove(nextMove: .blackPlaying, text: "Black's move")
-                                                                                    checkingStepsAllCheckers(recognizer: recognizer)
-                                                                                }
-                                                                            }
-                                                                        } else {
-                                                                            if (arrayPossibleStepsWhite.contains(squareOfChecker.tag) || arrayPossibleStepsWhite.isEmpty),
-                                                                                (arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag) || arrayPossibleStepsQueenWhite.isEmpty),
-                                                                               square.tag == (squareOfChecker.tag - 45) {
-                                                                                if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                                                   ((nineBottom.first?.subviews.first?.tag == 1 || nineBottom.first?.subviews.first?.tag == 3) && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtySixBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                    ((eighteenBottom.first?.subviews.first?.tag == 1 || eighteenBottom.first?.subviews.first?.tag == 3) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtySixBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                    ((twentySevenBottom.first?.subviews.first?.tag == 1 || twentySevenBottom.first?.subviews.first?.tag == 3) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtySixBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                    ((thirtySixBottom.first?.subviews.first?.tag == 1 || thirtySixBottom.first?.subviews.first?.tag == 3) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil) {
-                                                                                    nineBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                    eighteenBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                    twentySevenBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                    thirtySixBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                    desk.bringSubviewToFront(square)
-                                                                                    beatBlackCheckers += 1
-                                                                                    finishGame()
-                                                                                    square.addSubview(checker)
-                                                                                    checker.frame.origin = .zero
-                                                                                    checkBeatCheckerWhite(recognizer: recognizer)
-                                                                                    checkingStepsAllCheckers(recognizer: recognizer)
-                                                                                } else {
-                                                                                    if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                                                       nineBottom.first(where: {$0.subviews.isEmpty}) != nil && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtySixBottom.first(where: {$0.subviews.isEmpty}) != nil {
-                                                                                        desk.bringSubviewToFront(square)
-                                                                                        square.addSubview(checker)
-                                                                                        checker.frame.origin = .zero
-                                                                                        nextMove(nextMove: .blackPlaying, text: "Black's move")
-                                                                                        checkingStepsAllCheckers(recognizer: recognizer)
-                                                                                    }
-                                                                                }
-                                                                            } else {
-                                                                                if (arrayPossibleStepsWhite.contains(squareOfChecker.tag) || arrayPossibleStepsWhite.isEmpty),
-                                                                                    (arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag) || arrayPossibleStepsQueenWhite.isEmpty),
-                                                                                   square.tag == (squareOfChecker.tag - 54) {
-                                                                                    if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                                                       ((nineBottom.first?.subviews.first?.tag == 1 || nineBottom.first?.subviews.first?.tag == 3) && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtySixBottom.first(where: {$0.subviews.isEmpty}) != nil && fortyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                        ((eighteenBottom.first?.subviews.first?.tag == 1 || eighteenBottom.first?.subviews.first?.tag == 3) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtySixBottom.first(where: {$0.subviews.isEmpty}) != nil && fortyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                        ((twentySevenBottom.first?.subviews.first?.tag == 1 || twentySevenBottom.first?.subviews.first?.tag == 3) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtySixBottom.first(where: {$0.subviews.isEmpty}) != nil && fortyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                        ((thirtySixBottom.first?.subviews.first?.tag == 1 || thirtySixBottom.first?.subviews.first?.tag == 3) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtySixBottom.first(where: {$0.subviews.isEmpty}) != nil && fortyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                        ((fortyFiveBottom.first?.subviews.first?.tag == 1 || fortyFiveBottom.first?.subviews.first?.tag == 3) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtySixBottom.first(where: {$0.subviews.isEmpty}) != nil) {
-                                                                                        nineBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                        eighteenBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                        twentySevenBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                        thirtySixBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                        fortyFiveBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                        desk.bringSubviewToFront(square)
-                                                                                        beatBlackCheckers += 1
-                                                                                        finishGame()
-                                                                                        square.addSubview(checker)
-                                                                                        checker.frame.origin = .zero
-                                                                                        checkBeatCheckerWhite(recognizer: recognizer)
-                                                                                        checkingStepsAllCheckers(recognizer: recognizer)
-                                                                                    } else {
-                                                                                        if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), nineBottom.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                                            eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                                            twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                                            thirtySixBottom.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                                            fortyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil {
-                                                                                            desk.bringSubviewToFront(square)
-                                                                                            square.addSubview(checker)
-                                                                                            checker.frame.origin = .zero
-                                                                                            nextMove(nextMove: .blackPlaying, text: "Black's move")
-                                                                                            checkingStepsAllCheckers(recognizer: recognizer)
-                                                                                        }
-                                                                                    }
-                                                                                } else {
-                                                                                    if (arrayPossibleStepsWhite.contains(squareOfChecker.tag) || arrayPossibleStepsWhite.isEmpty),
-                                                                                        (arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag) || arrayPossibleStepsQueenWhite.isEmpty),
-                                                                                       square.tag == (squareOfChecker.tag - 28) {
-                                                                                        if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                                                           ((sevenBottom.first?.subviews.first?.tag == 1 || sevenBottom.first?.subviews.first?.tag == 3) && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                            ((fourteenBottom.first?.subviews.first?.tag == 1 || fourteenBottom.first?.subviews.first?.tag == 3) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                            ((twentyOneBottom.first?.subviews.first?.tag == 1 || twentyOneBottom.first?.subviews.first?.tag == 3) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil) {
-                                                                                            sevenBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                            fourteenBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                            twentyOneBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                            desk.bringSubviewToFront(square)
-                                                                                            beatBlackCheckers += 1
-                                                                                            finishGame()
-                                                                                            square.addSubview(checker)
-                                                                                            checker.frame.origin = .zero
-                                                                                            checkBeatCheckerWhite(recognizer: recognizer)
-                                                                                            checkingStepsAllCheckers(recognizer: recognizer)
-                                                                                        } else {
-                                                                                            if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                                                               sevenBottom.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                                                fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                                                twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil {
-                                                                                                desk.bringSubviewToFront(square)
-                                                                                                square.addSubview(checker)
-                                                                                                checker.frame.origin = .zero
-                                                                                                nextMove(nextMove: .blackPlaying, text: "Black's move")
-                                                                                                checkingStepsAllCheckers(recognizer: recognizer)
-                                                                                            }
-                                                                                        }
-                                                                                    } else {
-                                                                                        if (arrayPossibleStepsWhite.contains(squareOfChecker.tag) || arrayPossibleStepsWhite.isEmpty),
-                                                                                            (arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag) || arrayPossibleStepsQueenWhite.isEmpty),
-                                                                                           square.tag == (squareOfChecker.tag - 35) {
-                                                                                            if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                                                               ((sevenBottom.first?.subviews.first?.tag == 1 || sevenBottom.first?.subviews.first?.tag == 3) && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                                ((fourteenBottom.first?.subviews.first?.tag == 1 || fourteenBottom.first?.subviews.first?.tag == 3) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                                ((twentyOneBottom.first?.subviews.first?.tag == 1 || twentyOneBottom.first?.subviews.first?.tag == 3) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                                ((twentyEightBottom.first?.subviews.first?.tag == 1 || twentyEightBottom.first?.subviews.first?.tag == 3) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil) {
-                                                                                                sevenBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                fourteenBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                twentyOneBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                twentyEightBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                desk.bringSubviewToFront(square)
-                                                                                                beatBlackCheckers += 1
-                                                                                                finishGame()
-                                                                                                square.addSubview(checker)
-                                                                                                checker.frame.origin = .zero
-                                                                                                checkBeatCheckerWhite(recognizer: recognizer)
-                                                                                                checkingStepsAllCheckers(recognizer: recognizer)
-                                                                                            } else {
-                                                                                                if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                                                                   sevenTop.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                                                    fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                                                    twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                                                    twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil {
-                                                                                                    desk.bringSubviewToFront(square)
-                                                                                                    square.addSubview(checker)
-                                                                                                    checker.frame.origin = .zero
-                                                                                                    nextMove(nextMove: .blackPlaying, text: "Black's move")
-                                                                                                    checkingStepsAllCheckers(recognizer: recognizer)
-                                                                                                }
-                                                                                            }
-                                                                                        } else {
-                                                                                            if (arrayPossibleStepsWhite.contains(squareOfChecker.tag) || arrayPossibleStepsWhite.isEmpty),
-                                                                                                (arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag) || arrayPossibleStepsQueenWhite.isEmpty),
-                                                                                               square.tag == (squareOfChecker.tag - 42) {
-                                                                                                if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                                                                   ((sevenBottom.first?.subviews.first?.tag == 1 || sevenBottom.first?.subviews.first?.tag == 3) && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                                    ((fourteenBottom.first?.subviews.first?.tag == 1 || fourteenBottom.first?.subviews.first?.tag == 3) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                                    ((twentyOneBottom.first?.subviews.first?.tag == 1 || twentyOneBottom.first?.subviews.first?.tag == 3) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                                    ((twentyEightBottom.first?.subviews.first?.tag == 1 || twentyEightBottom.first?.subviews.first?.tag == 3) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                                    ((thirtyFiveBottom.first?.subviews.first?.tag == 1 || thirtyFiveBottom.first?.subviews.first?.tag == 3) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil) {
-                                                                                                    sevenBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                    fourteenBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                    twentyOneBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                    twentyEightBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                    thirtyFiveBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                    desk.bringSubviewToFront(square)
-                                                                                                    beatBlackCheckers += 1
-                                                                                                    finishGame()
-                                                                                                    square.addSubview(checker)
-                                                                                                    checker.frame.origin = .zero
-                                                                                                    checkBeatCheckerWhite(recognizer: recognizer)
-                                                                                                    checkingStepsAllCheckers(recognizer: recognizer)
-                                                                                                } else {
-                                                                                                    if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                                                                       sevenBottom.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                                                        fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                                                        twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                                                        twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                                                        thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil {
-                                                                                                        desk.bringSubviewToFront(square)
-                                                                                                        square.addSubview(checker)
-                                                                                                        checker.frame.origin = .zero
-                                                                                                        nextMove(nextMove: .blackPlaying, text: "Black's move")
-                                                                                                        checkingStepsAllCheckers(recognizer: recognizer)
-                                                                                                    }
-                                                                                                }
-                                                                                            } else {
-                                                                                                if (arrayPossibleStepsWhite.contains(squareOfChecker.tag) || arrayPossibleStepsWhite.isEmpty),
-                                                                                                    (arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag) || arrayPossibleStepsQueenWhite.isEmpty),
-                                                                                                   square.tag == (squareOfChecker.tag - 49) {
-                                                                                                    if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                                                                       ((sevenBottom.first?.subviews.first?.tag == 1 || sevenBottom.first?.subviews.first?.tag == 3) && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil && fortyTwoBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                                        ((fourteenBottom.first?.subviews.first?.tag == 1 || fourteenBottom.first?.subviews.first?.tag == 3) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil && fortyTwoBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                                        ((twentyOneBottom.first?.subviews.first?.tag == 1 || twentyOneBottom.first?.subviews.first?.tag == 3) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil && fortyTwoBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                                        ((twentyEightBottom.first?.subviews.first?.tag == 1 || twentyEightBottom.first?.subviews.first?.tag == 3) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil && fortyTwoBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                                        ((thirtyFiveBottom.first?.subviews.first?.tag == 1 || thirtyFiveBottom.first?.subviews.first?.tag == 3) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil && fortyTwoBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
-                                                                                                        ((fortyTwoBottom.first?.subviews.first?.tag == 1 || fortyTwoBottom.first?.subviews.first?.tag == 3) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil) {
-                                                                                                        sevenBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                        fourteenBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                        twentyOneBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                        twentyEightBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                        thirtyFiveBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                        fortyTwoBottom.first?.subviews.first?.removeFromSuperview()
-                                                                                                        desk.bringSubviewToFront(square)
-                                                                                                        beatBlackCheckers += 1
-                                                                                                        finishGame()
-                                                                                                        square.addSubview(checker)
-                                                                                                        checker.frame.origin = .zero
-                                                                                                        checkBeatCheckerWhite(recognizer: recognizer)
-                                                                                                        checkingStepsAllCheckers(recognizer: recognizer)
-                                                                                                    } else {
-                                                                                                        if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                                                                           sevenBottom.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                                                            fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                                                            twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                                                            twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                                                            thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil &&
-                                                                                                            fortyTwoBottom.first(where: {$0.subviews.isEmpty}) != nil {
-                                                                                                            desk.bringSubviewToFront(square)
-                                                                                                            square.addSubview(checker)
-                                                                                                            checker.frame.origin = .zero
-                                                                                                            nextMove(nextMove: .blackPlaying, text: "Black's move")
-                                                                                                            checkingStepsAllCheckers(recognizer: recognizer)
-                                                                            }}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+  } else {
+      if arrayPossibleStepsWhite.isEmpty, arrayPossibleStepsQueenWhite.isEmpty,
+          square.tag == (squareOfChecker.tag - 14) {
+          if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), sevenBottom.first(where: {$0.subviews.isEmpty}) != nil {
+              desk.bringSubviewToFront(square)
+              square.addSubview(checker)
+              checker.frame.origin = .zero
+              nextMove(nextMove: .blackPlaying, text: "Black's move")
+              checkingStepsAllCheckers(recognizer: recognizer)
+          }
+      } else {
+          if arrayPossibleStepsWhite.isEmpty, arrayPossibleStepsQueenWhite.isEmpty,
+             square.tag == (squareOfChecker.tag - 18) {
+              if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), nineBottom.first(where: {$0.subviews.isEmpty}) != nil {
+                  desk.bringSubviewToFront(square)
+                  square.addSubview(checker)
+                  checker.frame.origin = .zero
+                  nextMove(nextMove: .blackPlaying, text: "Black's move")
+                  checkingStepsAllCheckers(recognizer: recognizer)
+              }
+          } else {
+              if arrayPossibleStepsWhite.contains(squareOfChecker.tag) ||
+                    arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag),
+                 square.tag == (squareOfChecker.tag - 21) {
+                  if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
+                     ((sevenBottom.first?.subviews.first?.tag == 1 || sevenBottom.first?.subviews.first?.tag == 3) && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                        ((fourteenBottom.first?.subviews.first?.tag == 1 || fourteenBottom.first?.subviews.first?.tag == 3) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil) {
+                      sevenBottom.first?.subviews.first?.removeFromSuperview()
+                      fourteenBottom.first?.subviews.first?.removeFromSuperview()
+                      desk.bringSubviewToFront(square)
+                      beatBlackCheckers += 1
+                      finishGame()
+                      square.addSubview(checker)
+                      checker.frame.origin = .zero
+                      checkBeatCheckerWhite(recognizer: recognizer)
+                      checkingStepsAllCheckers(recognizer: recognizer)
+                  }
+              } else {
+                  if arrayPossibleStepsWhite.isEmpty, arrayPossibleStepsQueenWhite.isEmpty,
+                     square.tag == (squareOfChecker.tag - 21) {
+                      if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil {
+                          desk.bringSubviewToFront(square)
+                          square.addSubview(checker)
+                          checker.frame.origin = .zero
+                          nextMove(nextMove: .blackPlaying, text: "Black's move")
+                          checkingStepsAllCheckers(recognizer: recognizer)
+                      }
+                  } else {
+                      if arrayPossibleStepsWhite.contains(squareOfChecker.tag) ||
+                            arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag),
+                         square.tag == (squareOfChecker.tag - 27) {
+                          if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
+                             ((nineBottom.first?.subviews.first?.tag == 1 || nineBottom.first?.subviews.first?.tag == 3) && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                ((eighteenBottom.first?.subviews.first?.tag == 1 || eighteenBottom.first?.subviews.first?.tag == 3) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil) {
+                              nineBottom.first?.subviews.first?.removeFromSuperview()
+                              eighteenBottom.first?.subviews.first?.removeFromSuperview()
+                              desk.bringSubviewToFront(square)
+                              beatBlackCheckers += 1
+                              finishGame()
+                              square.addSubview(checker)
+                              checker.frame.origin = .zero
+                              checkBeatCheckerWhite(recognizer: recognizer)
+                              checkingStepsAllCheckers(recognizer: recognizer)
+                          }
+                      } else {
+                          if arrayPossibleStepsWhite.isEmpty, arrayPossibleStepsQueenWhite.isEmpty,
+                             square.tag == (squareOfChecker.tag - 27) {
+                              if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), nineBottom.first(where: {$0.subviews.isEmpty}) != nil && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil {
+                                  desk.bringSubviewToFront(square)
+                                  square.addSubview(checker)
+                                  checker.frame.origin = .zero
+                                  nextMove(nextMove: .blackPlaying, text: "Black's move")
+                                  checkingStepsAllCheckers(recognizer: recognizer)
+                              }
+                          } else {
+                              if arrayPossibleStepsWhite.contains(squareOfChecker.tag) ||
+                                    arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag),
+                                 square.tag == (squareOfChecker.tag - 36) {
+                                  if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
+                                     ((nineBottom.first?.subviews.first?.tag == 1 || nineBottom.first?.subviews.first?.tag == 3) && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                        ((eighteenBottom.first?.subviews.first?.tag == 1 || eighteenBottom.first?.subviews.first?.tag == 3) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                        ((twentySevenBottom.first?.subviews.first?.tag == 1 || twentySevenBottom.first?.subviews.first?.tag == 3) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil) {
+                                      nineBottom.first?.subviews.first?.removeFromSuperview()
+                                      eighteenBottom.first?.subviews.first?.removeFromSuperview()
+                                      twentySevenBottom.first?.subviews.first?.removeFromSuperview()
+                                      desk.bringSubviewToFront(square)
+                                      beatBlackCheckers += 1
+                                      finishGame()
+                                      square.addSubview(checker)
+                                      checker.frame.origin = .zero
+                                      checkBeatCheckerWhite(recognizer: recognizer)
+                                      checkingStepsAllCheckers(recognizer: recognizer)
+                                  }
+                              } else {
+                                  if arrayPossibleStepsWhite.isEmpty, arrayPossibleStepsQueenWhite.isEmpty,
+                                     square.tag == (squareOfChecker.tag - 36) {
+                                      if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), nineBottom.first(where: {$0.subviews.isEmpty}) != nil && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil {
+                                          desk.bringSubviewToFront(square)
+                                          square.addSubview(checker)
+                                          checker.frame.origin = .zero
+                                          nextMove(nextMove: .blackPlaying, text: "Black's move")
+                                          checkingStepsAllCheckers(recognizer: recognizer)
+                                      }
+                                  } else {
+                                      if arrayPossibleStepsWhite.contains(squareOfChecker.tag) ||
+                                            arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag),
+                                         square.tag == (squareOfChecker.tag - 45) {
+                                          if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
+                                             ((nineBottom.first?.subviews.first?.tag == 1 || nineBottom.first?.subviews.first?.tag == 3) && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtySixBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                ((eighteenBottom.first?.subviews.first?.tag == 1 || eighteenBottom.first?.subviews.first?.tag == 3) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtySixBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                ((twentySevenBottom.first?.subviews.first?.tag == 1 || twentySevenBottom.first?.subviews.first?.tag == 3) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtySixBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                ((thirtySixBottom.first?.subviews.first?.tag == 1 || thirtySixBottom.first?.subviews.first?.tag == 3) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil) {
+                                              nineBottom.first?.subviews.first?.removeFromSuperview()
+                                              eighteenBottom.first?.subviews.first?.removeFromSuperview()
+                                              twentySevenBottom.first?.subviews.first?.removeFromSuperview()
+                                              thirtySixBottom.first?.subviews.first?.removeFromSuperview()
+                                              desk.bringSubviewToFront(square)
+                                              beatBlackCheckers += 1
+                                              finishGame()
+                                              square.addSubview(checker)
+                                              checker.frame.origin = .zero
+                                              checkBeatCheckerWhite(recognizer: recognizer)
+                                              checkingStepsAllCheckers(recognizer: recognizer)
+                                          }
+                                      } else {
+                                          if arrayPossibleStepsWhite.isEmpty, arrayPossibleStepsQueenWhite.isEmpty,
+                                             square.tag == (squareOfChecker.tag - 45) {
+                                              if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), nineBottom.first(where: {$0.subviews.isEmpty}) != nil && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtySixBottom.first(where: {$0.subviews.isEmpty}) != nil {
+                                                  desk.bringSubviewToFront(square)
+                                                  square.addSubview(checker)
+                                                  checker.frame.origin = .zero
+                                                  nextMove(nextMove: .blackPlaying, text: "Black's move")
+                                                  checkingStepsAllCheckers(recognizer: recognizer)
+                                              }
+                                          } else {
+                                              if arrayPossibleStepsWhite.contains(squareOfChecker.tag) ||
+                                                    arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag), square.tag == (squareOfChecker.tag - 54) {
+                                                  if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
+                                                     ((nineBottom.first?.subviews.first?.tag == 1 || nineBottom.first?.subviews.first?.tag == 3) && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtySixBottom.first(where: {$0.subviews.isEmpty}) != nil && fortyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                        ((eighteenBottom.first?.subviews.first?.tag == 1 || eighteenBottom.first?.subviews.first?.tag == 3) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtySixBottom.first(where: {$0.subviews.isEmpty}) != nil && fortyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                        ((twentySevenBottom.first?.subviews.first?.tag == 1 || twentySevenBottom.first?.subviews.first?.tag == 3) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtySixBottom.first(where: {$0.subviews.isEmpty}) != nil && fortyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                        ((thirtySixBottom.first?.subviews.first?.tag == 1 || thirtySixBottom.first?.subviews.first?.tag == 3) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fortyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                        ((fortyFiveBottom.first?.subviews.first?.tag == 1 || fortyFiveBottom.first?.subviews.first?.tag == 3) && nineBottom.first(where: {$0.subviews.isEmpty}) != nil && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtySixBottom.first(where: {$0.subviews.isEmpty}) != nil) {
+                                                      nineBottom.first?.subviews.first?.removeFromSuperview()
+                                                      eighteenBottom.first?.subviews.first?.removeFromSuperview()
+                                                      twentySevenBottom.first?.subviews.first?.removeFromSuperview()
+                                                      thirtySixBottom.first?.subviews.first?.removeFromSuperview()
+                                                      fortyFiveBottom.first?.subviews.first?.removeFromSuperview()
+                                                      desk.bringSubviewToFront(square)
+                                                      beatBlackCheckers += 1
+                                                      finishGame()
+                                                      square.addSubview(checker)
+                                                      checker.frame.origin = .zero
+                                                      checkBeatCheckerWhite(recognizer: recognizer)
+                                                      checkingStepsAllCheckers(recognizer: recognizer)
+                                                  }
+                                              } else {
+                                                  if arrayPossibleStepsWhite.isEmpty, arrayPossibleStepsQueenWhite.isEmpty,
+                                                     square.tag == (squareOfChecker.tag - 54) {
+                                                      if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), nineBottom.first(where: {$0.subviews.isEmpty}) != nil && eighteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentySevenBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtySixBottom.first(where: {$0.subviews.isEmpty}) != nil && fortyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil {
+                                                          desk.bringSubviewToFront(square)
+                                                          square.addSubview(checker)
+                                                          checker.frame.origin = .zero
+                                                          nextMove(nextMove: .blackPlaying, text: "Black's move")
+                                                          checkingStepsAllCheckers(recognizer: recognizer)
+                                                      }
+                                                  } else {
+                                                      if arrayPossibleStepsWhite.contains(squareOfChecker.tag) ||
+                                                            arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag),
+                                                         square.tag == (squareOfChecker.tag - 28) {
+                                                          if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
+                                                             ((sevenBottom.first?.subviews.first?.tag == 1 || sevenBottom.first?.subviews.first?.tag == 3) && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                                ((fourteenBottom.first?.subviews.first?.tag == 1 || fourteenBottom.first?.subviews.first?.tag == 3) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                                ((twentyOneBottom.first?.subviews.first?.tag == 1 || twentyOneBottom.first?.subviews.first?.tag == 3) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil) {
+                                                              sevenBottom.first?.subviews.first?.removeFromSuperview()
+                                                              fourteenBottom.first?.subviews.first?.removeFromSuperview()
+                                                              twentyOneBottom.first?.subviews.first?.removeFromSuperview()
+                                                              desk.bringSubviewToFront(square)
+                                                              beatBlackCheckers += 1
+                                                              finishGame()
+                                                              square.addSubview(checker)
+                                                              checker.frame.origin = .zero
+                                                              checkBeatCheckerWhite(recognizer: recognizer)
+                                                              checkingStepsAllCheckers(recognizer: recognizer)
+                                                          }
+                                                      } else {
+                                                          if arrayPossibleStepsWhite.isEmpty, arrayPossibleStepsQueenWhite.isEmpty,
+                                                             square.tag == (squareOfChecker.tag - 28) {
+                                                              if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil {
+                                                                  desk.bringSubviewToFront(square)
+                                                                  square.addSubview(checker)
+                                                                  checker.frame.origin = .zero
+                                                                  nextMove(nextMove: .blackPlaying, text: "Black's move")
+                                                                  checkingStepsAllCheckers(recognizer: recognizer)
+                                                              }
+                                                          } else {
+                                                              if arrayPossibleStepsWhite.contains(squareOfChecker.tag) ||
+                                                                    arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag),
+                                                                    square.tag == (squareOfChecker.tag - 35) {
+                                                                  if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
+                                                                     ((sevenBottom.first?.subviews.first?.tag == 1 || sevenBottom.first?.subviews.first?.tag == 3) && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                                        ((fourteenBottom.first?.subviews.first?.tag == 1 || fourteenBottom.first?.subviews.first?.tag == 3) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                                        ((twentyOneBottom.first?.subviews.first?.tag == 1 || twentyOneBottom.first?.subviews.first?.tag == 3) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                                        ((twentyEightBottom.first?.subviews.first?.tag == 1 || twentyEightBottom.first?.subviews.first?.tag == 3) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil) {
+                                                                      sevenBottom.first?.subviews.first?.removeFromSuperview()
+                                                                      fourteenBottom.first?.subviews.first?.removeFromSuperview()
+                                                                      twentyOneBottom.first?.subviews.first?.removeFromSuperview()
+                                                                      twentyEightBottom.first?.subviews.first?.removeFromSuperview()
+                                                                      desk.bringSubviewToFront(square)
+                                                                      beatBlackCheckers += 1
+                                                                      finishGame()
+                                                                      square.addSubview(checker)
+                                                                      checker.frame.origin = .zero
+                                                                      checkBeatCheckerWhite(recognizer: recognizer)
+                                                                      checkingStepsAllCheckers(recognizer: recognizer)
+                                                                  }
+                                                              } else {
+                                                                  if arrayPossibleStepsWhite.isEmpty, arrayPossibleStepsQueenWhite.isEmpty,
+                                                                     square.tag == (squareOfChecker.tag - 35) {
+                                                                      if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil {
+                                                                          desk.bringSubviewToFront(square)
+                                                                          square.addSubview(checker)
+                                                                          checker.frame.origin = .zero
+                                                                          nextMove(nextMove: .blackPlaying, text: "Black's move")
+                                                                          checkingStepsAllCheckers(recognizer: recognizer)
+                                                                      }
+                                                                  } else {
+                                                                      if arrayPossibleStepsWhite.contains(squareOfChecker.tag) ||
+                                                                            arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag),
+                                                                         square.tag == (squareOfChecker.tag - 42) {
+                                                                          if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
+                                                                             ((sevenBottom.first?.subviews.first?.tag == 1 || sevenBottom.first?.subviews.first?.tag == 3) && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                                                ((fourteenBottom.first?.subviews.first?.tag == 1 || fourteenBottom.first?.subviews.first?.tag == 3) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                                                ((twentyOneBottom.first?.subviews.first?.tag == 1 || twentyOneBottom.first?.subviews.first?.tag == 3) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                                                ((twentyEightBottom.first?.subviews.first?.tag == 1 || twentyEightBottom.first?.subviews.first?.tag == 3) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                                                ((thirtyFiveBottom.first?.subviews.first?.tag == 1 || thirtyFiveBottom.first?.subviews.first?.tag == 3) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil) {
+                                                                              sevenBottom.first?.subviews.first?.removeFromSuperview()
+                                                                              fourteenBottom.first?.subviews.first?.removeFromSuperview()
+                                                                              twentyOneBottom.first?.subviews.first?.removeFromSuperview()
+                                                                              twentyEightBottom.first?.subviews.first?.removeFromSuperview()
+                                                                              thirtyFiveBottom.first?.subviews.first?.removeFromSuperview()
+                                                                              desk.bringSubviewToFront(square)
+                                                                              beatBlackCheckers += 1
+                                                                              finishGame()
+                                                                              square.addSubview(checker)
+                                                                              checker.frame.origin = .zero
+                                                                              checkBeatCheckerWhite(recognizer: recognizer)
+                                                                              checkingStepsAllCheckers(recognizer: recognizer)
+                                                                          }
+                                                                      } else {
+                                                                          if arrayPossibleStepsWhite.isEmpty, arrayPossibleStepsQueenWhite.isEmpty,
+                                                                             square.tag == (squareOfChecker.tag - 42) {
+                                                                              if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil {
+                                                                                  desk.bringSubviewToFront(square)
+                                                                                  square.addSubview(checker)
+                                                                                  checker.frame.origin = .zero
+                                                                                  nextMove(nextMove: .blackPlaying, text: "Black's move")
+                                                                                  checkingStepsAllCheckers(recognizer: recognizer)
+                                                                              }
+                                                                          } else {
+                                                                              if arrayPossibleStepsWhite.contains(squareOfChecker.tag) ||
+                                                                                    arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag), square.tag == (squareOfChecker.tag - 49) {
+                                                                                  if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
+                                                                                     ((sevenBottom.first?.subviews.first?.tag == 1 || sevenBottom.first?.subviews.first?.tag == 3) && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil && fortyTwoBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                                                        ((fourteenBottom.first?.subviews.first?.tag == 1 || fourteenBottom.first?.subviews.first?.tag == 3) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil && fortyTwoBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                                                        ((twentyOneBottom.first?.subviews.first?.tag == 1 || twentyOneBottom.first?.subviews.first?.tag == 3) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil && fortyTwoBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                                                        ((twentyEightBottom.first?.subviews.first?.tag == 1 || twentyEightBottom.first?.subviews.first?.tag == 3) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil && fortyTwoBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                                                        ((thirtyFiveBottom.first?.subviews.first?.tag == 1 || thirtyFiveBottom.first?.subviews.first?.tag == 3) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil && fortyTwoBottom.first(where: {$0.subviews.isEmpty}) != nil) ||
+                                                                                        ((fortyTwoBottom.first?.subviews.first?.tag == 1 || fortyTwoBottom.first?.subviews.first?.tag == 3) && sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil) {
+                                                                                      sevenBottom.first?.subviews.first?.removeFromSuperview()
+                                                                                      fourteenBottom.first?.subviews.first?.removeFromSuperview()
+                                                                                      twentyOneBottom.first?.subviews.first?.removeFromSuperview()
+                                                                                      twentyEightBottom.first?.subviews.first?.removeFromSuperview()
+                                                                                      thirtyFiveBottom.first?.subviews.first?.removeFromSuperview()
+                                                                                      fortyTwoBottom.first?.subviews.first?.removeFromSuperview()
+                                                                                      desk.bringSubviewToFront(square)
+                                                                                      beatBlackCheckers += 1
+                                                                                      finishGame()
+                                                                                      square.addSubview(checker)
+                                                                                      checker.frame.origin = .zero
+                                                                                      checkBeatCheckerWhite(recognizer: recognizer)
+                                                                                      checkingStepsAllCheckers(recognizer: recognizer)
+                                                                                  }
+                                                                              } else {
+                                                                                  if arrayPossibleStepsWhite.isEmpty, arrayPossibleStepsQueenWhite.isEmpty,
+                                                                                     square.tag == (squareOfChecker.tag - 49) {
+                                                                                      if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"), sevenBottom.first(where: {$0.subviews.isEmpty}) != nil && fourteenBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyOneBottom.first(where: {$0.subviews.isEmpty}) != nil && twentyEightBottom.first(where: {$0.subviews.isEmpty}) != nil && thirtyFiveBottom.first(where: {$0.subviews.isEmpty}) != nil && fortyTwoBottom.first(where: {$0.subviews.isEmpty}) != nil {
+                                                                                          desk.bringSubviewToFront(square)
+                                                                                          square.addSubview(checker)
+                                                                                          checker.frame.origin = .zero
+                                                                                          nextMove(nextMove: .blackPlaying, text: "Black's move")
+                                                                                          checkingStepsAllCheckers(recognizer: recognizer)
+                                                                                      }}
+                                                                                  }}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
 }
                 
  //MARK: - CAN YOU MOVE AGAIN

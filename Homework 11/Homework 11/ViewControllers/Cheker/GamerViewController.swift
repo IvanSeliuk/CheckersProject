@@ -26,6 +26,7 @@ class GamerViewController: UIViewController {
     @IBOutlet weak var buttonSave: UIButton!
     @IBOutlet weak var whoMustMoveLabel: UILabel!
     @IBOutlet weak var animationView: AnimationView!
+    @IBOutlet weak var buttonVolume: UIButton!
     
     var desk: UIView!
     var chechersArray: [SaveCheckers] = []
@@ -45,6 +46,7 @@ class GamerViewController: UIViewController {
     var arrayPossibleStepsQueenBlack = [Int]()
     var checkersDB: [Checkers] = []
     var checherTag: ColorChecker = .white
+    var isMute: Bool = false
     
     var seconds: Int = 0 {
         didSet {
@@ -95,7 +97,11 @@ class GamerViewController: UIViewController {
         let filterNineBottom = desk.subviews.filter{($0.tag == (squareOfChecker.tag) - 9)}
         switch sender.state {
         case .began:
-            AudioManager.shared.playSoundPlayer(with: SoundsChoice.click.rawValue)
+            if isMute {
+                AudioManager.shared.playerAudio?.isMuted = true
+            } else {
+                AudioManager.shared.playSoundPlayer(with: SoundsChoice.click.rawValue)
+            }
             arrayBorder.removeAll()
             for square in desk.subviews {
                 if checker.tag == 0 && currentGamer == .whitePlaying &&
@@ -147,7 +153,13 @@ class GamerViewController: UIViewController {
             }
             
         case .ended:
-            AudioManager.shared.playSoundPlayer(with: SoundsChoice.click.rawValue)
+            if isMute {
+                AudioManager.shared.playerAudio?.isMuted = true
+                
+            } else {
+                AudioManager.shared.playSoundPlayer(with: SoundsChoice.click.rawValue)
+                
+            }
             UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseOut) {
                 checker.transform = .identity
             }
@@ -190,9 +202,8 @@ class GamerViewController: UIViewController {
                 if square.frame.contains(recognizer.location(in: desk)) {
                     if arrayPossibleStepsWhite.contains(squareOfChecker.tag) ||
                         arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag),
-                       checker.tag == 0, currentGamer == .whitePlaying, square.tag == (squareOfChecker.tag - 14) {
+                       checker.tag == 0 || checker.tag == 2, currentGamer == .whitePlaying, square.tag == (squareOfChecker.tag - 14) {
                         if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                           (filterSevenBottom.first(where: {$0.subviews.isEmpty}) == nil),
                            (filterSevenBottom.first?.subviews.first?.tag == 1 || filterSevenBottom.first?.subviews.first?.tag == 3) {
                             print("белая побила вправо")
                             filterSevenBottom.first?.subviews.first?.removeFromSuperview()
@@ -218,9 +229,8 @@ class GamerViewController: UIViewController {
                     } else {
                         if arrayPossibleStepsWhite.contains(squareOfChecker.tag) ||
                             arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag),
-                           checker.tag == 0, currentGamer == .whitePlaying, square.tag == (squareOfChecker.tag - 18) {
+                           checker.tag == 0 || checker.tag == 2, currentGamer == .whitePlaying, square.tag == (squareOfChecker.tag - 18) {
                             if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                               (filterNineBottom.first(where: {$0.subviews.isEmpty}) == nil),
                                (filterNineBottom.first?.subviews.first?.tag == 1 || filterNineBottom.first?.subviews.first?.tag == 3) {
                                 print("белая побила влево")
                                 filterNineBottom.first?.subviews.first?.removeFromSuperview()
@@ -270,10 +280,9 @@ class GamerViewController: UIViewController {
                             } else {
                                 if arrayPossibleStepsWhite.contains(squareOfChecker.tag) ||
                                     arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag),
-                                   checker.tag == 0, currentGamer == .whitePlaying,
+                                   checker.tag == 0 || checker.tag == 2, currentGamer == .whitePlaying,
                                    (square.tag == (squareOfChecker.tag + 14)) {
                                     if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                       (filterSevenTop.first(where: {$0.subviews.isEmpty}) == nil),
                                        (filterSevenTop.first?.subviews.first?.tag == 1 || filterSevenTop.first?.subviews.first?.tag == 3) {
                                         print("белая побила назад влево")
                                         filterSevenTop.first?.subviews.first?.removeFromSuperview()
@@ -298,10 +307,9 @@ class GamerViewController: UIViewController {
                                 } else {
                                     if arrayPossibleStepsWhite.contains(squareOfChecker.tag) ||
                                         arrayPossibleStepsQueenWhite.contains(squareOfChecker.tag),
-                                       checker.tag == 0, currentGamer == .whitePlaying,
+                                       checker.tag == 0 || checker.tag == 2, currentGamer == .whitePlaying,
                                        (square.tag == (squareOfChecker.tag + 18)) {
                                         if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                           (filterNineTop.first(where: {$0.subviews.isEmpty}) == nil),
                                            (filterNineTop.first?.subviews.first?.tag == 1 || filterNineTop.first?.subviews.first?.tag == 3) {
                                             print("белая побила назад вправо")
                                             filterNineTop.first?.subviews.first?.removeFromSuperview()
@@ -328,10 +336,9 @@ class GamerViewController: UIViewController {
                                     } else {
                                         if arrayPossibleStepsBlack.contains(squareOfChecker.tag) ||
                                             arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag),
-                                           checker.tag == 1, currentGamer == .blackPlaying,
+                                           checker.tag == 1 || checker.tag == 3, currentGamer == .blackPlaying,
                                            (square.tag == (squareOfChecker.tag + 14)) {
                                             if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                               (filterSevenTop.first(where: { $0.subviews.isEmpty}) == nil),
                                                (filterSevenTop.first?.subviews.first?.tag == 0 || filterSevenTop.first?.subviews.first?.tag == 2) {
                                                 print("черная побила влево")
                                                 filterSevenTop.first?.subviews.first?.removeFromSuperview()
@@ -356,10 +363,9 @@ class GamerViewController: UIViewController {
                                         } else {
                                             if arrayPossibleStepsBlack.contains(squareOfChecker.tag) ||
                                                 arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag),
-                                               checker.tag == 1, currentGamer == .blackPlaying,
+                                               checker.tag == 1 || checker.tag == 3, currentGamer == .blackPlaying,
                                                (square.tag == (squareOfChecker.tag + 18)) {
                                                 if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                   (filterNineTop.first(where: { $0.subviews.isEmpty}) == nil),
                                                    (filterNineTop.first?.subviews.first?.tag == 0 || filterNineTop.first?.subviews.first?.tag == 2)  {
                                                     print("черная побила вправо")
                                                     filterNineTop.first?.subviews.first?.removeFromSuperview()
@@ -409,10 +415,9 @@ class GamerViewController: UIViewController {
                                                     //MARK: - MOVE BLACK BACK
                                                     if arrayPossibleStepsBlack.contains(squareOfChecker.tag) ||
                                                         arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag),
-                                                       checker.tag == 1, currentGamer == .blackPlaying,
+                                                       checker.tag == 1 || checker.tag == 3, currentGamer == .blackPlaying,
                                                        (square.tag == (squareOfChecker.tag - 14)) {
                                                         if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                           (filterSevenBottom.first(where: {$0.subviews.isEmpty}) == nil),
                                                            (filterSevenBottom.first?.subviews.first?.tag == 0 || filterSevenBottom.first?.subviews.first?.tag == 2) {
                                                             print("черная побила назад влево")
                                                             filterSevenBottom.first?.subviews.first?.removeFromSuperview()
@@ -437,10 +442,9 @@ class GamerViewController: UIViewController {
                                                     } else {
                                                         if arrayPossibleStepsBlack.contains(squareOfChecker.tag) ||
                                                             arrayPossibleStepsQueenBlack.contains(squareOfChecker.tag),
-                                                           checker.tag == 1, currentGamer == .blackPlaying,
+                                                           checker.tag == 1 || checker.tag == 3, currentGamer == .blackPlaying,
                                                            (square.tag == (squareOfChecker.tag - 18)) {
                                                             if square.subviews.isEmpty, square.backgroundColor == UIColor(named: "ColorBlack"),
-                                                               (filterNineBottom.first(where: {$0.subviews.isEmpty}) == nil),
                                                                (filterNineBottom.first?.subviews.first?.tag == 0 || filterNineBottom.first?.subviews.first?.tag == 2) {
                                                                 print("черная побила назад вправо")
                                                                 filterNineBottom.first?.subviews.first?.removeFromSuperview()
@@ -579,6 +583,18 @@ class GamerViewController: UIViewController {
             UserDefaults.standard.removeObject(forKey: "chechersArray")
         }))
         present(alert, animated: true, completion: nil)
+    }
+    
+    @IBAction func buttonVolumeIsMute(_ sender: Any) {
+        if AudioManager.shared.playerAudio?.isMuted == false {
+            AudioManager.shared.playerAudio?.isMuted = true
+            buttonVolume.setImage(UIImage(systemName: "volume.slash.fill"), for: .normal)
+            isMute = true
+        } else {
+            AudioManager.shared.playerAudio?.isMuted = false
+            buttonVolume.setImage(UIImage(systemName: "volume.3.fill"), for: .normal)
+            isMute = false
+        }
     }
 }
 
